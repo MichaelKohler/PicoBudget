@@ -3,3 +3,7 @@ Desktop.ini
 *~
 *.swp
 *.tmp
+
+.project
+.settings
+target
