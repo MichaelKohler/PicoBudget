@@ -15,6 +15,7 @@
     }
   </style>
   <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
 
   <!-- IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -33,11 +34,22 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">PicoBudget</a>
+          <a class="brand" href="http://localhost:1337">PicoBudget</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="http://www.picobudget.com">Home</a></li>
+              <li class="active"><a href="http://localhost:1337/">Home</a></li>
+              <li><a href="http://localhost:1337/login">Register</a></li>
+              <li><a href="http://localhost:1337/faq">FAQ</a></li>
+              <li><a href="http://localhost:1337/about">About</a></li>
             </ul>
+            <form class="form-inline pull-right">
+              <input type="text" class="input-small" placeholder="Email">
+              <input type="password" class="input-small" placeholder="Password">
+              <label class="checkbox">
+                <input type="checkbox"> Remember me
+              </label>
+              <button type="submit" class="btn">Sign in</button>
+            </form>
           </div>
         </div>
       </div>
@@ -56,18 +68,18 @@
   <div class="row">
     <div class="span4">
       <h2>Introduction</h2>
-      <p>Under construction. Please stand by.</p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
+      <p>What is PicoBudget? Who is it for? Why should you use it?</p>
+      <p><a class="btn" href="http://localhost:1337/introduction">Read more &raquo;</a></p>
     </div>
     <div class="span4">
       <h2>FAQ</h2>
-      <p>Under construction. Please stand by.</p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
+      <p>We listed the frequently asked questions. It should cover most of your questions.</p>
+      <p><a class="btn" href="http://localhost:1337/faq">View FAQ &raquo;</a></p>
     </div>
     <div class="span4">
       <h2>Premium</h2>
-      <p>Under construction. Please stand by.</p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
+      <p>With a premium account you get even more features. It already starts from <strong>$0.00</strong>!</p>
+      <p><a class="btn" href="http://localhost:1337/premium">View Premium details &raquo;</a></p>
     </div>
   </div>
 </section>
