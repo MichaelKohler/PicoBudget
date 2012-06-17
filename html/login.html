@@ -68,18 +68,18 @@
       <div class="span6">
         <h1>Login</h1>
         <hr />
-        <form class="form-horizontal">
+        <form class="form-horizontal" method="POST" action="http://localhost:1337/authenticated">
           <fieldset>
             <div class="control-group">
               <label class="control-label" for="emailInput">eMail</label>
               <div class="controls">
-                <input type="text" class="input-xlarge" id="emailInput">
+                <input type="text" class="input-xlarge" id="emailInput" name="emailInput">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="passwordInput">Password</label>
               <div class="controls">
-                <input type="text" class="input-xlarge" id="passwordInput">
+                <input type="text" class="input-xlarge" id="passwordInput" name="passwordInput">
               </div>
             </div>
             <div class="control-group">
@@ -105,19 +105,19 @@
             <div class="control-group">
               <label class="control-label" for="emailInput">eMail</label>
               <div class="controls">
-                <input type="text" class="input-xlarge" id="emailInput">
+                <input type="text" class="input-xlarge" id="emailInput" name="emailInputReg">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="passwordInput">Password</label>
               <div class="controls">
-                <input type="text" class="input-xlarge" id="passwordInput">
+                <input type="text" class="input-xlarge" id="passwordInput" name="passwordInputReg">
               </div>
             </div>
             <div class="control-group">
               <label class="control-label" for="passwordConfirmInput">Confirm Password</label>
               <div class="controls">
-                <input type="text" class="input-xlarge" id="passwordConfirmInput">
+                <input type="text" class="input-xlarge" id="passwordConfirmInput" name="passwordConfirmInputReg">
               </div>
             </div>
             <div class="form-actions">
