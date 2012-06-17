@@ -86,3 +86,12 @@ server.get('/logout', function(req, res) {
   delete req.session.user;
   res.redirect('/login?loggedOut=true');
 });
+server.get('/admin_dashboard', requiresLogin, function(req, res) {
+  res.render('admin_dashboard.html');
+});
+server.get('/admin_users', requiresLogin, function(req, res) {
+  res.render('admin_users.html');
+});
+server.get('/admin_pricing', requiresLogin, function(req, res) {
+  res.render('admin_pricing.html');
+});
