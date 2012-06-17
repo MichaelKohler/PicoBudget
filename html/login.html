@@ -60,7 +60,7 @@
       <button class="close" data-dismiss="alert">×</button>
       <strong>Error!</strong><br />Please fill in all information!
     </div>
-    <div class="alert-error alert" id="userOrPasswordWrong">
+    <div class="alert-error alert" id="credentialsWrong">
       <button class="close" data-dismiss="alert">×</button>
       <strong>Error!</strong><br />Either the username or password were wrong! Please try again.
     </div>
@@ -68,15 +68,16 @@
       <div class="span6">
         <h1>Login</h1>
         <hr />
-        <form class="form-horizontal" method="POST" action="http://localhost:1337/authenticated">
+        <form class="form-horizontal" method="POST" action="http://localhost:1337/authenticated"
+          onsubmit="return validateLoginForm();">
           <fieldset>
-            <div class="control-group">
+            <div class="control-group" id="cg-email">
               <label class="control-label" for="emailInput">eMail</label>
               <div class="controls">
                 <input type="text" class="input-xlarge" id="emailInput" name="emailInput">
               </div>
             </div>
-            <div class="control-group">
+            <div class="control-group" id="cg-password">
               <label class="control-label" for="passwordInput">Password</label>
               <div class="controls">
                 <input type="text" class="input-xlarge" id="passwordInput" name="passwordInput">
@@ -137,8 +138,59 @@
 </footer>
 </div>
 
-<script src="bootstrap/js/bootstrap.js"></script>
 <script src="js/libs/jquery-1.7.2.js"></script>
+
+<script type='text/javascript'>
+// Extend JQuery to read GET parameters
+$.extend({
+  getUrlVars: function(){
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  },
+  getUrlVar: function(name){
+    return $.getUrlVars()[name];
+  }
+});
+
+// hide all notifications which should not be displayed
+if (typeof($.getUrlVar('loggedOut')) == 'undefined')
+  $('#loggedOut').hide();
+if (typeof($.getUrlVar('wrongCredentials')) == 'undefined')
+  $('#credentialsWrong').hide();
+
+$('#fillInAllInfo').hide();
+
+// validate login form
+function validateLoginForm() {
+  var state = false;
+
+  if ($('#emailInput').val() != '' && $('#passwordInput').val() != '')
+    state = true;
+  else
+    $('#fillInAllInfo').show(); // not all info entered -> show error
+
+  if ($('#emailInput').val() == '')
+    $('#cg-email').addClass('error'); // email was empty -> error
+  else
+    $('#cg-email').removeClass('error'); // email is not empty -> no error
+
+  if ($('#passwordInput').val() == '')
+    $('#cg-password').addClass('error'); // password was empty -> error
+  else
+    $('#cg-password').removeClass('error'); // password is not empty -> no error
+
+  return state;
+}
+</script>
+
+<script src="bootstrap/js/bootstrap.js"></script>
 
 </body>
 </html>
