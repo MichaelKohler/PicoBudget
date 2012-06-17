@@ -26,7 +26,7 @@ function requiresLogin(req, res, next) {
     next();
   }
   else {
-    res.redirect('/login?redir=' + req.url);
+    res.redirect('/login'); // TODO: process redirect
   }
 }
 
