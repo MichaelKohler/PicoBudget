@@ -1,0 +1,153 @@
+doctype html
+html(lang='en')
+  head
+    title Login - PicoBudget - Expense tracking tool
+    link(href='bootstrap/css/bootstrap.css', rel='stylesheet')
+    style(type='text/css')
+      body {
+        padding-top: 100px;
+        padding-bottom: 40px;
+      }
+    link(href='bootstrap/css/bootstrap-responsive.css', rel='stylesheet')
+    link(href='css/main.css', rel='stylesheet')
+    //if lt IE 9
+      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+  body
+    header
+      nav
+        .navbar.navbar-fixed-top
+          .navbar-inner
+            .container
+              a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+              a.brand(href='http://localhost:1337') PicoBudget
+              .nav-collapse
+                ul.nav
+                  li
+                    a(href='http://localhost:1337') Home
+                  li.active
+                    a(href='http://localhost:1337/login') Register
+                  li
+                    a(href='http://localhost:1337/faq') FAQ
+                  li
+                    a(href='http://localhost:1337/about') About
+                  li
+                    a(href='http://localhost:1337/dashboard') Dashboard
+
+    .container
+      section#content
+
+        section#loginForm
+          .alert-info.alert#loggedOut
+            button.close(date-dismiss='alert') ×
+            strong Logged out!
+            br
+            p You have been logged out. You can always log back in.
+          .alert-error.alert#fillInAllInfo
+            button.close(date-dismiss='alert') ×
+            strong Error!
+            br
+            p Please fill in all the information!
+          .alert-error.alert#credentialsWrong
+            button.close(date-dismiss='alert') ×
+            strong Error!
+            br
+            p Either the username or password were wrong! Please try again.
+          .row
+            .span6
+              h1 Login
+              hr
+              form.form-horizontal(method='POST', action='http://localhost:1337/authenticated', onsubmit='return validateLoginForm();')
+                fieldset
+                  .control-group#cg-email
+                    label.control-label(for='emailInput') eMail
+                    .controls
+                      input.input-xlarge#emailInput(type='text', name='emailInput')
+                  .control-group#cg-password
+                    label.control-label(for='passwordInput') Password
+                    .controls
+                      input.input-xlarge#passwordInput(type='text', name='passwordInput')
+                  .control-group
+                    .controls
+                      label.checkbox
+                        input#optionsCheckbox(type='checkbox', value='rememberMe') Remember me
+                  .form-actions
+                    button.btn(type='submit') Login
+            .span6
+              h1 Register for free
+              hr
+              form.form-horizontal(method='POST', action='http://localhost:1337/registered', onsubmit='return validateRegisterForm();')
+                fieldset
+                  .control-group#cg-email-reg
+                    label.control-label(for='emailInputReg') eMail
+                    .controls
+                      input.input-xlarge#emailInputReg(type='text', name='emailInputReg')
+                  .control-group#cg-password-reg
+                    label.control-label(for='passwordInputReg') Password
+                    .controls
+                      input.input-xlarge#passwordInputReg(type='text', name='passwordInputReg')
+                  .control-group#cg-passwordconfirm-reg
+                    label.control-label(for='passwordConfirmInputReg') Password
+                    .controls
+                      input.input-xlarge#passwordConfirmInput(type='text', name='passwordConfirmInputReg')
+                  .form-actions
+                      button.btn(type='submit') Login
+      hr
+
+      footer
+        p &copy; PicoBudget.com 2012
+
+    script(src='js/libs/jquery-1.7.2.js')
+
+    script(type='text/javascript')
+      // Extend JQuery to read GET parameters
+      $.extend({
+        getUrlVars: function(){
+          var vars = [], hash;
+          var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+          for(var i = 0; i < hashes.length; i++)
+          {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+          }
+          return vars;
+        },
+        getUrlVar: function(name){
+          return $.getUrlVars()[name];
+        }
+      });
+
+      // hide all notifications which should not be displayed
+      if (typeof($.getUrlVar('loggedOut')) == 'undefined')
+        $('#loggedOut').hide();
+      if (typeof($.getUrlVar('wrongCredentials')) == 'undefined')
+        $('#credentialsWrong').hide();
+
+      $('#fillInAllInfo').hide();
+
+      // validate login form
+      function validateLoginForm() {
+        var state = false;
+
+        if ($('#emailInput').val() != '' && $('#passwordInput').val() != '')
+          state = true;
+        else
+          $('#fillInAllInfo').show(); // not all info entered -> show error
+
+        if ($('#emailInput').val() == '')
+          $('#cg-email').addClass('error'); // email was empty -> error
+        else
+          $('#cg-email').removeClass('error'); // email is not empty -> no error
+
+        if ($('#passwordInput').val() == '')
+          $('#cg-password').addClass('error'); // password was empty -> error
+        else
+          $('#cg-password').removeClass('error'); // password is not empty -> no error
+
+        return state;
+      }
+
+    script(src='bootstrap/js/bootstrap.js')

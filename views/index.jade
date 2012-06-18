@@ -1,0 +1,75 @@
+doctype html
+html(lang='en')
+  head
+    title PicoBudget - Expense tracking tool
+    link(href='bootstrap/css/bootstrap.css', rel='stylesheet')
+    style(type='text/css')
+      body {
+        padding-top: 100px;
+        padding-bottom: 40px;
+      }
+    link(href='bootstrap/css/bootstrap-responsive.css', rel='stylesheet')
+    link(href='css/main.css', rel='stylesheet')
+    //if lt IE 9
+      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+  body
+    header
+      nav
+        .navbar.navbar-fixed-top
+          .navbar-inner
+            .container
+              a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+              a.brand(href='http://localhost:1337') PicoBudget
+              .nav-collapse
+                ul.nav
+                  li.active
+                    a(href='http://localhost:1337') Home
+                  li
+                    a(href='http://localhost:1337/login') Register
+                  li
+                    a(href='http://localhost:1337/faq') FAQ
+                  li
+                    a(href='http://localhost:1337/about') About
+                  li
+                    a(href='http://localhost:1337/dashboard') Dashboard
+                if true
+                  form.form-inline.pull-right(action='http://localhost:1337/authenticated', method='POST')
+                    input.input-small(type='text', placeholder='Email', name='emailInput')
+                    input.input-small(type='password', placeholder='Password', name='passwordInput')
+                    label.checkbox
+                      input(type='checkbox') Remember me
+                    button.btn(type='submit') Sign in
+
+    .container
+      section#content
+        .hero-unit
+          h1 Easily manage your money
+          p Ever wondered where your money goes? What do you spend the most money on? PicoBudget is a simple tool which features transactions, budgeting and reporting. Using Basic PicoBudget is absolutely free. If you enjoy it, though, you can get even more features with PicoBudget Premium!
+          p Currently PicoBudget is under construction. Feel free to come back to check it out when it launched!
+
+        .row
+          .span4
+            h2 Introduction
+            p What is PicoBudget? Who is it for? Why should you use it?
+            p
+              a.btn(href='http://localhost:1337/introduction') Read more &raquo;
+          .span4
+            h2 FAQ
+            p We listed the frequently asked questions. It should cover most of your questions.
+            p
+              a.btn(href='http://localhost:1337/faq') View FAQ &raquo;
+          .span4
+            h2 Premium
+            p With a premium account you get even more features. It already starts from 0.00!
+            p
+              a.btn(href='http://localhost:1337/premium') Read more &raquo;
+      hr
+
+      footer
+        p &copy; PicoBudget.com 2012
+
+    script(src='bootstrap/js/bootstrap.js')
+    script(src='js/libs/jquery-1.7.2.js')
