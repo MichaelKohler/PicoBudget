@@ -32,7 +32,7 @@ function requiresLogin(req, res, next) {
 var pseudoUsers = require('./users');
 
 server.get('/login', function(req, res) {
-  res.render('login');
+  res.render('login', { locals: {user: req.session.user || ''}});
 });
 server.post('/authenticated', function(req, res) {
   pseudoUsers.authenticate(req.body['emailInput'], req.body['passwordInput'], function(user) {
@@ -49,22 +49,22 @@ server.post('/authenticated', function(req, res) {
 /* ROUTERS ****************/
 /**************************/
 server.get('/', function(req, res) {
-  res.render('index', { locals: {user: req.session.user}});
+  res.render('index', { locals: {user: req.session.user || ''}});
 });
 server.get('/home', function(req, res) {
-  res.render('index');
+  res.render('index', { locals: {user: req.session.user || ''}});
 });
 server.get('/faq', function(req, res) {
-  res.render('faq');
+  res.render('faq', { locals: {user: req.session.user || ''}});
 });
 server.get('/introduction', function(req, res) {
-  res.render('introduction');
+  res.render('introduction', { locals: {user: req.session.user || ''}});
 });
 server.get('/premium', function(req, res) {
-  res.render('premium');
+  res.render('premium', { locals: {user: req.session.user || ''}});
 });
 server.get('/about', function(req, res) {
-  res.render('about');
+  res.render('about', { locals: {user: req.session.user || ''}});
 });
 server.get('/dashboard', requiresLogin, function(req, res) {
   res.render('dashboard');
