@@ -1,0 +1,32 @@
+header
+      nav
+        .navbar.navbar-fixed-top
+          .navbar-inner
+            .container
+              a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+              a.brand(href='http://localhost:1337') PicoBudget
+              .nav-collapse
+                ul.nav
+                  li
+                    a(href='http://localhost:1337') Home
+                  - if (!user)
+                    li
+                      a(href='http://localhost:1337/login') Register
+                  li
+                    a(href='http://localhost:1337/faq') FAQ
+                  li
+                    a(href='http://localhost:1337/about') About
+                  - if (user)
+                    li
+                      a(href='http://localhost:1337/dashboard') Dashboard
+                - if (!user)
+                  form.form-inline.pull-right(action='http://localhost:1337/authenticated', method='POST')
+                    input.input-small(type='text', placeholder='Email', name='emailInput')
+                    input.input-small(type='password', placeholder='Password', name='passwordInput')
+                    label.checkbox
+                      input(type='checkbox')
+                      | Remember me
+                    button.btn(type='submit') Sign in

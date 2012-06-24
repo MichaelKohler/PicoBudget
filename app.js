@@ -8,7 +8,7 @@ server.configure(function () {
 });
 server.set('view engine', 'jade');
 server.set('views', __dirname + '/views');
-server.set('view options', { layout: false }) 
+server.set('view options', { layout: false });
 server.use(express.bodyParser());
 server.use(express.cookieParser({ secret: "keyboard cat" }));
 var memStore = require('connect').session.MemoryStore;

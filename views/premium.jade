@@ -2,50 +2,14 @@ doctype html
 html(lang='en')
   head
     title Premium - PicoBudget - Expense tracking tool
-    link(href='bootstrap/css/bootstrap.css', rel='stylesheet')
-    style(type='text/css')
-      body {
-        padding-top: 100px;
-        padding-bottom: 40px;
-      }
-    link(href='bootstrap/css/bootstrap-responsive.css', rel='stylesheet')
-    link(href='css/main.css', rel='stylesheet')
-    //if lt IE 9
-      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+    include includes/head.jade
   body
-    header
-      nav
-        .navbar.navbar-fixed-top
-          .navbar-inner
-            .container
-              a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-                span.icon-bar
-                span.icon-bar
-                span.icon-bar
-              a.brand(href='http://localhost:1337') PicoBudget
-              .nav-collapse
-                ul.nav
-                  li
-                    a(href='http://localhost:1337') Home
-                  - if (!user)
-                    li
-                      a(href='http://localhost:1337/login') Register
-                  li
-                    a(href='http://localhost:1337/faq') FAQ
-                  li
-                    a(href='http://localhost:1337/about') About
-                  - if (user)
-                    li
-                      a(href='http://localhost:1337/dashboard') Dashboard
+    include includes/nav.jade
 
     .container
       section#content
       h1 Premium
       p Here should be the premium page.
-      hr
+      include includes/footer.jade
 
-      footer
-        p &copy; PicoBudget.com 2012
-
-    script(src='bootstrap/js/bootstrap.js')
-    script(src='js/libs/jquery-1.7.2.js')
+    include includes/bootstrap_jquery.jade

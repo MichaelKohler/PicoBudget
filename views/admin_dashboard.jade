@@ -2,65 +2,18 @@ doctype html
 html(lang='en')
   head
     title Admin - Dashboard - PicoBudget - Expense tracking tool
-    link(href='bootstrap/css/bootstrap.css', rel='stylesheet')
-    style(type='text/css')
-      body {
-        padding-top: 100px;
-        padding-bottom: 40px;
-      }
-    link(href='bootstrap/css/bootstrap-responsive.css', rel='stylesheet')
-    link(href='css/main.css', rel='stylesheet')
-    //if lt IE 9
-      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+    include includes/head.jade
   body
-    header
-      nav
-        .navbar.navbar-fixed-top
-          .navbar-inner
-            .container
-              a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-                span.icon-bar
-                span.icon-bar
-                span.icon-bar
-              a.brand(href='http://localhost:1337') PicoBudget
-              .nav-collapse
-                ul.nav
-                  li.active
-                    a(href='http://localhost:1337/dashboard') Home
-                  li
-                    a(href='http://localhost:1337/faq') FAQ
-                  li
-                    a(href='http://localhost:1337/about') About
-                  li
-                    a(href='http://localhost:1337/logout') Logout
+    include includes/dashboard_nav.jade
     .container
       section#content
         .row
-          .span2
-            .well(style='padding: 8px 0;')
-              ul.nav.nav-list
-                li.nav-header Administration
-                li
-                  a(href='http://localhost:1337/admin_dashboard')
-                    i.icon-home
-                    span Dashboard
-                li
-                  a(href='http://localhost:1337/admin_users')
-                    i.icon-wrench
-                    span Users
-                li
-                  a(href='http://localhost:1337/admin_pricing')
-                    i.icon-shopping-cart
-                    span Pricing
+          include includes/admin_sidebar.jade
 
           .span10
             h1 Admin Dashboard
             p Here should be the general overview.
 
-      hr
+      include includes/footer.jade
 
-      footer
-        p &copy; PicoBudget.com 2012
-
-    script(src='bootstrap/js/bootstrap.js')
-    script(src='js/libs/jquery-1.7.2.js')
+    include includes/bootstrap_jquery.jade
