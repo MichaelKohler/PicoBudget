@@ -13,7 +13,7 @@ module.exports.create = function(login, password, db, callback) {
   db.collection('users', function(err, collection) {
     collection.findOne({username:login}, function(err, foundUser) {
       if (!foundUser) {
-        var newUser = { username: login, password: password };
+        var newUser = { username: login, password: password, role: 'user' };
         collection.insert(newUser, function(err, result) {
           if (result)
             callback(newUser);
