@@ -136,6 +136,18 @@ server.post('/settingsChanged', requiresLogin, function(req, res) {
     });
   }
 });
+server.post('/userDeleted', requiresLogin, function(req, res) {
+  users.remove(req.session.user.username, req.body["passwordInput"], db, function(removed) {
+    if (removed) {
+      delete req.session.user;
+      res.redirect('/login?removed=true');
+    }
+    else {
+      res.redirect('/settings?removed=false');
+    } 
+  });
+  // TODO: remove other data too!
+});
 server.get('/logout', function(req, res) {
   delete req.session.user;
   res.redirect('/login?loggedOut=true');

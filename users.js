@@ -53,3 +53,18 @@ module.exports.changeSettings = function(login, oldPassword, newPassword, db, ca
     });
   });
 };
+
+module.exports.remove = function(login, password, db, callback) {
+  db.collection('users', function(err, collection) {
+    collection.findOne({username:login}, function(err, user) {
+      if (user.password == password) {
+        collection.remove({username:login}, function(err) {
+          err ? callback(null) : callback(true);
+        });
+      }
+      else {
+        callback(null);
+      }
+    });
+  });
+};

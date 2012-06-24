@@ -34,6 +34,11 @@ html(lang='en')
                 strong Error!
                 br
                 p Your old password is not correct.
+              .alert-error.alert#userNotRemoved
+                button.close(date-dismiss='alert') ×
+                strong Error!
+                br
+                p Your user account could not be removed! Did you enter a correct password?
               form.form-horizontal(method='POST', action='http://localhost:1337/settingsChanged', onsubmit='return validateSettingsForm();')
                 fieldset
                   .control-group#cg-email
@@ -106,6 +111,8 @@ html(lang='en')
         $('#settingsChanged').hide();
       if (typeof($.getUrlVar('oldPasswordNotOK')) == 'undefined')
         $('#oldPasswordNotOK').hide();
+      if (typeof($.getUrlVar('removed')) == 'undefined')
+        $('#userNotRemoved').hide();
 
       $('#fillInAllInfo').hide();
       $('#passwordsDidntMatch').hide();

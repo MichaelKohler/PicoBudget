@@ -40,6 +40,11 @@ html(lang='en')
               strong Error!
               br
               p The given email address is already used! Please log in on the left side with your email address or use another address.
+          .alert-info.alert#userRemoved
+              button.close(date-dismiss='alert') ×
+              strong User removed!
+              br
+              p Your user account and all data associated with it was removed.
           .row
             .span6
               h1 Login
@@ -109,6 +114,8 @@ html(lang='en')
         $('#userNotCreated').hide();
       if (typeof($.getUrlVar('userExists')) == 'undefined')
         $('#userExists').hide();
+      if (typeof($.getUrlVar('removed')) == 'undefined')
+        $('#userRemoved').hide();
 
       $('#fillInAllInfo').hide();
       $('#passwordsDidntMatch').hide();
