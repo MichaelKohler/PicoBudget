@@ -10,48 +10,56 @@ html(lang='en')
         .row
           include includes/dashboard_sidebar.jade
 
-          .span5
-            h1 Settings
-            hr
-            .alert-info.alert#settingsChanged
-              button.close(date-dismiss='alert') ×
-              strong Settings changed!
-              br
-              p You're settings are saved.
-            .alert-error.alert#fillInAllInfo
-              button.close(date-dismiss='alert') ×
-              strong Error!
-              br
-              p Please fill in all the information!
-            .alert-error.alert#passwordsDidntMatch
-              button.close(date-dismiss='alert') ×
-              strong Error!
-              br
-              p The passwords didn't match.
-            .alert-error.alert#oldPasswordNotOK
-              button.close(date-dismiss='alert') ×
-              strong Error!
-              br
-              p Your old password is not correct.
-            form.form-horizontal(method='POST', action='http://localhost:1337/settingsChanged', onsubmit='return validateSettingsForm();')
-              fieldset
-                .control-group#cg-oldpassword
-                  label.control-label(for='oldPasswordInput') Old password
-                  .controls
-                    input.input-xlarge#oldPasswordInput(type='password', name='oldPasswordInput')
-                .control-group#cg-newpassword
-                  label.control-label(for='newPasswordInput') New password
-                  .controls
-                    input.input-xlarge#newPasswordInput(type='password', name='newPasswordInput')
-                .control-group#cg-confirmnewpassword
-                  label.control-label(for='confirmNewPasswordInput') Confirm new password
-                  .controls
-                    input.input-xlarge#confirmNewPasswordInput(type='password', name='confirmNewPasswordInput')
-                .control-group
-                .form-actions
-                  button.btn.btn-info(type='submit') Change settings
-          .span5
-            h1 Delete account
+          .row
+            .span10
+              h1 Settings
+              hr
+              .alert-info.alert#settingsChanged
+                button.close(date-dismiss='alert') ×
+                strong Settings changed!
+                br
+                p You're settings are saved.
+              .alert-error.alert#fillInAllInfo
+                button.close(date-dismiss='alert') ×
+                strong Error!
+                br
+                p Please fill in all the information!
+              .alert-error.alert#passwordsDidntMatch
+                button.close(date-dismiss='alert') ×
+                strong Error!
+                br
+                p The passwords didn't match.
+              .alert-error.alert#oldPasswordNotOK
+                button.close(date-dismiss='alert') ×
+                strong Error!
+                br
+                p Your old password is not correct.
+              form.form-horizontal(method='POST', action='http://localhost:1337/settingsChanged', onsubmit='return validateSettingsForm();')
+                fieldset
+                  .control-group#cg-email
+                    label.control-label(for='newEmailInput') New eMail Address
+                    .controls
+                      input.input-xlarge#oneEmailInput(type='text', name='newEmailInput')
+                  .control-group#cg-oldpassword
+                    label.control-label(for='oldPasswordInput') Old password
+                    .controls
+                      input.input-xlarge#oldPasswordInput(type='password', name='oldPasswordInput')
+                  .control-group#cg-newpassword
+                    label.control-label(for='newPasswordInput') New password
+                    .controls
+                      input.input-xlarge#newPasswordInput(type='password', name='newPasswordInput')
+                  .control-group#cg-confirmnewpassword
+                    label.control-label(for='confirmNewPasswordInput') Confirm new password
+                    .controls
+                      input.input-xlarge#confirmNewPasswordInput(type='password', name='confirmNewPasswordInput')
+                  .control-group
+                  .form-actions
+                    button.btn.btn-info(type='submit') Change settings
+        .row
+          .span2(style='text-align:justify; padding-top: 40px;')
+            p You can delete your account on the right hand side. We would like you to reconsider it, maybe getting in touch with us to instantly improve your experience would be enough for you? Feel free to contact us!
+          .span10
+            h3 Delete account
             hr
             .alert-warning.alert#disclaimer
               button.close(date-dismiss='alert') ×
@@ -61,18 +69,16 @@ html(lang='en')
                 p Deleting your account is permanent and deletes all the data which is stored in our database. You will not get any money back if you delete your account.
               - if (user.role == 'user')
                 p Deleting your account is permanent and deletes all the data which is stored in our database.
-
-            form.form-horizontal(method='POST', action='http://localhost:1337/userDeleted', onsubmit='return askAgain();')
+             form.form-horizontal(method='POST', action='http://localhost:1337/userDeleted', onsubmit='return askAgain();')
               fieldset
-                .control-group#cg-newpassword
+                .control-group#cg-password
                   label.control-label(for='passwordInput') Password
                   .controls
                     input.input-xlarge#passwordInput(type='password', name='passwordInput')
                 .control-group
                 .form-actions
                   button.btn.btn-danger(type='submit') Remove account!
-
-      include includes/footer.jade
+       include includes/footer.jade
 
     include includes/bootstrap_jquery.jade
 
