@@ -10,7 +10,7 @@ html(lang='en')
         .row
           include includes/dashboard_sidebar.jade
 
-          .span10
+          .span5
             h1 Settings
             hr
             .alert-info.alert#settingsChanged
@@ -49,7 +49,28 @@ html(lang='en')
                     input.input-xlarge#confirmNewPasswordInput(type='password', name='confirmNewPasswordInput')
                 .control-group
                 .form-actions
-                  button.btn(type='submit') Change settings
+                  button.btn.btn-info(type='submit') Change settings
+          .span5
+            h1 Delete account
+            hr
+            .alert-warning.alert#disclaimer
+              button.close(date-dismiss='alert') ×
+              strong Attention!
+              br
+              - if (user.role == 'premium')
+                p Deleting your account is permanent and deletes all the data which is stored in our database. You will not get any money back if you delete your account.
+              - if (user.role == 'user')
+                p Deleting your account is permanent and deletes all the data which is stored in our database.
+
+            form.form-horizontal(method='POST', action='http://localhost:1337/userDeleted', onsubmit='return askAgain();')
+              fieldset
+                .control-group#cg-newpassword
+                  label.control-label(for='passwordInput') Password
+                  .controls
+                    input.input-xlarge#passwordInput(type='password', name='passwordInput')
+                .control-group
+                .form-actions
+                  button.btn.btn-danger(type='submit') Remove account!
 
       include includes/footer.jade
 

@@ -54,6 +54,7 @@ server.get('/login', function(req, res) {
   else
     res.render('login', { locals: { user: req.session.user || ''} });
 });
+
 var users = require('./users');
 server.post('/authenticated', function(req, res) {
   users.authenticate(req.body['emailInput'], req.body['passwordInput'], db, function(user) {
@@ -66,7 +67,6 @@ server.post('/authenticated', function(req, res) {
      }
   });
 });
-
 server.post('/registered', function(req, res) {
   users.create(req.body['emailInputReg'], req.body['passwordInputReg'], db, function(user) {
     if (user == "EXISTS") {
