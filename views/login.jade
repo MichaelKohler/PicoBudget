@@ -35,6 +35,11 @@ html(lang='en')
               strong Error!
               br
               p The passwords didn't match.
+          .alert-error.alert#userExists
+              button.close(date-dismiss='alert') ×
+              strong Error!
+              br
+              p The given email address is already used! Please log in on the left side with your email address or use another address.
           .row
             .span6
               h1 Login
@@ -102,6 +107,8 @@ html(lang='en')
         $('#credentialsWrong').hide();
       if (typeof($.getUrlVar('userNotCreated')) == 'undefined')
         $('#userNotCreated').hide();
+      if (typeof($.getUrlVar('userExists')) == 'undefined')
+        $('#userExists').hide();
 
       $('#fillInAllInfo').hide();
       $('#passwordsDidntMatch').hide();

@@ -10,15 +10,21 @@ module.exports.authenticate = function(login, password, db, callback) {
 };
 
 module.exports.create = function(login, password, db, callback) {
-  // TODO: check if user exists
   db.collection('users', function(err, collection) {
-    var newUser = { username: login, password: password };
-    collection.insert(newUser, function(err, result) {
-      if (result)
-        callback(newUser);
-      else
-        callback(null);
-    });
+    collection.findOne({username:login}, function(err, foundUser) {
+      if (!foundUser) {
+        var newUser = { username: login, password: password };
+        collection.insert(newUser, function(err, result) {
+          if (result)
+            callback(newUser);
+          else
+            callback(null);
+        });
+      }
+      else {
+        callback("EXISTS");
+      }
+    });  
   });
 };
 

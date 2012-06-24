@@ -61,7 +61,10 @@ server.post('/authenticated', function(req, res) {
 
 server.post('/registered', function(req, res) {
   users.create(req.body['emailInputReg'], req.body['passwordInputReg'], db, function(user) {
-    if (user) {
+    if (user == "EXISTS") {
+      res.redirect('/login?userExists=true');
+    }
+    else if (user) {
       req.session.user = user;
       res.redirect('/dashboard?registered=true');
       // TODO: send email to the user
