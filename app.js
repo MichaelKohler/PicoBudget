@@ -50,7 +50,6 @@ var users = require('./users');
 server.post('/authenticated', function(req, res) {
   users.authenticate(req.body['emailInput'], req.body['passwordInput'], db, function(user) {
      if (user) {
-       console.log("logged user: " + user.username);
        req.session.user = user;
        res.redirect('/dashboard');
      }
@@ -63,7 +62,6 @@ server.post('/authenticated', function(req, res) {
 server.post('/registered', function(req, res) {
   users.create(req.body['emailInputReg'], req.body['passwordInputReg'], db, function(user) {
     if (user) {
-      console.log('new user: ' + user.username);
       req.session.user = user;
       res.redirect('/dashboard?registered=true');
       // TODO: send email to the user
