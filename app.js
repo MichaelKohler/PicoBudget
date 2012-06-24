@@ -39,6 +39,14 @@ function requiresLogin(req, res, next) {
     res.redirect('/login');
   }
 }
+function requiresAdminLogin(req, res, next) {
+  if (req.session.user.role == 'admin') {
+    next();
+  }
+  else {
+    res.redirect('/login');
+  }
+}
 
 server.get('/login', function(req, res) {
   if (req.session.user)
@@ -131,13 +139,4 @@ server.post('/settingsChanged', requiresLogin, function(req, res) {
 server.get('/logout', function(req, res) {
   delete req.session.user;
   res.redirect('/login?loggedOut=true');
-});
-server.get('/admin_dashboard', requiresLogin, function(req, res) {
-  res.render('admin_dashboard', { locals: { user: req.session.user || ''} });
-});
-server.get('/admin_users', requiresLogin, function(req, res) {
-  res.render('admin_users', { locals: { user: req.session.user || ''} });
-});
-server.get('/admin_pricing', requiresLogin, function(req, res) {
-  res.render('admin_pricing', { locals: { user: req.session.user || ''} });
 });
