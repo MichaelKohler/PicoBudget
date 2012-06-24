@@ -19,6 +19,17 @@ server.use(express.session({ secret: "keyboard cat", store: memStore( {
 server.listen(1337);
 console.log('Express server started on port %s', server.address().port);
 
+/** MongoDB  */
+var mongo = require('mongodb');
+var MongoServer = mongo.Server;
+var MongoDatabase = mongo.Db;
+var dbServer = new MongoServer('localhost', 27017, {auto_reconnect: true, poolSize: 1 })
+var db = new MongoDatabase('mydb', dbServer)
+
+db.open(function(err, db){
+  if(err) console.log(err);
+});
+
 /** SESSIONS **/
 function requiresLogin(req, res, next) {
   if (req.session.user) {
