@@ -40,13 +40,15 @@ function requiresLogin(req, res, next) {
   }
 }
 
-var pseudoUsers = require('./users');
-
 server.get('/login', function(req, res) {
-  res.render('login', { locals: { user: req.session.user || ''} });
+  if (req.session.user)
+    res.render('dashboard');
+  else
+    res.render('login', { locals: { user: req.session.user || ''} });
 });
+var users = require('./users');
 server.post('/authenticated', function(req, res) {
-  pseudoUsers.authenticate(req.body['emailInput'], req.body['passwordInput'], function(user) {
+  users.authenticate(req.body['emailInput'], req.body['passwordInput'], db, function(user) {
      if (user) {
        req.session.user = user;
        res.redirect('/dashboard');
@@ -54,6 +56,19 @@ server.post('/authenticated', function(req, res) {
      else {
        res.redirect('/login?wrongCredentials=true');
      }
+  });
+});
+
+server.post('/registered', function(req, res) {
+  users.create(req.body['emailInputReg'], req.body['passwordInputReg'], db, function(user) {
+    if (user) {
+      req.session.user = user;
+      res.redirect('/dashboard?registered=true');
+      // TODO: send email to the user
+    }
+    else {
+      res.redirect('/login?userNotCreated=true');
+    }
   });
 });
 

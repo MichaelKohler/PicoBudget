@@ -25,10 +25,16 @@ html(lang='en')
             strong Error!
             br
             p Either the username or password were wrong! Please try again.
+          .alert-error.alert#userNotCreated
+            button.close(date-dismiss='alert') ×
+            strong Error!
+            br
+            p The user could not be created. Please try again.
           .row
             .span6
               h1 Login
               hr
+              p If you already have an account, you can sign in here.
               form.form-horizontal(method='POST', action='http://localhost:1337/authenticated', onsubmit='return validateLoginForm();')
                 fieldset
                   .control-group#cg-email
@@ -40,10 +46,6 @@ html(lang='en')
                     .controls
                       input.input-xlarge#passwordInput(type='text', name='passwordInput')
                   .control-group
-                    .controls
-                      label.checkbox
-                        input#optionsCheckbox(type='checkbox', value='rememberMe')
-                        | Remember me
                   .form-actions
                     button.btn(type='submit') Login
             .span6
@@ -93,6 +95,8 @@ html(lang='en')
         $('#loggedOut').hide();
       if (typeof($.getUrlVar('wrongCredentials')) == 'undefined')
         $('#credentialsWrong').hide();
+      if (typeof($.getUrlVar('userNotCreated')) == 'undefined')
+        $('#userNotCreated').hide();
 
       $('#fillInAllInfo').hide();
 
