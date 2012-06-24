@@ -12,7 +12,24 @@ html(lang='en')
 
           .span10
             h1 Settings
-            p Here should be the settings overview.
+              hr
+              form.form-horizontal(method='POST', action='http://localhost:1337/settingsChanged', onsubmit='return validateSettingsForm();')
+                fieldset
+                  .control-group#cg-oldpassword
+                    label.control-label(for='oldPasswordInput') Old password
+                    .controls
+                      input.input-xlarge#oldPasswordInput(type='text', name='oldPasswordInput')
+                  .control-group#cg-newpassword
+                    label.control-label(for='newPasswordInput') New password
+                    .controls
+                      input.input-xlarge#newPasswordInput(type='text', name='newPasswordInput')
+                  .control-group#cg-confirmnewpassword
+                    label.control-label(for='confirmNewPasswordInput') Confirm new password
+                    .controls
+                      input.input-xlarge#confirmNewPasswordInput(type='text', name='confirmNewPasswordInput')
+                  .control-group
+                  .form-actions
+                    button.btn(type='submit') Change settings
 
       include includes/footer.jade
 
