@@ -50,6 +50,7 @@ var users = require('./users');
 server.post('/authenticated', function(req, res) {
   users.authenticate(req.body['emailInput'], req.body['passwordInput'], db, function(user) {
      if (user) {
+       console.log("logged user: " + user.username);
        req.session.user = user;
        res.redirect('/dashboard');
      }
@@ -62,6 +63,7 @@ server.post('/authenticated', function(req, res) {
 server.post('/registered', function(req, res) {
   users.create(req.body['emailInputReg'], req.body['passwordInputReg'], db, function(user) {
     if (user) {
+      console.log('new user: ' + user.username);
       req.session.user = user;
       res.redirect('/dashboard?registered=true');
       // TODO: send email to the user
@@ -109,6 +111,21 @@ server.get('/reports', requiresLogin, function(req, res) {
 });
 server.get('/settings', requiresLogin, function(req, res) {
   res.render('settings');
+});
+server.post('/settingsChanged', requiresLogin, function(req, res) {
+  var oldPW = req.body['oldPasswordInput'];
+  var newPW = req.body['newPasswordInput'];
+  if (oldPW != newPW) {
+    users.changeSettings(req.session.user.username, oldPW, newPW, db, function(user) {
+      if (user) {
+        req.session.user = user; // we need to reinit the session because of the new password
+        res.redirect('/settings?settingsChanged=true');
+      }
+      else {
+        res.redirect('/settings?oldPasswordNotOK=true');
+      }
+    });
+  }
 });
 server.get('/logout', function(req, res) {
   delete req.session.user;

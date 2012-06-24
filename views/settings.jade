@@ -12,25 +12,93 @@ html(lang='en')
 
           .span10
             h1 Settings
-              hr
-              form.form-horizontal(method='POST', action='http://localhost:1337/settingsChanged', onsubmit='return validateSettingsForm();')
-                fieldset
-                  .control-group#cg-oldpassword
-                    label.control-label(for='oldPasswordInput') Old password
-                    .controls
-                      input.input-xlarge#oldPasswordInput(type='text', name='oldPasswordInput')
-                  .control-group#cg-newpassword
-                    label.control-label(for='newPasswordInput') New password
-                    .controls
-                      input.input-xlarge#newPasswordInput(type='text', name='newPasswordInput')
-                  .control-group#cg-confirmnewpassword
-                    label.control-label(for='confirmNewPasswordInput') Confirm new password
-                    .controls
-                      input.input-xlarge#confirmNewPasswordInput(type='text', name='confirmNewPasswordInput')
-                  .control-group
-                  .form-actions
-                    button.btn(type='submit') Change settings
+            hr
+            .alert-info.alert#settingsChanged
+              button.close(date-dismiss='alert') ×
+              strong Settings changed!
+              br
+              p You're settings are saved.
+            .alert-error.alert#fillInAllInfo
+              button.close(date-dismiss='alert') ×
+              strong Error!
+              br
+              p Please fill in all the information!
+            .alert-error.alert#passwordsDidntMatch
+              button.close(date-dismiss='alert') ×
+              strong Error!
+              br
+              p The passwords didn't match.
+            .alert-error.alert#oldPasswordNotOK
+              button.close(date-dismiss='alert') ×
+              strong Error!
+              br
+              p Your old password is not correct.
+            form.form-horizontal(method='POST', action='http://localhost:1337/settingsChanged', onsubmit='return validateSettingsForm();')
+              fieldset
+                .control-group#cg-oldpassword
+                  label.control-label(for='oldPasswordInput') Old password
+                  .controls
+                    input.input-xlarge#oldPasswordInput(type='password', name='oldPasswordInput')
+                .control-group#cg-newpassword
+                  label.control-label(for='newPasswordInput') New password
+                  .controls
+                    input.input-xlarge#newPasswordInput(type='password', name='newPasswordInput')
+                .control-group#cg-confirmnewpassword
+                  label.control-label(for='confirmNewPasswordInput') Confirm new password
+                  .controls
+                    input.input-xlarge#confirmNewPasswordInput(type='password', name='confirmNewPasswordInput')
+                .control-group
+                .form-actions
+                  button.btn(type='submit') Change settings
 
       include includes/footer.jade
 
     include includes/bootstrap_jquery.jade
+
+    script(type='text/javascript')
+      // Extend JQuery to read GET parameters
+      $.extend({
+        getUrlVars: function(){
+          var vars = [], hash;
+          var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+          for(var i = 0; i < hashes.length; i++)
+          {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+          }
+          return vars;
+        },
+        getUrlVar: function(name){
+          return $.getUrlVars()[name];
+        }
+      });
+
+      // hide all notifications which should not be displayed
+      if (typeof($.getUrlVar('settingsChanged')) == 'undefined')
+        $('#settingsChanged').hide();
+      if (typeof($.getUrlVar('oldPasswordNotOK')) == 'undefined')
+        $('#oldPasswordNotOK').hide();
+
+      $('#fillInAllInfo').hide();
+      $('#passwordsDidntMatch').hide();
+ 
+      // validate settings form
+      function validateSettingsForm() {
+        var state = false;
+
+        if ($('#oldPasswordInput').val() != '' && $('#newPasswordInput').val() != ''
+            && $('#confirmNewPasswordInput').val() != '')
+          state = true;
+        else
+          $('#fillInAllInfo').show(); // not all info entered -> show error
+
+        if ($('#newPasswordInput').val() != $('#confirmNewPasswordInput').val()) {
+          state = false;
+          $('#passwordsDidntMatch').show(); // passwords didn't match -> show error
+          $('#newPasswordInput').addClass('error');
+          $('#confirmNewPasswordInput').addClass('error');
+        }
+
+        return state;
+      }

@@ -10,6 +10,7 @@ module.exports.authenticate = function(login, password, db, callback) {
 };
 
 module.exports.create = function(login, password, db, callback) {
+  // TODO: check if user exists
   db.collection('users', function(err, collection) {
     var newUser = { username: login, password: password };
     collection.insert(newUser, function(err, result) {
@@ -17,6 +18,32 @@ module.exports.create = function(login, password, db, callback) {
         callback(result);
       else
         callback(null);
+    });
+  });
+};
+
+module.exports.changeSettings = function(login, oldPassword, newPassword, db, callback) {
+  db.collection('users', function(err, collection) {
+    collection.findOne({username:login}, function(err, user) {
+      if (user) {
+        if (user.password == oldPassword) {
+          collection.update({username:login}, {$set: {password: newPassword}}, function(err) {
+            if (user && typeof(err) == 'undefined') {
+              user.password = newPassword;
+              callback(user);
+            }
+            else {
+              callback(null);
+            }
+          });
+        }
+        else {
+          callback(null);
+        }
+      }
+      else {
+        callback(null);
+      } 
     });
   });
 };
