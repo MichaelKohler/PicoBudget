@@ -23,8 +23,23 @@
                     i.icon-file
                     span Reports
                 li.divider
-                li.nav-header Administration
+                li.nav-header Settings
                 li
                   a(href='http://localhost:1337/settings')
                     i.icon-wrench
                     span Settings
+                - if (user.role == 'admin')
+                  li.divider
+                  li.nav-header Admin-Tools
+                  li
+                    a(href='http://localhost:1337/admin_dashboard')
+                      i.icon-home
+                      span Dashboard
+                  li
+                    a(href='http://localhost:1337/admin_users')
+                      i.icon-wrench
+                      span Users
+                  li
+                    a(href='http://localhost:1337/admin_pricing')
+                      i.icon-shopping-cart
+                      span Pricing

@@ -96,22 +96,22 @@ server.get('/about', function(req, res) {
   res.render('about', { locals: { user: req.session.user || ''} });
 });
 server.get('/dashboard', requiresLogin, function(req, res) {
-  res.render('dashboard');
+  res.render('dashboard', { locals: { user: req.session.user || ''} });
 });
 server.get('/accounts', requiresLogin, function(req, res) {
-  res.render('accounts');
+  res.render('accounts', { locals: { user: req.session.user || ''} });
 });
 server.get('/transactions', requiresLogin, function(req, res) {
-  res.render('transactions');
+  res.render('transactions', { locals: { user: req.session.user || ''} });
 });
 server.get('/budget', requiresLogin, function(req, res) {
-  res.render('budget');
+  res.render('budget', { locals: { user: req.session.user || ''} });
 });
 server.get('/reports', requiresLogin, function(req, res) {
-  res.render('reports');
+  res.render('reports', { locals: { user: req.session.user || ''} });
 });
 server.get('/settings', requiresLogin, function(req, res) {
-  res.render('settings');
+  res.render('settings', { locals: { user: req.session.user || ''} });
 });
 server.post('/settingsChanged', requiresLogin, function(req, res) {
   var oldPW = req.body['oldPasswordInput'];
@@ -133,11 +133,11 @@ server.get('/logout', function(req, res) {
   res.redirect('/login?loggedOut=true');
 });
 server.get('/admin_dashboard', requiresLogin, function(req, res) {
-  res.render('admin_dashboard');
+  res.render('admin_dashboard', { locals: { user: req.session.user || ''} });
 });
 server.get('/admin_users', requiresLogin, function(req, res) {
-  res.render('admin_users');
+  res.render('admin_users', { locals: { user: req.session.user || ''} });
 });
 server.get('/admin_pricing', requiresLogin, function(req, res) {
-  res.render('admin_pricing');
+  res.render('admin_pricing', { locals: { user: req.session.user || ''} });
 });
