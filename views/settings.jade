@@ -74,7 +74,7 @@ html(lang='en')
                 p Deleting your account is permanent and deletes all the data which is stored in our database. You will not get any money back if you delete your account.
               - if (user.role == 'user')
                 p Deleting your account is permanent and deletes all the data which is stored in our database.
-             form.form-horizontal(method='POST', action='http://localhost:1337/userDeleted', onsubmit='return askAgain();')
+             form.form-horizontal(method='POST', action='http://localhost:1337/userDeleted')
               fieldset
                 .control-group#cg-password
                   label.control-label(for='passwordInput') Password
