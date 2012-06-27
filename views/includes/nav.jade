@@ -24,7 +24,7 @@ header
                       a(href='http://localhost:1337/dashboard') Dashboard
                 - if (!user)
                   form.form-inline.pull-right(action='http://localhost:1337/authenticated', method='POST')
-                    input.input-small(type='text', placeholder='Email', name='emailInput')
+                    input.input-small(type='email', placeholder='Email', name='emailInput')
                     input.input-small(type='password', placeholder='Password', name='passwordInput')
                     label.checkbox
                       input(type='checkbox')
