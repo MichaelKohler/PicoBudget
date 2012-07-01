@@ -12,8 +12,30 @@ html(lang='en')
 
           .span10
             h1 Accounts
-            p Here should be the accounts overview.
+            table.table
+              thead
+                tr
+                  th Name
+                  th Currency
+                  th Balance
+              tbody              
+                for account in accounts
+                  tr
+                    td #{account.name}
+                    td #{account.currency}
+                    td #{account.balance}
+                    td Edit balance
+            .alert-success.alert#noAccounts
+              button.close(date-dismiss='alert') ×
+              strong No accounts found!
+              br
+              p We couldn't find any accounts. Try again or add a new account below.
 
       include includes/footer.jade
 
     include includes/bootstrap_jquery.jade
+
+    script(type='text/javascript')
+      // hide all notifications which should not be displayed
+      if (typeof($.getUrlVar('noAccounts')) == 'undefined')
+        $('#noAccounts').hide();

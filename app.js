@@ -106,9 +106,23 @@ server.get('/about', function(req, res) {
 server.get('/dashboard', requiresLogin, function(req, res) {
   res.render('dashboard', { locals: { user: req.session.user || ''} });
 });
+
+var accounts = require('./accounts.js');
 server.get('/accounts', requiresLogin, function(req, res) {
-  res.render('accounts', { locals: { user: req.session.user || ''} });
+  accounts.getAllAccounts(req.session.user.username, req.session.user.password,
+                          db, function(accounts) {
+    if (accounts) {
+      res.render('accounts', { locals: {
+        user: req.session.user || '',
+        accounts: accounts 
+      }});
+    }
+    else {
+      res.redirect('/accounts?noAccounts=true');
+    } 
+  });
 });
+
 server.get('/transactions', requiresLogin, function(req, res) {
   res.render('transactions', { locals: { user: req.session.user || ''} });
 });
