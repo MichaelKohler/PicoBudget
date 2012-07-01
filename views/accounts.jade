@@ -25,17 +25,12 @@ html(lang='en')
                     td #{account.currency}
                     td #{account.balance}
                     td Edit balance
-            .alert-success.alert#noAccounts
-              button.close(date-dismiss='alert') ×
-              strong No accounts found!
-              br
-              p We couldn't find any accounts. Try again or add a new account below.
+                tr(style='font-weight:bold;')
+                  td
+                  td Total (#{user.prefCurr}):
+                  td #{balanceSum}
+                  td
 
       include includes/footer.jade
 
     include includes/bootstrap_jquery.jade
-
-    script(type='text/javascript')
-      // hide all notifications which should not be displayed
-      if (typeof($.getUrlVar('noAccounts')) == 'undefined')
-        $('#noAccounts').hide();

@@ -110,16 +110,17 @@ server.get('/dashboard', requiresLogin, function(req, res) {
 var accounts = require('./accounts.js');
 server.get('/accounts', requiresLogin, function(req, res) {
   accounts.getAllAccounts(req.session.user.username, req.session.user.password,
-                          db, function(accounts) {
-    if (accounts) {
-      res.render('accounts', { locals: {
-        user: req.session.user || '',
-        accounts: accounts 
-      }});
+                          db, function(accountList) {
+    if (accountList) {
+      accounts.sumBalance(accountList, function(sum) {
+        res.render('accounts', { locals: {
+          user: req.session.user || '',
+          accounts: accountList,
+          balanceSum: sum,
+          accNumber: accountList.length
+        }});
+      });
     }
-    else {
-      res.redirect('/accounts?noAccounts=true');
-    } 
   });
 });
 
