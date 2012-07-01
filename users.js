@@ -13,7 +13,7 @@ module.exports.create = function(login, password, db, callback) {
   db.collection('users', function(err, collection) {
     collection.findOne({username:login}, function(err, foundUser) {
       if (!foundUser) {
-        var newUser = { username: login, password: password, role: 'user' };
+        var newUser = { username: login, password: password, role: 'user', prefCurr: "CHF" };
         collection.insert(newUser, function(err, result) {
           if (result)
             callback(newUser);
@@ -28,12 +28,12 @@ module.exports.create = function(login, password, db, callback) {
   });
 };
 
-module.exports.changeSettings = function(login, oldPassword, newPassword, db, callback) {
+module.exports.changeSettings = function(login, oldPassword, newPassword, prefCurr, db, callback) {
   db.collection('users', function(err, collection) {
     collection.findOne({username:login}, function(err, user) {
       if (user) { // user was found
         if (user.password == oldPassword) { // old password matched
-          collection.update({username:login}, {$set: {password: newPassword}}, function(err) {
+          collection.update({username:login}, {$set: {password: newPassword, prefCurr: prefCurr}}, function(err) {
             if (user && typeof(err) == 'undefined') { // sanity check for user + there was no error
               user.password = newPassword;
               callback(user);

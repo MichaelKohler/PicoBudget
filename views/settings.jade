@@ -14,11 +14,12 @@ html(lang='en')
             .span10
               h1 Settings
               hr
-              .alert-info.alert#settingsChanged
-                button.close(date-dismiss='alert') ×
-                strong Settings changed!
-                br
-                p You're settings are saved.
+              - if (changed == true)
+                .alert-info.alert#settingsChanged
+                  button.close(date-dismiss='alert') ×
+                  strong Settings changed!
+                  br
+                  p You're settings are saved.
               .alert-error.alert#fillInAllInfo
                 button.close(date-dismiss='alert') ×
                 strong Error!
@@ -57,6 +58,15 @@ html(lang='en')
                     label.control-label(for='confirmNewPasswordInput') Confirm new password
                     .controls
                       input.input-xlarge#confirmNewPasswordInput(type='password', name='confirmNewPasswordInput')
+                  .control-group#cg-prefCurr
+                    label.control-label(for='prefCurrDropdown') Preferred currency
+                    .controls
+                      select(name='prefCurrDropdown')
+                        for currency in currencies
+                          - if (currency.ISO == user.prefCurr)
+                            option(selected='true', value='#{currency.ISO}') #{currency.ISO}
+                          - else
+                            option(value='#{currency.ISO}') #{currency.ISO}
                   .control-group
                   .form-actions
                     button.btn.btn-info(type='submit') Change settings
@@ -89,8 +99,6 @@ html(lang='en')
 
     script(type='text/javascript')
       // hide all notifications which should not be displayed
-      if (typeof($.getUrlVar('settingsChanged')) == 'undefined')
-        $('#settingsChanged').hide();
       if (typeof($.getUrlVar('oldPasswordNotOK')) == 'undefined')
         $('#oldPasswordNotOK').hide();
       if (typeof($.getUrlVar('removed')) == 'undefined')

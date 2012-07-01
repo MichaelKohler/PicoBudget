@@ -133,17 +133,36 @@ server.get('/budget', requiresLogin, function(req, res) {
 server.get('/reports', requiresLogin, function(req, res) {
   res.render('reports', { locals: { user: req.session.user || ''} });
 });
+
+var globals = require('./globals.js');
 server.get('/settings', requiresLogin, function(req, res) {
-  res.render('settings', { locals: { user: req.session.user || ''} });
+  globals.getAllAvailableCurrencies(db, function(currencyList) {
+    if (currencyList) {
+      res.render('settings', { locals: {
+        user: req.session.user || '',
+        currencies: currencyList,
+        changed: false
+      }});
+    }
+  });
 });
 server.post('/settingsChanged', requiresLogin, function(req, res) {
   var oldPW = req.body['oldPasswordInput'];
   var newPW = req.body['newPasswordInput'];
+  var prefCurr = req.body['prefCurrDropdown'];
   if (oldPW != newPW) {
-    users.changeSettings(req.session.user.username, oldPW, newPW, db, function(user) {
+    users.changeSettings(req.session.user.username, oldPW, newPW, prefCurr, db, function(user) {
       if (user) {
         req.session.user = user; // we need to reinit the session because of the new password
-        res.redirect('/settings?settingsChanged=true');
+        globals.getAllAvailableCurrencies(db, function(currencyList) {
+          if (currencyList) {
+            res.render('settings', { locals: {
+              user: req.session.user || '',
+              currencies: currencyList,
+              changed: true
+            }});
+          }
+        });
       }
       else {
         res.redirect('/settings?oldPasswordNotOK=true');
