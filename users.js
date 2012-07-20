@@ -33,7 +33,7 @@ module.exports.changeSettings = function(login, oldPassword, newPassword, prefCu
     collection.findOne({username:login}, function(err, user) {
       if (user) { // user was found
         if (user.password == oldPassword) { // old password matched
-          collection.update({username:login}, {$set: {password: newPassword, prefCurr: prefCurr}}, function(err) {
+          collection.update({username:login}, {$set: {password:newPassword, prefCurr:prefCurr}}, function(err) {
             if (user && typeof(err) == 'undefined') { // sanity check for user + there was no error
               user.password = newPassword;
               callback(user);

@@ -17,10 +17,23 @@ html(lang='en')
               br
               p Your registration was successfull. You will receive a confirmation email in the next few minutes.
             h1 Account Overview
-            p Here should be the overview over all accounts. You can manage the accounts under "Accounts".
+            p You can manage the accounts under 
+              a(href='http://localhost:1337/accounts') "Accounts"
+              | .
+            table.table
+              thead
+                tr
+                  th Name
+                  th Currency
+                  th(style='text-align:right;') Balance
+              tbody              
+                for account in accounts
+                  tr
+                    td #{account.name}
+                    td #{account.currency}
+                    td(style='text-align:right;') #{account.balance}
             hr
             h1 Recent transactions
-            p Here should be the recent 5 transactions in a table.
 
       include includes/footer.jade
     include includes/bootstrap_jquery.jade

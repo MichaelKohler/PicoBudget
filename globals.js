@@ -7,3 +7,8 @@ module.exports.getAllAvailableCurrencies = function(db, callback) {
     });
   });
 };
+
+module.exports.formatBalance = function(balance) {
+  var formattedBalance = parseFloat(balance).toFixed(2);
+  return formattedBalance;
+}

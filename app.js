@@ -1,5 +1,7 @@
 var express = require('express');
 var server = express.createServer();
+var accounts = require('./accounts.js');
+var globals = require('./globals.js');
 
 server.configure(function () {
   server.use('/bootstrap', express.static(__dirname + '/bootstrap'));
@@ -83,7 +85,7 @@ server.post('/registered', function(req, res) {
   });
 });
 
-/* ROUTERS ****************/
+/* ROUTES ****************/
 /**************************/
 server.get('/', function(req, res) {
   res.render('index', { locals: { user: req.session.user || ''} });
@@ -104,22 +106,73 @@ server.get('/about', function(req, res) {
   res.render('about', { locals: { user: req.session.user || ''} });
 });
 server.get('/dashboard', requiresLogin, function(req, res) {
-  res.render('dashboard', { locals: { user: req.session.user || ''} });
+  accounts.getAllAccounts(req.session.user.username, req.session.user.password,
+                          db, function(accountList) {
+    res.render('dashboard', { locals: {
+      user: req.session.user || '',
+      accounts: accountList,
+      accNumber: accountList.length
+    }});
+  });
 });
 
-var accounts = require('./accounts.js');
 server.get('/accounts', requiresLogin, function(req, res) {
   accounts.getAllAccounts(req.session.user.username, req.session.user.password,
                           db, function(accountList) {
     if (accountList) {
       accounts.sumBalance(accountList, function(sum) {
-        res.render('accounts', { locals: {
-          user: req.session.user || '',
-          accounts: accountList,
-          balanceSum: sum,
-          accNumber: accountList.length
-        }});
+        globals.getAllAvailableCurrencies(db, function(currencyList) {
+          if (currencyList) {
+            res.render('accounts', { locals: {
+              user: req.session.user || '',
+              currencies: currencyList,
+              accounts: accountList,
+              balanceSum: globals.formatBalance(sum),
+              accNumber: accountList.length
+            }});
+          }
+        });
       });
+    }
+  });
+});
+
+server.post('/accountAdded', requiresLogin, function(req, res) {
+  var accName = req.body['nameInput'];
+  var accCurrency = req.body['currDropdown'];
+  var accBalance = req.body['initBalanceInput'];
+  accounts.addAccount(req.session.user.username, accName, accCurrency, accBalance, db, function(success) {
+    if (success) {
+      res.redirect('/accounts?accountAdded=true');
+    }
+    else if (success == "EXISTS") {
+      res.redirect('/accounts?accountAlreadyExists=true');
+    }
+  });
+});
+
+server.post('/accountEdited', requiresLogin, function(req, res) {
+  var oldName = req.body['hiddenOldName'];
+  var accName = req.body['editNameInput'];
+  var accBalance = req.body['editInitBalanceInput'];
+  accounts.editAccount(req.session.user.username, oldName, accName, accBalance, db, function(success) {
+    if (success) {
+      res.redirect('/accounts?accountEdited=true');
+    }
+    else {
+      res.redirect('/accounts?notEdited=true');
+    }
+  });
+});
+
+server.post('/accountDeleted', requiresLogin, function(req, res) {
+  var accName = req.body['deleteNameInput'];
+  accounts.deleteAccount(req.session.user.username, accName, db, function(success) {
+    if (success) {
+      res.redirect('/accounts?accountDeleted=true');
+    }
+    else {
+      res.redirect('/accounts?notDeleted=true');
     }
   });
 });
@@ -134,7 +187,6 @@ server.get('/reports', requiresLogin, function(req, res) {
   res.render('reports', { locals: { user: req.session.user || ''} });
 });
 
-var globals = require('./globals.js');
 server.get('/settings', requiresLogin, function(req, res) {
   globals.getAllAvailableCurrencies(db, function(currencyList) {
     if (currencyList) {
