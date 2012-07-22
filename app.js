@@ -202,28 +202,30 @@ server.post('/settingsChanged', requiresLogin, function(req, res) {
   var oldPW = req.body['oldPasswordInput'];
   var newPW = req.body['newPasswordInput'];
   var prefCurr = req.body['prefCurrDropdown'];
-  if (oldPW != newPW) {
-    users.changeSettings(req.session.user.username, oldPW, newPW, prefCurr, db, function(user) {
-      if (user) {
-        req.session.user = user; // we need to reinit the session because of the new password
-        globals.getAllAvailableCurrencies(db, function(currencyList) {
-          if (currencyList) {
-            res.render('settings', { locals: {
-              user: req.session.user || '',
-              currencies: currencyList,
-              changed: true
-            }});
-          }
-        });
-      }
-      else {
-        res.redirect('/settings?oldPasswordNotOK=true');
-      }
-    });
-  }
+
+  users.changeSettings(req.session.user.username, oldPW, newPW, prefCurr, db, function(changed) {
+    if (changed == "NOPWMATCH") {
+      res.redirect('/settings?passwordsDidntMatch=true');
+    }
+    else if (changed) {
+      req.session.user = changed; // we need to reinit the session because of the new password
+      globals.getAllAvailableCurrencies(db, function(currencyList) {
+        if (currencyList) {
+          res.render('settings', { locals: {
+            user: req.session.user || '',
+            currencies: currencyList,
+            changed: true
+          }});
+        }
+      });
+    }
+    else {
+      res.redirect('/settings?unknownError=true');
+    }    
+  });
 });
 server.post('/userDeleted', requiresLogin, function(req, res) {
-  users.remove(req.session.user.username, req.body["passwordInput"], db, function(removed) {
+  users.removeUser(req.session.user.username, req.body["passwordInput"], db, function(removed) {
     if (removed) {
       delete req.session.user;
       res.redirect('/login?removed=true');

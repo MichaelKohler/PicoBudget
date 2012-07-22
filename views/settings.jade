@@ -15,7 +15,7 @@ html(lang='en')
               h1 Settings
               hr
               - if (changed == true)
-                .alert-info.alert#settingsChanged
+                .alert-success.alert#settingsChanged
                   button.close(date-dismiss='alert') ×
                   strong Settings changed!
                   br
@@ -42,10 +42,6 @@ html(lang='en')
                 p Your user account could not be removed! Did you enter a correct password?
               form.form-horizontal(method='POST', action='http://localhost:1337/settingsChanged', onsubmit='return validateSettingsForm();')
                 fieldset
-                  .control-group#cg-email
-                    label.control-label(for='newEmailInput') New eMail Address
-                    .controls
-                      input.input-xlarge#oneEmailInput(type='text', name='newEmailInput')
                   .control-group#cg-oldpassword
                     label.control-label(for='oldPasswordInput') Old password
                     .controls
@@ -111,17 +107,21 @@ html(lang='en')
       function validateSettingsForm() {
         var state = false;
 
-        if ($('#oldPasswordInput').val() != '' && $('#newPasswordInput').val() != ''
-            && $('#confirmNewPasswordInput').val() != '')
-          state = true;
-        else
-          $('#fillInAllInfo').show(); // not all info entered -> show error
+        if ($('#newPasswordInput').val() != '') {
+          if ($('#oldPasswordInput').val() != '' && $('#confirmNewPasswordInput').val() != '')
+            state = true;
+          else
+            $('#fillInAllInfo').show(); // not all info entered -> show error
 
-        if ($('#newPasswordInput').val() != $('#confirmNewPasswordInput').val()) {
-          state = false;
-          $('#passwordsDidntMatch').show(); // passwords didn't match -> show error
-          $('#newPasswordInput').addClass('error');
-          $('#confirmNewPasswordInput').addClass('error');
+          if ($('#newPasswordInput').val() != $('#confirmNewPasswordInput').val()) {
+            state = false;
+            $('#passwordsDidntMatch').show(); // passwords didn't match -> show error
+            $('#newPasswordInput').addClass('error');
+            $('#confirmNewPasswordInput').addClass('error');
+          }
+        }
+        else {
+          state = true;
         }
 
         return state;

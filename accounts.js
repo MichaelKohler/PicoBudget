@@ -34,7 +34,7 @@ module.exports.addAccount = function(login, accName, accCurrency, accBalance, db
       }
     });  
   });
-}
+};
 
 module.exports.editAccount = function(login, oldName, accName, accBalance, db, callback) {
   db.collection('accounts', function(err, collection) {
@@ -54,7 +54,7 @@ module.exports.editAccount = function(login, oldName, accName, accBalance, db, c
       }
     });  
   });
-}
+};
 
 module.exports.deleteAccount = function(login, accName, db, callback) {
   db.collection('accounts', function(err, collection) {
@@ -69,4 +69,4 @@ module.exports.deleteAccount = function(login, accName, db, callback) {
       }
     });  
   });
-}
+};

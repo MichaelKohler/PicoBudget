@@ -32,29 +32,33 @@ module.exports.changeSettings = function(login, oldPassword, newPassword, prefCu
   db.collection('users', function(err, collection) {
     collection.findOne({username:login}, function(err, user) {
       if (user) { // user was found
-        if (user.password == oldPassword) { // old password matched
-          collection.update({username:login}, {$set: {password:newPassword, prefCurr:prefCurr}}, function(err) {
-            if (user && typeof(err) == 'undefined') { // sanity check for user + there was no error
+        if (oldPassword != '' && newPassword != '') { // pw change needed?
+          if (user.password == oldPassword) { // pw matches?
+            collection.update({username:login}, {$set: {password:newPassword, prefCurr:prefCurr}}, function(err) {
               user.password = newPassword;
-              callback(user);
-            }
-            else {
-              callback(null);
-            }
-          });
+              user.prefCurr = prefCurr;
+              typeof(err) == 'undefined' ? callback(user) : callback(null);
+            });
+          }
+          else { // old password didn't match
+            callback("NOPWMATCH");
+          }
         }
-        else { // old password didn't match
-          callback(null);
+        else { // only save prefcurr
+          collection.update({username:login}, {$set: {prefCurr:prefCurr}}, function(err) {
+            user.prefCurr = prefCurr;
+            typeof(err) == 'undefined' ? callback(user) : callback(null);
+          });
         }
       }
       else { // user was not found
         callback(null);
-      } 
+      }
     });
   });
 };
 
-module.exports.remove = function(login, password, db, callback) {
+module.exports.removeUser = function(login, password, db, callback) {
   db.collection('users', function(err, collection) {
     collection.findOne({username:login}, function(err, user) {
       if (user.password == password) {
