@@ -40,7 +40,7 @@ html(lang='en')
                 strong Error!
                 br
                 p Your user account could not be removed! Did you enter a correct password?
-              form.form-horizontal(method='POST', action='http://localhost:1337/settingsChanged', onsubmit='return validateSettingsForm();')
+              form.form-horizontal(method='POST', action='/settingsChanged', onsubmit='return validateSettingsForm();')
                 fieldset
                   .control-group#cg-oldpassword
                     label.control-label(for='oldPasswordInput') Old password
@@ -80,7 +80,7 @@ html(lang='en')
                 p Deleting your account is permanent and deletes all the data which is stored in our database. You will not get any money back if you delete your account.
               - if (user.role == 'user')
                 p Deleting your account is permanent and deletes all the data which is stored in our database.
-             form.form-horizontal(method='POST', action='http://localhost:1337/userDeleted')
+             form.form-horizontal(method='POST', action='/userDeleted')
               fieldset
                 .control-group#cg-password
                   label.control-label(for='passwordInput') Password

@@ -50,7 +50,7 @@ html(lang='en')
               h1 Login
               hr
               p If you already have an account, you can sign in here.
-              form.form-horizontal(method='POST', action='http://localhost:1337/authenticated', onsubmit='return validateLoginForm();')
+              form.form-horizontal(method='POST', action='/authenticated', onsubmit='return validateLoginForm();')
                 fieldset
                   .control-group#cg-email
                     label.control-label(for='emailInput') eMail
@@ -66,7 +66,7 @@ html(lang='en')
             .span6
               h1 Register for free
               hr
-              form.form-horizontal(method='POST', action='http://localhost:1337/registered', onsubmit='return validateRegisterForm();')
+              form.form-horizontal(method='POST', action='/registered', onsubmit='return validateRegisterForm();')
                 fieldset
                   .control-group#cg-email-reg
                     label.control-label(for='emailInputReg') eMail

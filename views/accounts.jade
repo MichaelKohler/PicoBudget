@@ -60,9 +60,9 @@ html(lang='en')
                     td #{account.currency}
                     td(style='text-align:right;') #{account.balance}
                     td(style='text-align:right;')
-                      a(href='http://localhost:1337/accounts?editAccount=true&n=#{account.name}&b=#{account.balance}') Edit
+                      a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.balance}') Edit
                     td(style='text-align:right;')
-                      a(style='color:red;', href='http://localhost:1337/accounts?deleteAccount=true&n=#{account.name}') Delete
+                      a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
                 tr(style='font-weight:bold;')
                   td
                   td Total (#{user.prefCurr}):
@@ -70,7 +70,7 @@ html(lang='en')
                   td
                   td
             h2(id='addaccounttitle') Add a new account
-            form.form-horizontal(id='addaccountform', method='POST', action='http://localhost:1337/accountAdded', onsubmit='return validateAccountForm();')
+            form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded', onsubmit='return validateAccountForm();')
                 fieldset
                   .control-group#cg-name
                     label.control-label(for='nameInput') Name
@@ -90,7 +90,7 @@ html(lang='en')
                   .form-actions
                     button.btn.btn-info(type='submit') Add account
             h2(id='editaccounttitle') Edit account
-            form.form-horizontal(id='editaccountform', method='POST', action='http://localhost:1337/accountEdited', onsubmit='return validateEditAccountForm();')
+            form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited', onsubmit='return validateEditAccountForm();')
                 fieldset
                   .control-group#cg-editname
                     label.control-label(for='editNameInput') Name
@@ -107,7 +107,7 @@ html(lang='en')
                   .form-actions
                     button.btn.btn-info(type='submit') Edit account
             h2(id='deleteaccounttitle') Delete account
-            form.form-horizontal(id='deleteaccountform', method='POST', action='http://localhost:1337/accountDeleted')
+            form.form-horizontal(id='deleteaccountform', method='POST', action='/accountDeleted')
                 fieldset
                   .control-group#cg-deletename
                     label.control-label(for='deleteNameInput') Name

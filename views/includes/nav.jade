@@ -7,23 +7,23 @@ header
                 span.icon-bar
                 span.icon-bar
                 span.icon-bar
-              a.brand(href='http://localhost:1337') PicoBudget
+              a.brand(href='') PicoBudget
               .nav-collapse
                 ul.nav
                   li
-                    a(href='http://localhost:1337') Home
+                    a(href='') Home
                   - if (!user)
                     li
-                      a(href='http://localhost:1337/login') Register
+                      a(href='/login') Register
                   li
-                    a(href='http://localhost:1337/faq') FAQ
+                    a(href='/faq') FAQ
                   li
-                    a(href='http://localhost:1337/about') About
+                    a(href='/about') About
                   - if (user)
                     li
-                      a(href='http://localhost:1337/dashboard') Dashboard
+                      a(href='/dashboard') Dashboard
                 - if (!user)
-                  form.form-inline.pull-right(action='http://localhost:1337/authenticated', method='POST')
+                  form.form-inline.pull-right(action='/authenticated', method='POST')
                     input.input-small(type='email', placeholder='Email', name='emailInput')
                     input.input-small(type='password', placeholder='Password', name='passwordInput')
                     label.checkbox
