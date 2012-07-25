@@ -2,6 +2,8 @@ var express = require('express');
 var server = express.createServer();
 var accounts = require('./accounts.js');
 var globals = require('./globals.js');
+var transactions = require('./transactions.js');
+var tags = require('./tags.js');
 
 server.configure(function () {
   server.use('/bootstrap', express.static(__dirname + '/bootstrap'));
@@ -90,24 +92,29 @@ server.post('/registered', function(req, res) {
 server.get('/', function(req, res) {
   res.render('index', { locals: { user: req.session.user || ''} });
 });
+
 server.get('/home', function(req, res) {
   res.render('index', { locals: { user: req.session.user || ''} });
 });
+
 server.get('/faq', function(req, res) {
   res.render('faq', { locals: { user: req.session.user || ''} });
 });
+
 server.get('/introduction', function(req, res) {
   res.render('introduction', { locals: { user: req.session.user || ''} });
 });
+
 server.get('/premium', function(req, res) {
   res.render('premium', { locals: {user: req.session.user || ''} });
 });
+
 server.get('/about', function(req, res) {
   res.render('about', { locals: { user: req.session.user || ''} });
 });
+
 server.get('/dashboard', requiresLogin, function(req, res) {
-  accounts.getAllAccounts(req.session.user.username, req.session.user.password,
-                          db, function(accountList) {
+  accounts.getAllAccounts(req.session.user.username, db, function(accountList) {
     res.render('dashboard', { locals: {
       user: req.session.user || '',
       accounts: accountList,
@@ -117,8 +124,7 @@ server.get('/dashboard', requiresLogin, function(req, res) {
 });
 
 server.get('/accounts', requiresLogin, function(req, res) {
-  accounts.getAllAccounts(req.session.user.username, req.session.user.password,
-                          db, function(accountList) {
+  accounts.getAllAccounts(req.session.user.username, db, function(accountList) {
     if (accountList) {
       accounts.sumBalance(accountList, function(sum) {
         globals.getAllAvailableCurrencies(db, function(currencyList) {
@@ -134,6 +140,7 @@ server.get('/accounts', requiresLogin, function(req, res) {
         });
       });
     }
+    // TODO: ELSE??
   });
 });
 
@@ -178,11 +185,73 @@ server.post('/accountDeleted', requiresLogin, function(req, res) {
 });
 
 server.get('/transactions', requiresLogin, function(req, res) {
-  res.render('transactions', { locals: { user: req.session.user || ''} });
+  transactions.getAllTransactions(req.session.user.username, db, function(transactionList) {
+    if (transactionList) {
+      tags.getAllTags(req.session.user.username, db, function(tagList) {
+        if (tagList) {
+          accounts.getAllAccounts(req.session.user.username,db, function(accList) {
+            if (accList) {
+              res.render('transactions', { locals: {
+                user: req.session.user || '',
+                transactions: transactionList,
+                tags: tagList,
+                accounts: accList
+              }});
+            }
+          });
+        }
+      }); 
+    }
+    // TODO: ELSE??
+  });
 });
+
+server.post('/transactionAdded', requiresLogin, function(req, res) {
+  var transID = req.body['transIDInput'];
+  var transAcc = req.body['transAccDropdown'];
+  var transArt = req.body['transArtInput'];
+  var transName = req.body['transNameInput'];
+  var transTags = req.body['transTags'].split(',');
+  var transAmount = req.body['transAmount'];
+  transactions.addTransaction(req.session.user.username, transID, transAcc, transArt, transName,
+                              transTags, transAmount, db, function(success) {
+    success ? res.redirect('/transactions?added=true') : res.redirect('/transactions?added=false');
+  });
+});
+
+server.post('/transactionEdited', requiresLogin, function(req, res) {
+  var transID = req.body['transID'];
+  var transArt = req.body['transArtEditInput'];
+  var transOldName = req.body['transOldName'];
+  var transName = req.body['transNameEditInput'];
+  var transTags = req.body['transTagsEdit'];
+  var transAmount = req.body['transEditAmount'];
+  transactions.editTransaction(req.session.user.username, transID, transArt, transName,
+                               transTags, transAmount, db, function(successTrans) {
+    tags.addTags(req.session.user.username, transTags.split(','), db, function(successTags) {
+      successTrans ? res.redirect('/transactions?edited=true') : res.redirect('/transactions?edited=false');
+    });
+  });
+});
+
+server.post('/transactionDeleted', requiresLogin, function(req, res) {
+  var transID = req.body['transID'];
+  transactions.removeTransaction(req.session.user.username, transID, db, function(success) {
+    success ? res.redirect('/transactions?deleted=true') : res.redirect('/transactions?deleted=false');
+  });
+});
+
+server.post('/tagDeleted', requiresLogin, function(req, res) {
+  var tagName = req.body['tagNameInput'];
+  tags.removeTag(req.session.user.username, tagName, db, function(success) {
+    success ? res.redirect('/transactions?tagDeleted=true') : res.redirect('/transactions?tagDeleted=false');
+  });
+});
+
 server.get('/budget', requiresLogin, function(req, res) {
   res.render('budget', { locals: { user: req.session.user || ''} });
 });
+
 server.get('/reports', requiresLogin, function(req, res) {
   res.render('reports', { locals: { user: req.session.user || ''} });
 });
@@ -198,6 +267,7 @@ server.get('/settings', requiresLogin, function(req, res) {
     }
   });
 });
+
 server.post('/settingsChanged', requiresLogin, function(req, res) {
   var oldPW = req.body['oldPasswordInput'];
   var newPW = req.body['newPasswordInput'];
@@ -224,6 +294,7 @@ server.post('/settingsChanged', requiresLogin, function(req, res) {
     }    
   });
 });
+
 server.post('/userDeleted', requiresLogin, function(req, res) {
   users.removeUser(req.session.user.username, req.body["passwordInput"], db, function(removed) {
     if (removed) {
@@ -236,6 +307,7 @@ server.post('/userDeleted', requiresLogin, function(req, res) {
   });
   // TODO: remove other data too!
 });
+
 server.get('/logout', function(req, res) {
   delete req.session.user;
   res.redirect('/login?loggedOut=true');

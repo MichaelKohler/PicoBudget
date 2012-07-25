@@ -12,8 +12,55 @@ html(lang='en')
 
           .span10
             h1 Transactions
-            p Here should be the transactions overview.
+            ul.nav.nav-tabs#tabnav
+              li#overviewlink
+                a(href='#') Overview
+              li#newlink
+                a(href='#') New transaction
+              li#tagslink
+                a(href='#') Manage tags
+            #overview
+              h3 Transaction overview
+            #new
+              h3 Add a new transaction
+            #tags
+              h3 Tags
 
       include includes/footer.jade
 
     include includes/bootstrap_jquery.jade
+
+    script(type='text/javascript')
+      $(function () {
+        $('#new').hide();
+        $('#tags').hide();
+        $('#overviewlink').addClass('active');
+
+        $('#overviewlink').click(function (e) {
+          e.preventDefault();
+          $('#new').hide();
+          $('#newlink').removeClass('active');
+          $('#tags').hide();
+          $('#tagslink').removeClass('active');
+          $('#overview').show();
+          $('#overviewlink').addClass('active');
+        })
+        $('#newlink').click(function (e) {
+          e.preventDefault();
+          $('#overview').hide();
+          $('#overviewlink').removeClass('active');
+          $('#tags').hide();
+          $('#tagslink').removeClass('active');
+          $('#new').show();
+          $('#newlink').addClass('active');
+        })
+        $('#tagslink').click(function (e) {
+          e.preventDefault();
+          $('#overview').hide();
+          $('#overviewlink').removeClass('active');
+          $('#new').hide();
+          $('#newlink').removeClass('active');
+          $('#tags').show();
+          $('#tagslink').addClass('active');
+        })
+      })
