@@ -57,15 +57,15 @@ html(lang='en')
                 for account in accounts
                   tr
                     td #{account.name}
-                    td #{account.currency}
-                    td(style='text-align:right;') #{account.balance}
+                    td #{account.curr}
+                    td(style='text-align:right;') #{account.bal}
                     td(style='text-align:right;')
-                      a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.balance}') Edit
+                      a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
                     td(style='text-align:right;')
                       a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
                 tr(style='font-weight:bold;')
                   td
-                  td Total (#{user.prefCurr}):
+                  td Total (#{user.curr}):
                   td(style='text-align:right;') #{balanceSum}
                   td
                   td

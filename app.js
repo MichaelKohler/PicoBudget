@@ -22,14 +22,13 @@ server.use(express.session({ secret: "keyboard cat", store: memStore( {
 })}));
 
 server.listen(1337);
-console.log('Express server started on port %s', server.address().port);
 
 /** MongoDB  */
 var mongo = require('mongodb');
 var MongoServer = mongo.Server;
 var MongoDatabase = mongo.Db;
 var dbServer = new MongoServer('localhost', 27017, {auto_reconnect: true, poolSize: 1 })
-var db = new MongoDatabase('mydb', dbServer)
+var db = new MongoDatabase('pb', dbServer)
 
 db.open(function(err, db){
   if(err) console.log(err);
@@ -114,8 +113,8 @@ server.get('/about', function(req, res) {
 });
 
 server.get('/dashboard', requiresLogin, function(req, res) {
-  transactions.getLimitedTransactions(req.session.user.username, db, 5, function (transactionList) {
-    accounts.getAllAccounts(req.session.user.username, db, function(accountList) {
+  transactions.getLimitedTransactions(req.session.user.user, db, 5, function (transactionList) {
+    accounts.getAllAccounts(req.session.user.user, db, function(accountList) {
       res.render('dashboard', { locals: {
         user: req.session.user || '',
         accounts: accountList,
@@ -127,7 +126,7 @@ server.get('/dashboard', requiresLogin, function(req, res) {
 });
 
 server.get('/accounts', requiresLogin, function(req, res) {
-  accounts.getAllAccounts(req.session.user.username, db, function(accountList) {
+  accounts.getAllAccounts(req.session.user.user, db, function(accountList) {
     if (accountList) {
       accounts.sumBalance(accountList, function(sum) {
         globals.getAllAvailableCurrencies(db, function(currencyList) {
@@ -151,7 +150,7 @@ server.post('/accountAdded', requiresLogin, function(req, res) {
   var accName = req.body['nameInput'];
   var accCurrency = req.body['currDropdown'];
   var accBalance = req.body['initBalanceInput'];
-  accounts.addAccount(req.session.user.username, accName, accCurrency, accBalance, db, function(success) {
+  accounts.addAccount(req.session.user.user, accName, accCurrency, accBalance, db, function(success) {
     if (success) {
       res.redirect('/accounts?accountAdded=true');
     }
@@ -165,7 +164,7 @@ server.post('/accountEdited', requiresLogin, function(req, res) {
   var oldName = req.body['hiddenOldName'];
   var accName = req.body['editNameInput'];
   var accBalance = req.body['editInitBalanceInput'];
-  accounts.editAccount(req.session.user.username, oldName, accName, accBalance, db, function(success) {
+  accounts.editAccount(req.session.user.user, oldName, accName, accBalance, db, function(success) {
     if (success) {
       res.redirect('/accounts?accountEdited=true');
     }
@@ -177,7 +176,7 @@ server.post('/accountEdited', requiresLogin, function(req, res) {
 
 server.post('/accountDeleted', requiresLogin, function(req, res) {
   var accName = req.body['deleteNameInput'];
-  accounts.deleteAccount(req.session.user.username, accName, db, function(success) {
+  accounts.deleteAccount(req.session.user.user, accName, db, function(success) {
     if (success) {
       res.redirect('/accounts?accountDeleted=true');
     }
@@ -188,11 +187,11 @@ server.post('/accountDeleted', requiresLogin, function(req, res) {
 });
 
 server.get('/transactions', requiresLogin, function(req, res) {
-  transactions.getAllTransactions(req.session.user.username, db, function(transactionList) {
+  transactions.getAllTransactions(req.session.user.user, db, function(transactionList) {
     if (transactionList) {
-      tags.getAllTags(req.session.user.username, db, function(tagList) {
+      tags.getAllTags(req.session.user.user, db, function(tagList) {
         if (tagList) {
-          accounts.getAllAccounts(req.session.user.username,db, function(accList) {
+          accounts.getAllAccounts(req.session.user.user,db, function(accList) {
             if (accList) {
               res.render('transactions', { locals: {
                 user: req.session.user || '',
@@ -218,7 +217,7 @@ server.post('/transactionAdded', requiresLogin, function(req, res) {
   var transName = req.body['transNameInput'];
   var transTags = req.body['transTagsInput'].split(',');
   var transAmount = req.body['transAmountInput'];
-  transactions.addTransaction(req.session.user.username, transID, transAcc, transArt, transName,
+  transactions.addTransaction(req.session.user.user, transID, transAcc, transArt, transName,
                               transTags, transAmount, db, function(success) {
     success ? res.redirect('/transactions?added=true') : res.redirect('/transactions?added=false');
   });
@@ -231,7 +230,7 @@ server.post('/transactionEdited', requiresLogin, function(req, res) {
   var transName = req.body['transNameEditInput'];
   var transTags = req.body['transTagsEdit'];
   var transAmount = req.body['transEditAmount'];
-  transactions.editTransaction(req.session.user.username, transID, transArt, transName,
+  transactions.editTransaction(req.session.user.user, transID, transArt, transName,
                                transTags, transAmount, db, function(successTrans) {
     successTrans ? res.redirect('/transactions?edited=true') : res.redirect('/transactions?edited=false');
   });
@@ -239,14 +238,14 @@ server.post('/transactionEdited', requiresLogin, function(req, res) {
 
 server.post('/transactionDeleted', requiresLogin, function(req, res) {
   var transID = req.body['transID'];
-  transactions.removeTransaction(req.session.user.username, transID, db, function(success) {
+  transactions.removeTransaction(req.session.user.user, transID, db, function(success) {
     success ? res.redirect('/transactions?deleted=true') : res.redirect('/transactions?deleted=false');
   });
 });
 
 server.post('/tagDeleted', requiresLogin, function(req, res) {
   var tagName = req.body['tagNameInput'];
-  tags.removeTag(req.session.user.username, tagName, db, function(success) {
+  tags.removeTag(req.session.user.user, tagName, db, function(success) {
     success ? res.redirect('/transactions?tagDeleted=true') : res.redirect('/transactions?tagDeleted=false');
   });
 });
@@ -276,7 +275,7 @@ server.post('/settingsChanged', requiresLogin, function(req, res) {
   var newPW = req.body['newPasswordInput'];
   var prefCurr = req.body['prefCurrDropdown'];
 
-  users.changeSettings(req.session.user.username, oldPW, newPW, prefCurr, db, function(changed) {
+  users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, db, function(changed) {
     if (changed == "NOPWMATCH") {
       res.redirect('/settings?passwordsDidntMatch=true');
     }
@@ -299,7 +298,7 @@ server.post('/settingsChanged', requiresLogin, function(req, res) {
 });
 
 server.post('/userDeleted', requiresLogin, function(req, res) {
-  users.removeUser(req.session.user.username, req.body["passwordInput"], db, function(removed) {
+  users.removeUser(req.session.user.user, req.body["passwordInput"], db, function(removed) {
     if (removed) {
       delete req.session.user;
       res.redirect('/login?removed=true');

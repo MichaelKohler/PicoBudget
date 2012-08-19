@@ -20,8 +20,8 @@ module.exports.addAccount = function(login, accName, accCurrency, accBalance, db
   db.collection('accounts', function(err, collection) {
     collection.findOne({user:login, name:accName}, function(err, foundAccount) {
       if (!foundAccount) {
-        var newAccount = { user: login, name: accName, currency: accCurrency,
-                            balance: parseFloat(accBalance).toFixed(2), active: true };
+        var newAccount = { user: login, name: accName, curr: accCurrency,
+                            bal: parseFloat(accBalance).toFixed(2), act: true };
         collection.insert(newAccount, function(err, result) {
           if (result)
             callback(true);

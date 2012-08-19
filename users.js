@@ -1,8 +1,8 @@
 module.exports.authenticate = function(login, password, db, callback) {
   db.collection('users', function(err, collection) {
-    collection.findOne({username:login}, function(err, user) {
+    collection.findOne({user:login}, function(err, user) {
       if (user)
-        user.password == password ? callback(user) : callback(null);
+        user.pw == password ? callback(user) : callback(null);
       else
         callback(null);
     });
@@ -11,9 +11,9 @@ module.exports.authenticate = function(login, password, db, callback) {
 
 module.exports.create = function(login, password, db, callback) {
   db.collection('users', function(err, collection) {
-    collection.findOne({username:login}, function(err, foundUser) {
+    collection.findOne({user:login}, function(err, foundUser) {
       if (!foundUser) {
-        var newUser = { username: login, password: password, role: 'user', prefCurr: "CHF" };
+        var newUser = { user: login, pw: password, role: 'user', curr: "CHF" };
         collection.insert(newUser, function(err, result) {
           if (result)
             callback(newUser);
@@ -30,13 +30,13 @@ module.exports.create = function(login, password, db, callback) {
 
 module.exports.changeSettings = function(login, oldPassword, newPassword, prefCurr, db, callback) {
   db.collection('users', function(err, collection) {
-    collection.findOne({username:login}, function(err, user) {
+    collection.findOne({user:login}, function(err, user) {
       if (user) { // user was found
         if (oldPassword != '' && newPassword != '') { // pw change needed?
-          if (user.password == oldPassword) { // pw matches?
-            collection.update({username:login}, {$set: {password:newPassword, prefCurr:prefCurr}}, function(err) {
-              user.password = newPassword;
-              user.prefCurr = prefCurr;
+          if (user.pw == oldPassword) { // pw matches?
+            collection.update({user:login}, {$set: {pw:newPassword, curr:prefCurr}}, function(err) {
+              user.pw = newPassword;
+              user.curr = prefCurr;
               typeof(err) == 'undefined' ? callback(user) : callback(null);
             });
           }
@@ -45,8 +45,8 @@ module.exports.changeSettings = function(login, oldPassword, newPassword, prefCu
           }
         }
         else { // only save prefcurr
-          collection.update({username:login}, {$set: {prefCurr:prefCurr}}, function(err) {
-            user.prefCurr = prefCurr;
+          collection.update({user:login}, {$set: {curr:prefCurr}}, function(err) {
+            user.curr = prefCurr;
             typeof(err) == 'undefined' ? callback(user) : callback(null);
           });
         }
@@ -60,9 +60,9 @@ module.exports.changeSettings = function(login, oldPassword, newPassword, prefCu
 
 module.exports.removeUser = function(login, password, db, callback) {
   db.collection('users', function(err, collection) {
-    collection.findOne({username:login}, function(err, user) {
-      if (user.password == password) {
-        collection.remove({username:login}, function(err) {
+    collection.findOne({user:login}, function(err, user) {
+      if (user.pw == password) {
+        collection.remove({user:login}, function(err) {
           err ? callback(null) : callback(true);
         });
       }
