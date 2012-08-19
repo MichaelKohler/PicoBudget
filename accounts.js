@@ -40,7 +40,7 @@ module.exports.editAccount = function(login, oldName, accName, accBalance, db, c
   db.collection('accounts', function(err, collection) {
     collection.findOne({name:oldName}, function(err, foundAccount) {
       if (foundAccount) {
-        collection.update({name:oldName}, {$set: {name:accName, balance:accBalance}}, function(err) {
+        collection.update({name:oldName}, {$set: {name:accName, bal:accBalance}}, function(err) {
           if (typeof(err) == 'undefined') {
             callback(true);
           }
