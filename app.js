@@ -1,5 +1,6 @@
 var express = require('express');
 var server = express.createServer();
+var users = require('./users');
 var accounts = require('./accounts.js');
 var globals = require('./globals.js');
 var transactions = require('./transactions.js');
@@ -59,7 +60,6 @@ server.get('/login', function(req, res) {
     res.render('login', { locals: { user: req.session.user || ''} });
 });
 
-var users = require('./users');
 server.post('/authenticated', function(req, res) {
   users.authenticate(req.body['emailInput'], req.body['passwordInput'], db, function(user) {
      if (user) {
@@ -114,12 +114,15 @@ server.get('/about', function(req, res) {
 });
 
 server.get('/dashboard', requiresLogin, function(req, res) {
-  accounts.getAllAccounts(req.session.user.username, db, function(accountList) {
-    res.render('dashboard', { locals: {
-      user: req.session.user || '',
-      accounts: accountList,
-      accNumber: accountList.length
-    }});
+  transactions.getLimitedTransactions(req.session.user.username, db, 5, function (transactionList) {
+    accounts.getAllAccounts(req.session.user.username, db, function(accountList) {
+      res.render('dashboard', { locals: {
+        user: req.session.user || '',
+        accounts: accountList,
+        accNumber: accountList.length,
+        transactions: transactionList
+      }});
+    });
   });
 });
 
@@ -195,24 +198,26 @@ server.get('/transactions', requiresLogin, function(req, res) {
                 user: req.session.user || '',
                 transactions: transactionList,
                 tags: tagList,
-                accounts: accList
+                accounts: accList	
               }});
             }
           });
         }
       }); 
     }
-    // TODO: ELSE??
+    else {
+      res.redirect('/transactions?error=true');
+    }
   });
 });
 
 server.post('/transactionAdded', requiresLogin, function(req, res) {
   var transID = req.body['transIDInput'];
   var transAcc = req.body['transAccDropdown'];
-  var transArt = req.body['transArtInput'];
+  var transArt = req.body['transArtDropdown'];
   var transName = req.body['transNameInput'];
-  var transTags = req.body['transTags'].split(',');
-  var transAmount = req.body['transAmount'];
+  var transTags = req.body['transTagsInput'].split(',');
+  var transAmount = req.body['transAmountInput'];
   transactions.addTransaction(req.session.user.username, transID, transAcc, transArt, transName,
                               transTags, transAmount, db, function(success) {
     success ? res.redirect('/transactions?added=true') : res.redirect('/transactions?added=false');
@@ -228,11 +233,9 @@ server.post('/transactionEdited', requiresLogin, function(req, res) {
   var transAmount = req.body['transEditAmount'];
   transactions.editTransaction(req.session.user.username, transID, transArt, transName,
                                transTags, transAmount, db, function(successTrans) {
-    tags.addTags(req.session.user.username, transTags.split(','), db, function(successTags) {
-      successTrans ? res.redirect('/transactions?edited=true') : res.redirect('/transactions?edited=false');
-    });
+    successTrans ? res.redirect('/transactions?edited=true') : res.redirect('/transactions?edited=false');
   });
-});
+});	
 
 server.post('/transactionDeleted', requiresLogin, function(req, res) {
   var transID = req.body['transID'];

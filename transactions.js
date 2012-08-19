@@ -1,6 +1,16 @@
 module.exports.getAllTransactions = function(login, db, callback) {
   db.collection('transactions', function(err, collection) {
-    collection.find({user:login}, function(err, cursor) {
+    collection.find({username:login}, {sort:[['date',-1]]}, function(err, cursor) {
+      cursor.toArray(function (err, items) {
+        callback(items);
+      });
+    });
+  });
+};
+
+module.exports.getLimitedTransactions = function(login, db, limitedEntries, callback) {
+  db.collection('transactions', function(err, collection) {
+    collection.find({username:login}, {limit: limitedEntries, sort:[['date',-1]]}, function(err, cursor) {
       cursor.toArray(function (err, items) {
         callback(items);
       });
@@ -11,8 +21,9 @@ module.exports.getAllTransactions = function(login, db, callback) {
 module.exports.addTransaction = function(login, transID, transAcc, transArt, transName, transTags,
                                           transAmount, db, callback) {
   db.collection('transactions', function(err, collection) {
-    var newTransaction = { username: login, transID:transID, acc:transAcc, art: transArt,
-                           name:transName, tags:transTags, amount:transAmount };
+    var currentDate = new Date().getFullYear() + "/" + (new Date().getMonth()+1) + "/" + new Date().getDate();
+    var newTransaction = { username: login, transID:transID, date:currentDate, acc:transAcc, art: transArt,
+                           name:transName, tags:transTags, amount:parseFloat(transAmount).toFixed(2) };
     collection.insert(newTransaction, function(err, result) {
       if (result)
         callback(newTransaction);
@@ -26,7 +37,7 @@ module.exports.editTransaction = function(login, transID, transArt, transName,
                                            transTags, transAmount, db, callback) {
   db.collection('transactions', function(err, collection) {
     var transaction = { username: login, transID:transID };
-    var newTransaction = { art: transArt, name:transName, tags:transTags, amount:transAmount };
+    var newTransaction = { art: transArt, name:transName, tags:transTags, amount:parseFloat(transAmount).toFixed(2) };
     collection.findOne(transaction, function(err, foundTransaction) {
       if (foundTransaction) {
         collection.update(transaction, {$set: newTransaction}, function(err) {

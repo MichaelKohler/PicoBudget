@@ -12,7 +12,7 @@ html(lang='en')
 
           .span10
             h1 Transactions
-            ul.nav.nav-tabs#tabnav
+            ul(style='padding-top:20px;').nav.nav-tabs#tabnav
               li#overviewlink
                 a(href='#') Overview
               li#newlink
@@ -21,8 +21,93 @@ html(lang='en')
                 a(href='#') Manage tags
             #overview
               h3 Transaction overview
+              .alert-success.alert#added
+                button.close(date-dismiss='alert') ×
+                strong Added!
+                br
+                p The transaction has been added successfully!
+              .alert-error.alert#notadded
+                button.close(date-dismiss='alert') ×
+                strong Error while adding your transaction!
+                br
+                p Unfortunately there was an error while adding your transaction! Please try again later.
+              .alert-success.alert#edited
+                button.close(date-dismiss='alert') ×
+                strong Edited!
+                br
+                p The transaction has been edited successfully!
+              .alert-error.alert#notedited
+                button.close(date-dismiss='alert') ×
+                strong Error while editing your transaction!
+                br
+                p Unfortunately there was an error while editing your transaction! Please try again later.
+              .alert-success.alert#deleted
+                button.close(date-dismiss='alert') ×
+                strong Deleted!
+                br
+                p The transaction has been deleted successfully!
+              .alert-error.alert#notdeleted
+                button.close(date-dismiss='alert') ×
+                strong Error while deleting your transaction!
+                br
+                p Unfortunately there was an error while deleting your transaction! Please try again later.
+              .alert-error.alert#error
+                button.close(date-dismiss='alert') ×
+                strong Error!
+                br
+                p Unfortunately there was an error what you told me to do! Please try again later.
+              table.table
+                thead
+                  tr
+                    th Date
+                    th Account
+                    th Descrition
+                    th +/-
+                    th Tags
+                    th(style='text-align:right;') Amount
+                tbody              
+                  for trans in transactions
+                    tr
+                      td #{trans.date}
+                      td #{trans.acc}
+                      td #{trans.name}
+                      td #{trans.art}
+                      td #{trans.tags}
+                      td(style='text-align:right;') #{trans.amount}
             #new
               h3 Add a new transaction
+              form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit='return validateTransactionForm();')
+                fieldset
+                  .control-group#cg-id
+                    .controls
+                      input.input-xlarge#transIDInput(type='hidden', name='transIDInput', value='1')
+                  .control-group#cg-account
+                    label.control-label(for='transAccDropdown') Account
+                    .controls
+                      select(name='transAccDropdown')
+                        option(value='einnahme') Foo
+                        option(value='einnahme') Bar
+                  .control-group#cg-name
+                    label.control-label(for='transNameInput') Description
+                    .controls
+                      input.input-xlarge#transNameInput(type='text', name='transNameInput')
+                  .control-group#cg-art
+                    label.control-label(for='artDropdown') +/-
+                    .controls
+                      select(name='transArtDropdown')
+                        option(value='einnahme') foo
+                        option(value='einnahme') bar
+                  .control-group#cg-transTags
+                    label.control-label(for='transTagsInput') Tags
+                    .controls
+                      input.input-xlarge#transTagsInput(type='text', name='transTagsInput')
+                  .control-group#cg-transAmount
+                    label.control-label(for='transAmountInput') Amount
+                    .controls
+                      input.input-xlarge#transAmountInput(type='text', name='transAmountInput')
+                  .control-group
+                  .form-actions
+                    button.btn.btn-info(type='submit') Add transaction
             #tags
               h3 Tags
 
@@ -63,4 +148,29 @@ html(lang='en')
           $('#tags').show();
           $('#tagslink').addClass('active');
         })
+
+        // TODO: switch?
+        // notifications
+        $('#notadded').hide();
+        $('#added').hide();
+        $('#notedited').hide();
+        $('#edited').hide();
+        $('#notdeleted').hide();
+        $('#deleted').hide();
+        $('#error').hide();
+
+        if ($.getUrlVar('added') == 'false')
+          $('#notadded').show();
+        if ($.getUrlVar('added') == 'true')
+          $('#added').show();
+        if ($.getUrlVar('edited') == 'false')
+          $('#notedited').show();
+        if ($.getUrlVar('edited') == 'true')
+          $('#edited').show();
+        if ($.getUrlVar('deleted') == 'false')
+          $('#notdeleted').show();
+        if ($.getUrlVar('deleted') == 'true')
+          $('#deleted').show();
+        if ($.getUrlVar('error') == 'true')
+          $('#error').show();
       })
