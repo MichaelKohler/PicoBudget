@@ -76,7 +76,12 @@ html(lang='en')
                       td(style='text-align:right;') #{trans.amount}
             #new
               h3 Add a new transaction
-              form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit='return validateTransactionForm();')
+              .alert-error.alert#fillInAllInfo
+                button.close(date-dismiss='alert') ×
+                strong Error!
+                br
+                p Please fill in all the information!
+              form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit='return validateAddTransactionForm();')
                 fieldset
                   .control-group#cg-id
                     .controls
@@ -97,11 +102,11 @@ html(lang='en')
                       select(name='transArtDropdown')
                         option(value='einnahme') foo
                         option(value='einnahme') bar
-                  .control-group#cg-transTags
+                  .control-group#cg-transtags
                     label.control-label(for='transTagsInput') Tags
                     .controls
                       input.input-xlarge#transTagsInput(type='text', name='transTagsInput')
-                  .control-group#cg-transAmount
+                  .control-group#cg-transamount
                     label.control-label(for='transAmountInput') Amount
                     .controls
                       input.input-xlarge#transAmountInput(type='text', name='transAmountInput')
@@ -149,8 +154,7 @@ html(lang='en')
           $('#tagslink').addClass('active');
         })
 
-        // TODO: switch?
-        // notifications
+        $('#fillInAllInfo').hide();
         $('#notadded').hide();
         $('#added').hide();
         $('#notedited').hide();
@@ -174,3 +178,27 @@ html(lang='en')
         if ($.getUrlVar('error') == 'true')
           $('#error').show();
       })
+
+      // validate add transaction form
+      function validateAddTransactionForm() {
+        var state = true;
+
+        if ($('#transNameInput').val() ==  '') {
+          $('#cg-name').addClass('error');
+          state = false;
+        } else {
+          $('#cg-name').removeClass('error');
+        }
+
+        if ($('#transAmountInput').val() ==  '' || isNaN($('#transAmountInput').val())) {
+           $('#cg-transamount').addClass('error');
+           state = false;
+        } else {
+           $('#cg-transamount').removeClass('error');
+        }
+          
+        if (!state)
+          $('#fillInAllInfo').show();
+
+        return state;
+      }

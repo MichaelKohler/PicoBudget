@@ -102,51 +102,57 @@ html(lang='en')
       $('#fillInAllInfo').hide();
       $('#passwordsDidntMatch').hide();
 
+
+
       // validate login form
       function validateLoginForm() {
-        var state = false;
+        var state = true;
 
-        if ($('#emailInput').val() != '' && $('#passwordInput').val() != '')
-          state = true;
-        else
-          $('#fillInAllInfo').show(); // not all info entered -> show error
+        if ($('#emailInput').val() == '') {
+          $('#cg-email').addClass('error');
+          state = false;
+        } else {
+          $('#cg-email').removeClass('error');
+        }
 
-        if ($('#emailInput').val() == '')
-          $('#cg-email').addClass('error'); // email was empty -> error
-        else
-          $('#cg-email').removeClass('error'); // email is not empty -> no error
+        if ($('#passwordInput').val() == '') {
+          $('#cg-password').addClass('error');
+          state = false;
+        } else {
+          $('#cg-password').removeClass('error');
+        }
 
-        if ($('#passwordInput').val() == '')
-          $('#cg-password').addClass('error'); // password was empty -> error
-        else
-          $('#cg-password').removeClass('error'); // password is not empty -> no error
+        if (!state)
+          $('#fillInAllInfo').show();
 
         return state;
       }
 
+
+
       // validate register form
       function validateRegisterForm() {
-        var state = false;
+        var state = true;
 
-        if ($('#emailInputReg').val() != '' && $('#passwordInputReg').val() != ''
-            && $('#passwordConfirmInputReg').val() != '')
-          state = true;
-        else
-          $('#fillInAllInfo').show(); // not all info entered -> show error
-        if (state)
-          $('#fillInAllInfo').hide(); // all infos provided -> no error
+        if ($('#emailInputReg').val() == '') {
+          $('#cg-email-reg').addClass('error');
+          state = false;
+        } else {
+          $('#cg-email-reg').removeClass('error');
+        }
 
-        if ($('#passwordInputReg').val() != $('#passwordConfirmInputReg').val()) {
+        if ($('#passwordInputReg').val() == '' || $('#passwordInputReg').val() != $('#passwordConfirmInputReg').val()) {
           state = false;
           $('#passwordsDidntMatch').show();
           $('#cg-password-reg').addClass('error');
           $('#cg-passwordconfirm-reg').addClass('error');
+        } else {
+          $('#cg-password-reg').removeClass('error');
+          $('#cg-passwordconfirm-reg').removeClass('error');
         }
 
-        if ($('#emailInputReg').val() == '')
-          $('#cg-email-reg').addClass('error'); // email was empty -> error
-        else
-          $('#cg-email-reg').removeClass('error'); // email is not empty -> no error
+        if (!state)
+          $('#fillInAllInfo').show();
 
         return state;
       }

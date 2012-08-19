@@ -161,33 +161,52 @@ html(lang='en')
         $('#deleteNameInput').val($.getUrlVar('n'));
       } 
  
+
+
       // validate add account form
       function validateAccountForm() {
-        var state = false;
+        var state = true;
 
-        if ($('#nameInput').val() != '' && $('#initBalanceInput').val() != '')
-          state = true;
+        if ($('#nameInput').val() ==  '') {
+          $('#cg-name').addClass('error');
+          state = false;
+        } else {
+          $('#cg-name').removeClass('error');
+        }
 
-        if ($('#nameInput').val() ==  '')
-          $('#nameInput').addClass('error');
-        if ($('#initBalanceInput').val() ==  '')
-          $('#initBalanceInput').addClass('error');
+        if ($('#initBalanceInput').val() ==  '' || isNaN($('#initBalanceInput').val())) {
+           $('#cg-initialbalance').addClass('error');
+           state = false;
+        } else {
+           $('#cg-initialbalance').removeClass('error');
+        }
+          
         if (!state)
           $('#fillInAllInfo').show(); // not all info entered -> show error
 
         return state;
       }
+
+
+
       // validate edit account form
       function validateEditAccountForm() {
-        var state = false;
+        var state = true;
 
-        if ($('#editNameInput').val() != '' && $('#editInitBalanceInput').val() != '')
-          state = true;
+        if ($('#editNameInput').val() ==  '') {
+          $('#cg-editname').addClass('error');
+          state = false;
+        } else {
+          $('#cg-editname').removeClass('error');
+        }
 
-        if ($('#editNameInput').val() ==  '')
-          $('#editNameInput').addClass('error');
-        if ($('#editInitBalanceInput').val() ==  '')
-          $('#editInitBalanceInput').addClass('error');
+        if ($('#editInitBalanceInput').val() ==  '' || isNaN($('#editInitBalanceInput').val())) {
+           $('#cg-editinitialbalance').addClass('error');
+           state = false;
+        } else {
+           $('#cg-editinitialbalance').removeClass('error');
+        }
+          
         if (!state)
           $('#fillInAllInfo').show(); // not all info entered -> show error
 
