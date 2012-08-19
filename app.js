@@ -142,7 +142,6 @@ server.get('/accounts', requiresLogin, function(req, res) {
         });
       });
     }
-    // TODO: ELSE??
   });
 });
 
