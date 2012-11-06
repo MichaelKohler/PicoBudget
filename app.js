@@ -1,5 +1,5 @@
 var express = require('express');
-var server = express.createServer();
+var server = express();
 var users = require('./users');
 var accounts = require('./accounts.js');
 var globals = require('./globals.js');
