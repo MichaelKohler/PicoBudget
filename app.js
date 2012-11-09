@@ -10,17 +10,17 @@ server.configure(function () {
   server.use('/bootstrap', express.static(__dirname + '/bootstrap'));
   server.use('/css', express.static(__dirname + '/css'));
   server.use('/js', express.static(__dirname + '/js'));
+  server.set('view engine', 'jade');
+  server.set('views', __dirname + '/views');
+  server.set('view options', { layout: false });
+  server.use(express.logger('dev'));
+  server.use(express.bodyParser());
+  server.use(express.cookieParser({ secret: "keyboard cat" }));
+  var memStore = require('connect').session.MemoryStore;
+  server.use(express.session({ secret: "keyboard cat", store: memStore( {
+    reapInterval: 60000 * 10
+  })}));
 });
-server.set('view engine', 'jade');
-server.set('views', __dirname + '/views');
-server.set('view options', { layout: false });
-server.use(express.bodyParser());
-server.use(express.cookieParser({ secret: "keyboard cat" }));
-var memStore = require('connect').session.MemoryStore;
-server.use(express.session({ secret: "keyboard cat", store: memStore( {
-  reapInterval: 60000 * 10
-})}));
-
 server.listen(1337);
 
 /** MongoDB  */
