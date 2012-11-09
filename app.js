@@ -7,6 +7,7 @@ var transactions = require('./models/transactions.js');
 var tags = require('./models/tags.js');
 
 server.configure(function () {
+  server.set('port', 1337);
   server.use('/bootstrap', express.static(__dirname + '/public/bootstrap'));
   server.use('/css', express.static(__dirname + '/public/css'));
   server.use('/js', express.static(__dirname + '/public/js'));
@@ -21,7 +22,10 @@ server.configure(function () {
     reapInterval: 60000 * 10
   })}));
 });
-server.listen(1337);
+server.listen(1337, function() {
+  console.log("Server started on Port " + server.get('port'));
+});
+
 
 /** MongoDB  */
 var mongo = require('mongodb');
