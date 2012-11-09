@@ -1,5 +1,5 @@
 var express = require('express');
-var server = express();
+var server = express.createServer();
 var users = require('./models/users');
 var accounts = require('./models/accounts.js');
 var globals = require('./models/globals.js');
@@ -8,13 +8,13 @@ var tags = require('./models/tags.js');
 
 server.configure(function () {
   server.set('port', 1337);
-  server.use('/bootstrap', express.static(__dirname + '/public/bootstrap'));
-  server.use('/css', express.static(__dirname + '/public/css'));
-  server.use('/js', express.static(__dirname + '/public/js'));
+  server.set('publicfolder', 'public');
+  server.use('/bootstrap', express.static(__dirname + server.get('publicfolder') + '/bootstrap'));
+  server.use('/css', express.static(__dirname + server.get('publicfolder') + '/css'));
+  server.use('/js', express.static(__dirname + server.get('publicfolder') + '/js'));
   server.set('view engine', 'jade');
   server.set('views', __dirname + '/views');
   server.set('view options', { layout: false });
-  server.use(express.logger('dev'));
   server.use(express.bodyParser());
   server.use(express.cookieParser({ secret: "keyboard cat" }));
   var memStore = require('connect').session.MemoryStore;
@@ -22,6 +22,11 @@ server.configure(function () {
     reapInterval: 60000 * 10
   })}));
 });
+
+server.configure('development', function() { 
+  server.use(express.logger('dev'));
+});
+
 server.listen(1337, function() {
   console.log("Server started on Port " + server.get('port'));
 });
