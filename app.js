@@ -27,11 +27,12 @@ server.listen(1337);
 var mongo = require('mongodb');
 var MongoServer = mongo.Server;
 var MongoDatabase = mongo.Db;
-var dbServer = new MongoServer('localhost', 27017, {auto_reconnect: true, poolSize: 1 })
-var db = new MongoDatabase('pb', dbServer)
+var dbServer = new MongoServer('localhost', 27017, { auto_reconnect: true, poolSize: 1 });
+var db = new MongoDatabase('pb', dbServer, { safe: true });
 
 db.open(function(err, db){
-  if(err) console.log(err);
+  if(err)
+    console.log(err);
 });
 
 /** SESSIONS **/
@@ -56,7 +57,7 @@ server.get('/login', function(req, res) {
   if (req.session.user)
     res.render('dashboard');
   else
-    res.render('login', { locals: { user: req.session.user || ''} });
+    res.render('login', { locals: { user: req.session.user || '' } });
 });
 
 server.post('/authenticated', function(req, res) {
@@ -70,6 +71,7 @@ server.post('/authenticated', function(req, res) {
      }
   });
 });
+
 server.post('/registered', function(req, res) {
   users.create(req.body['emailInputReg'], req.body['passwordInputReg'], db, function(user) {
     if (user == "EXISTS") {
