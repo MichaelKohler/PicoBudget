@@ -1,10 +1,10 @@
 var express = require('express');
 var server = express();
-var users = require('./users');
-var accounts = require('./accounts.js');
-var globals = require('./globals.js');
-var transactions = require('./transactions.js');
-var tags = require('./tags.js');
+var users = require('modules/users');
+var accounts = require('modules/accounts.js');
+var globals = require('modules/globals.js');
+var transactions = require('modules/transactions.js');
+var tags = require('modules/tags.js');
 
 server.configure(function () {
   server.use('/bootstrap', express.static(__dirname + '/bootstrap'));
