@@ -1,15 +1,15 @@
 var express = require('express');
 var server = express();
-var users = require('./modules/users');
-var accounts = require('./modules/accounts.js');
-var globals = require('./modules/globals.js');
-var transactions = require('./modules/transactions.js');
-var tags = require('./modules/tags.js');
+var users = require('./models/users');
+var accounts = require('./models/accounts.js');
+var globals = require('./models/globals.js');
+var transactions = require('./models/transactions.js');
+var tags = require('./models/tags.js');
 
 server.configure(function () {
-  server.use('/bootstrap', express.static(__dirname + '/bootstrap'));
-  server.use('/css', express.static(__dirname + '/css'));
-  server.use('/js', express.static(__dirname + '/js'));
+  server.use('/bootstrap', express.static(__dirname + '/public/bootstrap'));
+  server.use('/css', express.static(__dirname + '/public/css'));
+  server.use('/js', express.static(__dirname + '/public/js'));
   server.set('view engine', 'jade');
   server.set('views', __dirname + '/views');
   server.set('view options', { layout: false });
