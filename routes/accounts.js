@@ -18,7 +18,7 @@ exports.accounts = function(req, res) {
   });
 };
 
-exports.accountsAdded = function(req, res) {
+exports.accountAdded = function(req, res) {
   var accName = req.body['nameInput'];
   var accCurrency = req.body['currDropdown'];
   var accBalance = req.body['initBalanceInput'];
