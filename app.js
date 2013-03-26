@@ -1,3 +1,6 @@
+/* jslint node: true */
+"use strict";
+
 var express = require('express');
 var server = express();
 var users = require('./models/users');
@@ -7,28 +10,30 @@ var transactions = require('./models/transactions.js');
 var tags = require('./models/tags.js');
 
 server.configure(function () {
-  server.set('port', 1337);
-  server.set('publicfolder', 'public');
-  server.use('/bootstrap', express.static(__dirname + server.get('publicfolder') + '/bootstrap'));
-  server.use('/css', express.static(__dirname + server.get('publicfolder') + '/css'));
-  server.use('/js', express.static(__dirname + server.get('publicfolder') + '/js'));
-  server.set('view engine', 'jade');
-  server.set('views', __dirname + '/views');
-  server.set('view options', { layout: false });
-  server.use(express.bodyParser());
-  server.use(express.cookieParser({ secret: "keyboard cat" }));
-  var memStore = require('connect').session.MemoryStore;
-  server.use(express.session({ secret: "keyboard cat", store: memStore( {
-    reapInterval: 60000 * 10
-  })}));
+    server.set('port', 1337);
+    server.set('dbname', 'pb');
+    server.set('dbport', 27017);
+    server.set('publicfolder', 'public');
+    server.use('/bootstrap', express.static(__dirname + server.get('publicfolder') + '/bootstrap'));
+    server.use('/css', express.static(__dirname + server.get('publicfolder') + '/css'));
+    server.use('/js', express.static(__dirname + server.get('publicfolder') + '/js'));
+    server.set('view engine', 'jade');
+    server.set('views', __dirname + '/views');
+    server.set('view options', { layout: false });
+    server.use(express.bodyParser());
+    server.use(express.cookieParser({ secret: "keyboard cat" }));
+    var memStore = require('connect').session.MemoryStore;
+    server.use(express.session({ secret: "keyboard cat", store: memStore({
+        reapInterval: 60000 * 10
+    })}));
 });
 
-server.configure('development', function() { 
-  server.use(express.logger('dev'));
+server.configure('development', function () {
+    server.use(express.logger('dev'));
 });
 
-server.listen(1337, function() {
-  console.log("Server started on Port " + server.get('port'));
+server.listen(1337, function () {
+    console.log("Server started on Port " + server.get('port'));
 });
 
 
@@ -36,30 +41,31 @@ server.listen(1337, function() {
 var mongo = require('mongodb');
 var MongoServer = mongo.Server;
 var MongoDatabase = mongo.Db;
-var dbServer = new MongoServer('localhost', 27017, { auto_reconnect: true, poolSize: 1 });
-var db = new MongoDatabase('pb', dbServer, { safe: true });
+var dbServer = new MongoServer('localhost', server.get('dbport'), { auto_reconnect: true, poolSize: 1 });
+var db = new MongoDatabase(server.get('dbname'), dbServer, { safe: true });
 
-db.open(function(err, db){
-  if(err)
-    console.log(err);
+db.open(function (err, db) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("Connected to DB.");
+    }
 });
 
 /** SESSIONS **/
 function requiresLogin(req, res, next) {
-  if (req.session.user) {
-    next();
-  }
-  else {
-    res.redirect('/login');
-  }
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
 }
 function requiresAdminLogin(req, res, next) {
-  if (req.session.user.role == 'admin') {
-    next();
-  }
-  else {
-    res.redirect('/login');
-  }
+    if (req.session.user.role === 'admin') {
+        next();
+    } else {
+        res.redirect('/login');
+    }
 }
 
 /** ROUTES **/
