@@ -7,6 +7,7 @@
     "express"   :  "*",
     "connect"   :  "*",
     "mongodb"   :  "*",
-    "jade"      :  "*"
+    "jade"      :  "*",
+    "crypto"    :  "*"
   }
 }

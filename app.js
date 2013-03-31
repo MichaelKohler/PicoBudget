@@ -21,11 +21,8 @@ server.configure(function () {
     server.set('views', __dirname + '/views');
     server.set('view options', { layout: false });
     server.use(express.bodyParser());
-    server.use(express.cookieParser({ secret: "keyboard cat" }));
-    var memStore = require('connect').session.MemoryStore;
-    server.use(express.session({ secret: "keyboard cat", store: memStore({
-        reapInterval: 60000 * 10
-    })}));
+    server.use(express.cookieParser('' +  require('crypto').randomBytes(64) + ''));
+    server.use(express.session());
 });
 
 server.configure('development', function () {
