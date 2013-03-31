@@ -32,7 +32,7 @@ server.configure('development', function () {
     server.use(express.logger('dev'));
 });
 
-server.listen(1337, function () {
+server.listen(server.get('port'), function () {
     console.log("Server started on Port " + server.get('port'));
 });
 
