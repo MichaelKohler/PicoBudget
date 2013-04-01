@@ -14,7 +14,7 @@ html(lang='en')
             .span10
               h1 Settings
               hr
-              - if (changed == true)
+              - if (locals.changed == true)
                 .alert-success.alert#settingsChanged
                   button.close(date-dismiss='alert') ×
                   strong Settings changed!
@@ -58,7 +58,7 @@ html(lang='en')
                     label.control-label(for='prefCurrDropdown') Preferred currency
                     .controls
                       select(name='prefCurrDropdown')
-                        for currency in currencies
+                        for currency in locals.currencies
                           - if (currency.ISO == user.curr)
                             option(selected='true', value='#{currency.ISO}') #{currency.ISO}
                           - else
@@ -76,9 +76,9 @@ html(lang='en')
               button.close(date-dismiss='alert') ×
               strong Attention!
               br
-              - if (user.role == 'premium')
+              - if (locals.user.role == 'premium')
                 p Deleting your account is permanent and deletes all the data which is stored in our database. You will not get any money back if you delete your account.
-              - if (user.role == 'user')
+              - if (locals.user.role == 'user')
                 p Deleting your account is permanent and deletes all the data which is stored in our database.
              form.form-horizontal(method='POST', action='/userDeleted')
               fieldset

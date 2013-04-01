@@ -27,7 +27,7 @@ html(lang='en')
                   th Currency
                   th(style='text-align:right;') Balance
               tbody              
-                for account in accounts
+                for account in locals.accounts
                   tr
                     td #{account.name}
                     td #{account.curr}
@@ -44,7 +44,7 @@ html(lang='en')
                   th Tags
                   th(style='text-align:right;') Amount
               tbody              
-                for trans in transactions
+                for trans in locals.transactions
                   tr
                     td #{trans.date}
                     td #{trans.acc}

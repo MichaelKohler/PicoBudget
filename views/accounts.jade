@@ -54,7 +54,7 @@ html(lang='en')
                   th Currency
                   th(style='text-align:right;') Balance
               tbody              
-                for account in accounts
+                for account in locals.accounts
                   tr
                     td #{account.name}
                     td #{account.curr}
@@ -65,7 +65,7 @@ html(lang='en')
                       a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
                 tr(style='font-weight:bold;')
                   td
-                  td Total (#{user.curr}):
+                  td Total (#{locals.user.curr}):
                   td(style='text-align:right;') #{balanceSum}
                   td
                   td
@@ -80,7 +80,7 @@ html(lang='en')
                     label.control-label(for='currDropdown') Currency
                     .controls
                       select(name='currDropdown')
-                        for currency in currencies
+                        for currency in locals.currencies
                             option(value='#{currency.ISO}') #{currency.ISO}
                   .control-group#cg-initialbalance
                     label.control-label(for='initBalanceInput') Initial balance
