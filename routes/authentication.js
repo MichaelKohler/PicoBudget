@@ -1,3 +1,5 @@
+var globals = require('../globals').init();
+
 exports.login = function(req, res) {
   if (req.session.user)
     res.render('dashboard');
@@ -6,7 +8,7 @@ exports.login = function(req, res) {
 };
 
 exports.authenticated = function(req, res) {
-  users.authenticate(req.body['emailInput'], req.body['passwordInput'], db, function(user) {
+  globals.users.authenticate(req.body['emailInput'], req.body['passwordInput'], globals.db, function(user) {
      if (user) {
        req.session.user = user;
        res.redirect('/dashboard');
@@ -18,7 +20,7 @@ exports.authenticated = function(req, res) {
 };
 
 exports.registered = function(req, res) {
-  users.create(req.body['emailInputReg'], req.body['passwordInputReg'], db, function(user) {
+  globals.users.create(req.body['emailInputReg'], req.body['passwordInputReg'], globals.db, function(user) {
     if (user == "EXISTS") {
       res.redirect('/login?userExists=true');
     }

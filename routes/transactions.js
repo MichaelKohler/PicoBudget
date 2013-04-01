@@ -1,9 +1,11 @@
+var globals = require('../globals').init();
+
 exports.transactions = function(req, res) {
-  transactions.getAllTransactions(req.session.user.user, db, function(transactionList) {
+  globals.transactions.getAllTransactions(req.session.user.user, globals.db, function(transactionList) {
     if (transactionList) {
-      tags.getAllTags(req.session.user.user, db, function(tagList) {
+      tags.getAllTags(req.session.user.user, globals.db, function(tagList) {
         if (tagList) {
-          accounts.getAllAccounts(req.session.user.user,db, function(accList) {
+          globals.accounts.getAllAccounts(req.session.user.user, globals.db, function(accList) {
             if (accList) {
               res.render('transactions', { locals: {
                 user: req.session.user || '',
@@ -29,8 +31,8 @@ exports.transactionAdded = function(req, res) {
   var transName = req.body['transNameInput'];
   var transTags = req.body['transTagsInput'].split(',');
   var transAmount = req.body['transAmountInput'];
-  transactions.addTransaction(req.session.user.user, transID, transAcc, transArt, transName,
-                              transTags, transAmount, db, function(success) {
+  globals.transactions.addTransaction(req.session.user.user, transID, transAcc, transArt, transName,
+                              transTags, transAmount, globals.db, function(success) {
     success ? res.redirect('/transactions?added=true') : res.redirect('/transactions?added=false');
   });
 };
@@ -42,15 +44,15 @@ exports.transactionEdited = function(req, res) {
   var transName = req.body['transNameEditInput'];
   var transTags = req.body['transTagsEdit'];
   var transAmount = req.body['transEditAmount'];
-  transactions.editTransaction(req.session.user.user, transID, transArt, transName,
-                               transTags, transAmount, db, function(successTrans) {
+  globals.transactions.editTransaction(req.session.user.user, transID, transArt, transName,
+                               transTags, transAmount, globals.db, function(successTrans) {
     successTrans ? res.redirect('/transactions?edited=true') : res.redirect('/transactions?edited=false');
   });
 };	
 
 exports.transactionDeleted = function(req, res) {
   var transID = req.body['transID'];
-  transactions.removeTransaction(req.session.user.user, transID, db, function(success) {
+  globals.transactions.removeTransaction(req.session.user.user, transID, globals.db, function(success) {
     success ? res.redirect('/transactions?deleted=true') : res.redirect('/transactions?deleted=false');
   });
 };
