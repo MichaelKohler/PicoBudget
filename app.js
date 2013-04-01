@@ -2,13 +2,21 @@
 (function () {
   "use strict";
 
+  var globals = require('./globals').init();
+
+  globals.db.open(function (err, db) {
+      if (err) {
+          console.log(err);
+      } else {
+          console.log("Connected to DB on port 27017.");
+      }
+  });
+
   var express = require('express');
   var server = express();
 
   server.configure(function () {
       server.set('port', 1337);
-      server.set('dbname', 'pb');
-      server.set('dbport', 27017);
       server.set('publicfolder', 'public');
       server.use('/bootstrap', express.static(server.get('publicfolder') + '/bootstrap'));
       server.use('/css', express.static(server.get('publicfolder') + '/css'));
@@ -27,22 +35,6 @@
 
   server.listen(server.get('port'), function () {
       console.log("Server started on Port " + server.get('port'));
-  });
-
-
-  /** MongoDB  */
-  var mongo = require('mongodb');
-  var MongoServer = mongo.Server;
-  var MongoDatabase = mongo.Db;
-  var dbServer = new MongoServer('localhost', server.get('dbport'), { auto_reconnect: true, poolSize: 1 });
-  var db = new MongoDatabase(server.get('dbname'), dbServer, { safe: true });
-
-  db.open(function (err, db) {
-      if (err) {
-          console.log(err);
-      } else {
-          console.log("Connected to DB.");
-      }
   });
 
   /** SESSIONS **/
