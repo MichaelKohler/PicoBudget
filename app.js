@@ -5,7 +5,7 @@ var express = require('express');
 var server = express();
 var users = require('./models/users');
 var accounts = require('./models/accounts.js');
-var globals = require('./models/globals.js');
+var helpers = require('./models/helpers.js');
 var transactions = require('./models/transactions.js');
 var tags = require('./models/tags.js');
 
@@ -14,9 +14,9 @@ server.configure(function () {
     server.set('dbname', 'pb');
     server.set('dbport', 27017);
     server.set('publicfolder', 'public');
-    server.use('/bootstrap', express.static(__dirname + server.get('publicfolder') + '/bootstrap'));
-    server.use('/css', express.static(__dirname + server.get('publicfolder') + '/css'));
-    server.use('/js', express.static(__dirname + server.get('publicfolder') + '/js'));
+    server.use('/bootstrap', express.static(server.get('publicfolder') + '/bootstrap'));
+    server.use('/css', express.static(server.get('publicfolder') + '/css'));
+    server.use('/js', express.static(server.get('publicfolder') + '/js'));
     server.set('view engine', 'jade');
     server.set('views', __dirname + '/views');
     server.set('view options', { layout: false });

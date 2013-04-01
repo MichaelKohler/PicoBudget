@@ -1,5 +1,5 @@
 exports.settings = function(req, res) {
-  globals.getAllAvailableCurrencies(db, function(currencyList) {
+  helpers.getAllAvailableCurrencies(db, function(currencyList) {
     if (currencyList) {
       res.render('settings', { locals: {
         user: req.session.user || '',
