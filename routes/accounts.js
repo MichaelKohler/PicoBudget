@@ -3,14 +3,14 @@ var globals = require('../globals').init();
 exports.accounts = function(req, res) {
   globals.accounts.getAllAccounts(req.session.user.user, globals.db, function(accountList) {
     if (accountList) {
-        globals.accounts.sumBalance(accountList, function(sum) {
-        globals.getAllAvailableCurrencies(globals.db, function(currencyList) {
+      globals.accounts.sumBalance(accountList, function(sum) {
+        globals.helpers.getAllAvailableCurrencies(globals.db, function(currencyList) {
           if (currencyList) {
             res.render('accounts', { locals: {
               user: req.session.user || '',
               currencies: currencyList,
               accounts: accountList,
-              balanceSum: globals.formatBalance(sum),
+              balanceSum: globals.helpers.formatBalance(sum),
               accNumber: accountList.length
             }});
           }

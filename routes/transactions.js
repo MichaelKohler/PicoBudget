@@ -3,7 +3,7 @@ var globals = require('../globals').init();
 exports.transactions = function(req, res) {
   globals.transactions.getAllTransactions(req.session.user.user, globals.db, function(transactionList) {
     if (transactionList) {
-      tags.getAllTags(req.session.user.user, globals.db, function(tagList) {
+      globals.tags.getAllTags(req.session.user.user, globals.db, function(tagList) {
         if (tagList) {
           globals.accounts.getAllAccounts(req.session.user.user, globals.db, function(accList) {
             if (accList) {
@@ -11,7 +11,7 @@ exports.transactions = function(req, res) {
                 user: req.session.user || '',
                 transactions: transactionList,
                 tags: tagList,
-                accounts: accList	
+                accounts: accList
               }});
             }
           });
