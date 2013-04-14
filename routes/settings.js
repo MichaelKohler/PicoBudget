@@ -19,12 +19,12 @@ exports.settingsChanged = function(req, res) {
   var newPW = req.body.newPasswordInput;
   var prefCurr = req.body.prefCurrDropdown;
 
-    globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, globals.db, function(changed) {
-    if (changed === "NOPWMATCH") {
+  globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, globals.db, function(updatedUser) {
+    if (updatedUser === "NOPWMATCH") {
       res.redirect('/settings?passwordsDidntMatch=true');
     }
-    else if (changed) {
-      req.session.user = changed; // we need to reinit the session because of the new password
+    else if (updatedUser) {
+      req.session.user = updatedUser; // we need to reinit the session because of the new password
       globals.helpers.getAllAvailableCurrencies(globals.db, function(currencyList) {
         if (currencyList) {
           res.render('settings', { locals: {
