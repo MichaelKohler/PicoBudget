@@ -1,7 +1,9 @@
+"use strict";
+
 var globals = require('../globals').init();
 
 exports.settings = function(req, res) {
-  helpers.getAllAvailableCurrencies(db, function(currencyList) {
+  globals.helpers.getAllAvailableCurrencies(globals.db, function(currencyList) {
     if (currencyList) {
       res.render('settings', { locals: {
         user: req.session.user || '',
@@ -13,17 +15,17 @@ exports.settings = function(req, res) {
 };
 
 exports.settingsChanged = function(req, res) {
-  var oldPW = req.body['oldPasswordInput'];
-  var newPW = req.body['newPasswordInput'];
-  var prefCurr = req.body['prefCurrDropdown'];
+  var oldPW = req.body.oldPasswordInput;
+  var newPW = req.body.newPasswordInput;
+  var prefCurr = req.body.prefCurrDropdown;
 
     globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, globals.db, function(changed) {
-    if (changed == "NOPWMATCH") {
+    if (changed === "NOPWMATCH") {
       res.redirect('/settings?passwordsDidntMatch=true');
     }
     else if (changed) {
       req.session.user = changed; // we need to reinit the session because of the new password
-      helpers.getAllAvailableCurrencies(db, function(currencyList) {
+      globals.helpers.getAllAvailableCurrencies(globals.db, function(currencyList) {
         if (currencyList) {
           res.render('settings', { locals: {
             user: req.session.user || '',
@@ -35,19 +37,19 @@ exports.settingsChanged = function(req, res) {
     }
     else {
       res.redirect('/settings?unknownError=true');
-    }    
+    }
   });
 };
 
 exports.userDeleted = function(req, res) {
-  globals.users.removeUser(req.session.user.user, req.body["passwordInput"], globals.db, function(removed) {
+  globals.users.removeUser(req.session.user.user, req.body.passwordInput, globals.db, function(removed) {
     if (removed) {
       delete req.session.user;
       res.redirect('/login?removed=true');
     }
     else {
       res.redirect('/settings?removed=false');
-    } 
+    }
   });
   // TODO: remove other data too!
 };
