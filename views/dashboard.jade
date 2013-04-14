@@ -17,41 +17,47 @@ html(lang='en')
               br
               p Your registration was successfull. You will receive a confirmation email in the next few minutes.
             h1 Account Overview
-            p You can manage the accounts under 
+            p You can manage your accounts under
               a(href='/accounts') "Accounts"
               | .
-            table.table
-              thead
-                tr
-                  th Name
-                  th Currency
-                  th(style='text-align:right;') Balance
-              tbody              
-                for account in locals.accounts
+            - if (locals.accounts.length > 0)
+              table.table
+                thead
                   tr
-                    td #{account.name}
-                    td #{account.curr}
-                    td(style='text-align:right;') #{account.bal}
+                    th Name
+                    th Currency
+                    th(style='text-align:right;') Balance
+                tbody
+                  for account in locals.accounts
+                    tr
+                      td #{account.name}
+                      td #{account.curr}
+                      td(style='text-align:right;') #{account.bal}
+            - else
+              p There are no accounts to be displayed.
             hr
             h1 Recent transactions
-            table.table
-              thead
-                tr
-                  th Date
-                  th Account
-                  th Descrition
-                  th +/-
-                  th Tags
-                  th(style='text-align:right;') Amount
-              tbody              
-                for trans in locals.transactions
+            - if (locals.transactions.length > 0)
+              table.table
+                thead
                   tr
-                    td #{trans.date}
-                    td #{trans.acc}
-                    td #{trans.name}
-                    td #{trans.art}
-                    td #{trans.tags}
-                    td(style='text-align:right;') #{trans.amount}
+                    th Date
+                    th Account
+                    th Descrition
+                    th +/-
+                    th Tags
+                    th(style='text-align:right;') Amount
+                tbody
+                  for trans in locals.transactions
+                    tr
+                      td #{trans.date}
+                      td #{trans.acc}
+                      td #{trans.name}
+                      td #{trans.art}
+                      td #{trans.tags}
+                      td(style='text-align:right;') #{trans.amount}
+            - else
+              p There are no transactions to be displayed.
 
       include includes/footer.jade
     include includes/bootstrap_jquery.jade

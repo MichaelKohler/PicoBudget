@@ -47,28 +47,32 @@ html(lang='en')
                 strong Error!
                 br
                 p There is already an account with this name. Please try another name!
-            table.table
-              thead
-                tr
-                  th Name
-                  th Currency
-                  th(style='text-align:right;') Balance
-              tbody              
-                for account in locals.accounts
+            - if (locals.accounts.length > 0)
+              table.table
+                thead
                   tr
-                    td #{account.name}
-                    td #{account.curr}
-                    td(style='text-align:right;') #{account.bal}
-                    td(style='text-align:right;')
-                      a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
-                    td(style='text-align:right;')
-                      a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
-                tr(style='font-weight:bold;')
-                  td
-                  td Total (#{locals.user.curr}):
-                  td(style='text-align:right;') #{locals.balanceSum}
-                  td
-                  td
+                    th Name
+                    th Currency
+                    th(style='text-align:right;') Balance
+                tbody
+                  for account in locals.accounts
+                    tr
+                      td #{account.name}
+                      td #{account.curr}
+                      td(style='text-align:right;') #{account.bal}
+                      td(style='text-align:right;')
+                        a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
+                      td(style='text-align:right;')
+                        a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
+                  tr(style='font-weight:bold;')
+                    td
+                    td Total (#{locals.user.curr}):
+                    td(style='text-align:right;') #{locals.balanceSum}
+                    td
+                    td
+            - else
+              p There are no accounts to be displayed.
+            hr
             h2(id='addaccounttitle') Add a new account
             form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded', onsubmit='return validateAccountForm();')
                 fieldset

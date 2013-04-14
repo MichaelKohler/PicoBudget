@@ -56,24 +56,27 @@ html(lang='en')
                 strong Error!
                 br
                 p Unfortunately there was an error what you told me to do! Please try again later.
-              table.table
-                thead
-                  tr
-                    th Date
-                    th Account
-                    th Descrition
-                    th +/-
-                    th Tags
-                    th(style='text-align:right;') Amount
-                tbody              
-                  for trans in locals.transactions
+              - if (locals.transactions.length > 0)
+                table.table
+                  thead
                     tr
-                      td #{trans.date}
-                      td #{trans.acc}
-                      td #{trans.name}
-                      td #{trans.art}
-                      td #{trans.tags}
-                      td(style='text-align:right;') #{trans.amount}
+                      th Date
+                      th Account
+                      th Descrition
+                      th +/-
+                      th Tags
+                      th(style='text-align:right;') Amount
+                  tbody
+                    for trans in locals.transactions
+                      tr
+                        td #{trans.date}
+                        td #{trans.acc}
+                        td #{trans.name}
+                        td #{trans.art}
+                        td #{trans.tags}
+                        td(style='text-align:right;') #{trans.amount}
+              - else
+                p There are no transactions to be displayed.
             #new
               h3 Add a new transaction
               .alert-error.alert#fillInAllInfo
