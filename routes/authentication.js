@@ -1,27 +1,31 @@
+"use strict";
+
 var globals = require('../globals').init();
 
-exports.login = function(req, res) {
-  if (req.session.user)
+exports.login = function (req, res) {
+  if (req.session.user) {
     res.render('dashboard');
-  else
+  }
+  else {
     res.render('login', { locals: { user: req.session.user || '' } });
+  }
 };
 
-exports.authenticated = function(req, res) {
-  globals.users.authenticate(req.body['emailInput'], req.body['passwordInput'], globals.db, function(user) {
-     if (user) {
-       req.session.user = user;
-       res.redirect('/dashboard');
-     }
-     else {
-       res.redirect('/login?wrongCredentials=true');
-     }
+exports.authenticated = function (req, res) {
+  globals.users.authenticate(req.body.emailInput, req.body.passwordInput, globals.db, function (user) {
+    if (user) {
+      req.session.user = user;
+      res.redirect('/dashboard');
+    }
+    else {
+      res.redirect('/login?wrongCredentials=true');
+    }
   });
 };
 
-exports.registered = function(req, res) {
-  globals.users.create(req.body['emailInputReg'], req.body['passwordInputReg'], globals.db, function(user) {
-    if (user == "EXISTS") {
+exports.registered = function (req, res) {
+  globals.users.create(req.body.emailInputReg, req.body.passwordInputReg, globals.db, function (user) {
+    if (user === "EXISTS") {
       res.redirect('/login?userExists=true');
     }
     else if (user) {
@@ -35,7 +39,7 @@ exports.registered = function(req, res) {
   });
 };
 
-exports.logout = function(req, res) {
+exports.logout = function (req, res) {
   delete req.session.user;
   res.redirect('/login?loggedOut=true');
 };

@@ -5,45 +5,45 @@
   var globals = require('./globals').init();
 
   globals.db.open(function (err, db) {
-      if (err) {
-          console.log(err);
-      } else {
-          console.log("Connected to DB on port 27017.");
-      }
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Connected to DB on port 27017.");
+    }
   });
 
   var express = require('express');
   var server = express();
 
   server.configure(function () {
-      server.set('port', 1337);
-      server.set('publicfolder', 'public');
-      server.use('/bootstrap', express.static(server.get('publicfolder') + '/bootstrap'));
-      server.use('/css', express.static(server.get('publicfolder') + '/css'));
-      server.use('/js', express.static(server.get('publicfolder') + '/js'));
-      server.set('view engine', 'jade');
-      server.set('views', __dirname + '/views');
-      server.set('view options', { layout: false });
-      server.use(express.bodyParser());
-      server.use(express.cookieParser('' +  require('crypto').randomBytes(64) + ''));
-      server.use(express.session());
+    server.set('port', 1337);
+    server.set('publicfolder', 'public');
+    server.use('/bootstrap', express.static(server.get('publicfolder') + '/bootstrap'));
+    server.use('/css', express.static(server.get('publicfolder') + '/css'));
+    server.use('/js', express.static(server.get('publicfolder') + '/js'));
+    server.set('view engine', 'jade');
+    server.set('views', __dirname + '/views');
+    server.set('view options', { layout: false });
+    server.use(express.bodyParser());
+    server.use(express.cookieParser('' + require('crypto').randomBytes(64) + ''));
+    server.use(express.session());
   });
 
   server.configure('development', function () {
-      server.use(express.logger('dev'));
+    server.use(express.logger('dev'));
   });
 
   server.listen(server.get('port'), function () {
-      console.log("Server started on Port " + server.get('port'));
+    console.log("Server started on Port " + server.get('port'));
   });
 
   /** SESSIONS **/
   function requiresLogin(req, res, next) {
-      if (req.session.user) {
-          next();
-      } else {
-          res.redirect('/login');
-      }
+    if (req.session.user) {
+      next();
+    } else {
+      res.redirect('/login');
+    }
   }
 
   /** ROUTES **/
