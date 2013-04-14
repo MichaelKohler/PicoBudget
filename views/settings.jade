@@ -59,10 +59,10 @@ html(lang='en')
                     .controls
                       select(name='prefCurrDropdown')
                         for currency in locals.currencies
-                          - if (currency.ISO == user.curr)
-                            option(selected='true', value='#{currency.ISO}') #{currency.ISO}
+                          - if (currency.ISO === locals.user.curr)
+                            option(selected='true', value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
                           - else
-                            option(value='#{currency.ISO}') #{currency.ISO}
+                            option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
                   .control-group
                   .form-actions
                     button.btn.btn-info(type='submit') Change settings

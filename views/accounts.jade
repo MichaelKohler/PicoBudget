@@ -81,7 +81,7 @@ html(lang='en')
                     .controls
                       select(name='currDropdown')
                         for currency in locals.currencies
-                            option(value='#{currency.ISO}') #{currency.ISO}
+                            option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
                   .control-group#cg-initialbalance
                     label.control-label(for='initBalanceInput') Initial balance
                     .controls
