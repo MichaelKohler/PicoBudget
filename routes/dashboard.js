@@ -9,6 +9,7 @@ exports.index = function (req, res) {
         user: req.session.user || '',
         accounts: accountList,
         accNumber: accountList.length,
+        formatAmount: globals.helpers.formatAmount,
         transactions: transactionList
       }});
     });

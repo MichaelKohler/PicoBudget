@@ -12,7 +12,8 @@ exports.accounts = function (req, res) {
               user: req.session.user || '',
               currencies: currencyList,
               accounts: accountList,
-              balanceSum: globals.helpers.formatBalance(sum),
+              balanceSum: sum,
+              formatAmount: globals.helpers.formatAmount,
               accNumber: accountList.length
             }});
           }

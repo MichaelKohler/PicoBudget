@@ -10,7 +10,8 @@ module.exports.getAllAvailableCurrencies = function (db, callback) {
   });
 };
 
-module.exports.formatBalance = function (balance) {
-  var formattedBalance = parseFloat(balance).toFixed(2);
-  return formattedBalance;
-};
+module.exports.formatAmount = function (amount) {
+  var fixedAmount = parseFloat(amount).toFixed(2);
+  var formattedAmount = fixedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+  return formattedAmount;
+}
