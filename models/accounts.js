@@ -13,7 +13,7 @@ module.exports.getAllAccounts = function (login, db, callback) {
 module.exports.sumBalance = function (accounts, callback) {
   var sum = 0;
   for (var i = 0; i < accounts.length; i++) {
-    sum += parseFloat(accounts[i].balance);
+    sum += parseFloat(accounts[i].bal);
   }
   callback(sum);
 };
