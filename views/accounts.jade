@@ -20,37 +20,30 @@ html(lang='en')
             #overview
               h3 Account overview
               .alert-success.alert#accountAdded
-                button.close(date-dismiss='alert') ×
                 strong Account added!
                 br
                 p Your new account was added.
               .alert-success.alert#accountEdited
-                button.close(date-dismiss='alert') ×
                 strong Account edited!
                 br
                 p Your account was updated.
               .alert-success.alert#accountDeleted
-                button.close(date-dismiss='alert') ×
                 strong Account deleted!
                 br
                 p Your account was successfully deleted.
               .alert-error.alert#fillInAllInfo
-                button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p Please fill in all the information!
               .alert-error.alert#notEdited
-                button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p This account could not be edited. Please try again!
               .alert-error.alert#notDeleted
-                button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p This account could not be deleted. Please try again!
               .alert-error.alert#accountExists
-                button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p There is already an account with this name. Please try another name!

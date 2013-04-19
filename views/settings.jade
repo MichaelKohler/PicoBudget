@@ -16,27 +16,22 @@ html(lang='en')
               hr
               - if (locals.changed == true)
                 .alert-success.alert#settingsChanged
-                  button.close(date-dismiss='alert') ×
                   strong Settings changed!
                   br
                   p You're settings are saved.
               .alert-error.alert#fillInAllInfo
-                button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p Please fill in all the information!
               .alert-error.alert#passwordsDidntMatch
-                button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p The passwords didn't match.
               .alert-error.alert#oldPasswordNotOK
-                button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p Your old password is not correct.
               .alert-error.alert#userNotRemoved
-                button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p Your user account could not be removed! Did you enter a correct password?

@@ -11,37 +11,30 @@ html(lang='en')
 
         section#loginForm
           .alert-info.alert#loggedOut
-            button.close(date-dismiss='alert') ×
             strong Logged out!
             br
             p You have been logged out. You can always log back in.
           .alert-error.alert#fillInAllInfo
-            button.close(date-dismiss='alert') ×
             strong Error!
             br
             p Please fill in all the information!
           .alert-error.alert#credentialsWrong
-            button.close(date-dismiss='alert') ×
             strong Error!
             br
             p Either the username or password were wrong! Please try again.
           .alert-error.alert#userNotCreated
-            button.close(date-dismiss='alert') ×
             strong Error!
             br
             p The user could not be created. Please try again.
           .alert-error.alert#passwordsDidntMatch
-              button.close(date-dismiss='alert') ×
               strong Error!
               br
               p The passwords didn't match.
           .alert-error.alert#userExists
-              button.close(date-dismiss='alert') ×
               strong Error!
               br
               p The given email address is already used! Please log in on the left side with your email address or use another address.
           .alert-success.alert#userRemoved
-              button.close(date-dismiss='alert') ×
               strong User removed!
               br
               p Your user account and all data associated with it was removed.
