@@ -12,89 +12,76 @@ html(lang='en')
 
           .span10
             h1 Accounts
-            .alert-success.alert#accountAdded
+            ul(style='padding-top:20px;').nav.nav-tabs#tabnav
+              li#overviewlink
+                a(href='#') Overview
+              li#newlink
+                a(href='#') New account
+            #overview
+              h3 Account overview
+              .alert-success.alert#accountAdded
                 button.close(date-dismiss='alert') ×
                 strong Account added!
                 br
                 p Your new account was added.
-            .alert-success.alert#accountEdited
+              .alert-success.alert#accountEdited
                 button.close(date-dismiss='alert') ×
                 strong Account edited!
                 br
                 p Your account was updated.
-            .alert-success.alert#accountDeleted
+              .alert-success.alert#accountDeleted
                 button.close(date-dismiss='alert') ×
                 strong Account deleted!
                 br
                 p Your account was successfully deleted.
-            .alert-error.alert#fillInAllInfo
+              .alert-error.alert#fillInAllInfo
                 button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p Please fill in all the information!
-            .alert-error.alert#notEdited
+              .alert-error.alert#notEdited
                 button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p This account could not be edited. Please try again!
-            .alert-error.alert#notDeleted
+              .alert-error.alert#notDeleted
                 button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p This account could not be deleted. Please try again!
-            .alert-error.alert#accountExists
+              .alert-error.alert#accountExists
                 button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p There is already an account with this name. Please try another name!
-            - if (locals.accounts.length > 0)
-              table.table
-                thead
-                  tr
-                    th Name
-                    th Currency
-                    th(style='text-align:right;') Balance
-                tbody
-                  for account in locals.accounts
+              - if (locals.accounts.length > 0)
+                table.table
+                  thead
                     tr
-                      td #{account.name}
-                      td #{account.curr}
-                      td(style='text-align:right;') #{locals.formatAmount(account.bal)}
-                      td(style='text-align:right;')
-                        a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
-                      td(style='text-align:right;')
-                        a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
-                  tr(style='font-weight:bold;')
-                    td
-                    td Total (#{locals.user.curr}):
-                    td(style='text-align:right;') #{locals.formatAmount(locals.balanceSum)}
-                    td
-                    td
-            - else
-              p There are no accounts to be displayed.
-            hr
-            h2(id='addaccounttitle') Add a new account
-            form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded', onsubmit='return validateAccountForm();')
-                fieldset
-                  .control-group#cg-name
-                    label.control-label(for='nameInput') Name
-                    .controls
-                      input.input-xlarge#nameInput(type='text', name='nameInput')
-                  .control-group#cg-currency
-                    label.control-label(for='currDropdown') Currency
-                    .controls
-                      select(name='currDropdown')
-                        for currency in locals.currencies
-                            option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
-                  .control-group#cg-initialbalance
-                    label.control-label(for='initBalanceInput') Initial balance
-                    .controls
-                      input.input-xlarge#initBalanceInput(type='text', name='initBalanceInput')
-                  .control-group
-                  .form-actions
-                    button.btn.btn-info(type='submit') Add account
-            h2(id='editaccounttitle') Edit account
-            form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited', onsubmit='return validateEditAccountForm();')
+                      th Name
+                      th Currency
+                      th(style='text-align:right;') Balance
+                  tbody
+                    for account in locals.accounts
+                      tr
+                        td #{account.name}
+                        td #{account.curr}
+                        td(style='text-align:right;') #{locals.formatAmount(account.bal)}
+                        td(style='text-align:right;')
+                          a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
+                        td(style='text-align:right;')
+                          a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
+                    tr(style='font-weight:bold;')
+                      td
+                      td Total (#{locals.user.curr}):
+                      td(style='text-align:right;') #{locals.formatAmount(locals.balanceSum)}
+                      td
+                      td
+              - else
+                p There are no accounts to be displayed.
+
+              h3(id='editaccounttitle') Edit account
+              form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited', onsubmit='return validateEditAccountForm();')
                 fieldset
                   .control-group#cg-editname
                     label.control-label(for='editNameInput') Name
@@ -110,8 +97,9 @@ html(lang='en')
                   .control-group
                   .form-actions
                     button.btn.btn-info(type='submit') Edit account
-            h2(id='deleteaccounttitle') Delete account
-            form.form-horizontal(id='deleteaccountform', method='POST', action='/accountDeleted')
+
+              h2(id='deleteaccounttitle') Delete account
+              form.form-horizontal(id='deleteaccountform', method='POST', action='/accountDeleted')
                 fieldset
                   .control-group#cg-deletename
                     label.control-label(for='deleteNameInput') Name
@@ -120,51 +108,91 @@ html(lang='en')
                   .control-group
                   .form-actions
                     button.btn.btn-warning(type='submit') Delete this account!
+            #new
+              h3(id='addaccounttitle') Add a new account
+              form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded', onsubmit='return validateAccountForm();')
+                fieldset
+                  .control-group#cg-name
+                    label.control-label(for='nameInput') Name
+                    .controls
+                      input.input-xlarge#nameInput(type='text', name='nameInput')
+                  .control-group#cg-currency
+                    label.control-label(for='currDropdown') Currency
+                    .controls
+                      select(name='currDropdown')
+                        for currency in locals.currencies
+                          option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
+                  .control-group#cg-initialbalance
+                    label.control-label(for='initBalanceInput') Initial balance
+                    .controls
+                      input.input-xlarge#initBalanceInput(type='text', name='initBalanceInput')
+                  .control-group
+                  .form-actions
+                    button.btn.btn-info(type='submit') Add account
 
       include includes/footer.jade
 
     include includes/bootstrap_jquery.jade
 
     script(type='text/javascript')
-      // hide all notifications and forms which should not be displayed
-      if (typeof($.getUrlVar('accountAdded')) == 'undefined')
-        $('#accountAdded').hide();
-      if (typeof($.getUrlVar('accountEdited')) == 'undefined')
-        $('#accountEdited').hide();
-      if (typeof($.getUrlVar('notEdited')) == 'undefined')
-        $('#notEdited').hide();
-      if (typeof($.getUrlVar('accountAlreadyExists')) == 'undefined')
-        $('#accountExists').hide();
-      if (typeof($.getUrlVar('accountDeleted')) == 'undefined')
-        $('#accountDeleted').hide();
-      if (typeof($.getUrlVar('notDeleted')) == 'undefined')
-        $('#notDeleted').hide();
-      if (typeof($.getUrlVar('editAccount')) == 'undefined') {
-        $('#editaccountform').hide();
-        $('#editaccounttitle').hide();
-      }
-      if (typeof($.getUrlVar('deleteAccount')) == 'undefined') {
-        $('#deleteaccountform').hide();
-        $('#deleteaccounttitle').hide();
-      }
-      $('#fillInAllInfo').hide();
+      $(function () {
+        $('#new').hide();
+        $('#overviewlink').addClass('active');
 
-      // EDIIT MODE
-      if ($.getUrlVar('editAccount') == 'true') {
-        $('#addaccounttitle').hide();
-        $('#addaccountform').hide();
-        $('#hiddenOldName').val($.getUrlVar('n'));
-        $('#editNameInput').val($.getUrlVar('n'));
-        $('#editInitBalanceInput').val($.getUrlVar('b'));
-      } 
+        $('#overviewlink').click(function (e) {
+          e.preventDefault();
+          $('#new').hide();
+          $('#newlink').removeClass('active');
+          $('#overviewlink').addClass('active');
+          $('#overview').show();
+          $('#overviewlink').addClass('active');
+        });
+        $('#newlink').click(function (e) {
+          e.preventDefault();
+          $('#overview').hide();
+          $('#overviewlink').removeClass('active');
+          $('#new').show();
+          $('#newlink').addClass('active');
+        });
 
-      // DELETE MODE
-      if ($.getUrlVar('deleteAccount') == 'true') {
-        $('#addaccounttitle').hide();
-        $('#addaccountform').hide();
-        $('#deleteNameInput').val($.getUrlVar('n'));
-      } 
- 
+        // hide all notifications and forms which should not be displayed
+        if (typeof($.getUrlVar('accountAdded')) == 'undefined')
+          $('#accountAdded').hide();
+        if (typeof($.getUrlVar('accountEdited')) == 'undefined')
+          $('#accountEdited').hide();
+        if (typeof($.getUrlVar('notEdited')) == 'undefined')
+          $('#notEdited').hide();
+        if (typeof($.getUrlVar('accountAlreadyExists')) == 'undefined')
+          $('#accountExists').hide();
+        if (typeof($.getUrlVar('accountDeleted')) == 'undefined')
+          $('#accountDeleted').hide();
+        if (typeof($.getUrlVar('notDeleted')) == 'undefined')
+          $('#notDeleted').hide();
+        if (typeof($.getUrlVar('editAccount')) == 'undefined') {
+          $('#editaccountform').hide();
+          $('#editaccounttitle').hide();
+        }
+        if (typeof($.getUrlVar('deleteAccount')) == 'undefined') {
+          $('#deleteaccountform').hide();
+          $('#deleteaccounttitle').hide();
+        }
+        $('#fillInAllInfo').hide();
+
+        // EDIT MODE
+        if ($.getUrlVar('editAccount') == 'true') {
+          $('#addaccounttitle').hide();
+          $('#addaccountform').hide();
+          $('#hiddenOldName').val($.getUrlVar('n'));
+          $('#editNameInput').val($.getUrlVar('n'));
+          $('#editInitBalanceInput').val($.getUrlVar('b'));
+        }
+          // DELETE MODE
+        if ($.getUrlVar('deleteAccount') == 'true') {
+          $('#addaccounttitle').hide();
+          $('#addaccountform').hide();
+          $('#deleteNameInput').val($.getUrlVar('n'));
+        }
+      })();
 
 
       // validate add account form
@@ -184,7 +212,7 @@ html(lang='en')
         } else {
            $('#cg-initialbalance').removeClass('error');
         }
-          
+
         if (!state)
           $('#fillInAllInfo').show(); // not all info entered -> show error
 
@@ -210,7 +238,7 @@ html(lang='en')
         } else {
            $('#cg-editinitialbalance').removeClass('error');
         }
-          
+
         if (!state)
           $('#fillInAllInfo').show(); // not all info entered -> show error
 
