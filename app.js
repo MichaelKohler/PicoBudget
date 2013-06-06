@@ -14,6 +14,7 @@
 
   var express = require('express');
   var server = express();
+  var flashify = require('flashify');
 
   server.configure(function () {
     server.set('port', 1337);
@@ -27,6 +28,8 @@
     server.use(express.bodyParser());
     server.use(express.cookieParser('' + require('crypto').randomBytes(64) + ''));
     server.use(express.session());
+    server.use(flashify);
+    server.use(server.router);
   });
 
   server.configure('development', function () {

@@ -11,12 +11,13 @@ html(lang='en')
           include includes/dashboard_sidebar.jade
 
           .span10
-            .alert-success.alert#registeredInfo
-              strong Welcome!
-              br
-              p Your registration was successfull. You will receive a confirmation email in the next few minutes.
+            - if (locals.registeredInfo)
+              .alert-success.alert#registeredInfo
+                strong Welcome!
+                br
+                p Your registration was successfull. You will receive a confirmation email within the next few minutes.
             h1 Account Overview
-            p You can manage your accounts under
+            p You can manage your accounts under&nbsp;
               a(href='/accounts') "Accounts"
               | .
             - if (locals.accounts.length > 0)
@@ -60,8 +61,3 @@ html(lang='en')
 
       include includes/footer.jade
     include includes/libs.jade
-
-    script(type='text/javascript')
-      // hide all notifications which should not be displayed
-      if (typeof($.getUrlVar('registered')) == 'undefined')
-        $('#registeredInfo').hide();

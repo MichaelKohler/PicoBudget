@@ -1,0 +1,30 @@
+{
+  "CHF": {
+    "ISO": "CHF",
+    "name": "Schweizer Franken"
+  },
+  "USD": {
+    "ISO": "USD",
+    "name": "US Dollar"
+  },
+  "EUR": {
+    "ISO": "EUR",
+    "name": "Euro"
+  },
+  "GBP": {
+    "ISO": "GBP",
+    "name": "Great Britain Pound"
+  },
+  "JPY": {
+    "ISO": "JPY",
+    "name": "Japanese Yen"
+  },
+  "CAD": {
+    "ISO": "CAD",
+    "name": "Canadian Dollar"
+  },
+  "AUD": {
+    "ISO": "AUD",
+    "name": "Australian Dollar"
+  }
+}

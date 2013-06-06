@@ -28,12 +28,13 @@ exports.accountAdded = function (req, res) {
   var accCurrency = req.body.currDropdown;
   var accBalance = req.body.initBalanceInput;
   globals.accounts.addAccount(req.session.user.user, accName, accCurrency, accBalance, globals.db, function (success) {
-    if (success === "EXISTS") {
-      res.redirect('/accounts?accountAlreadyExists=true');
+    if (success) {
+      res.flash('success', 'The account has been added.');
     }
     else {
-      res.redirect('/accounts?accountAdded=true');
+      res.flash('error', 'The account could not be added.');
     }
+    res.redirect('/accounts');
   });
 };
 
@@ -43,11 +44,12 @@ exports.accountEdited = function (req, res) {
   var accBalance = req.body.editInitBalanceInput;
   globals.accounts.editAccount(req.session.user.user, oldName, accName, accBalance, globals.db, function (success) {
     if (success) {
-      res.redirect('/accounts?accountEdited=true');
+      res.flash('success', 'The account has been updated.');
     }
     else {
-      res.redirect('/accounts?notEdited=true');
+      res.flash('error', 'The account could not be updated.');
     }
+    res.redirect('/accounts');
   });
 };
 
@@ -55,10 +57,11 @@ exports.accountDeleted = function (req, res) {
   var accName = req.body.deleteNameInput;
   globals.accounts.deleteAccount(req.session.user.user, accName, globals.db, function (success) {
     if (success) {
-      res.redirect('/accounts?accountDeleted=true');
+      res.flash('success', 'The account has been deleted.');
     }
     else {
-      res.redirect('/accounts?notDeleted=true');
+      res.flash('error', 'The account could not be deleted.');
     }
+    res.redirect('/accounts');
   });
 };

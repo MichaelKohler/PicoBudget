@@ -10,40 +10,35 @@ html(lang='en')
       section#content
 
         section#loginForm
-          .alert-info.alert#loggedOut
-            strong Logged out!
-            br
-            p You have been logged out. You can always log back in.
-          .alert-error.alert#fillInAllInfo
+          .alert-error.alert.hidden#fillInAllInfo
             strong Error!
             br
             p Please fill in all the information!
-          .alert-error.alert#credentialsWrong
+          .alert-error.alert.hidden#passwordsDidntMatch
             strong Error!
             br
-            p Either the username or password were wrong! Please try again.
-          .alert-error.alert#userNotCreated
-            strong Error!
-            br
-            p The user could not be created. Please try again.
-          .alert-error.alert#passwordsDidntMatch
-              strong Error!
+            p The passwords didn't match.
+          - if (flash.success !== undefined)
+            .alert-success.alert#success
+              strong Well done!
               br
-              p The passwords didn't match.
-          .alert-error.alert#userExists
-              strong Error!
+              p #{flash.success}
+          - if (flash.error !== undefined)
+            .alert-danger.alert#fail
+              strong Oh no..
               br
-              p The given email address is already used! Please log in on the left side with your email address or use another address.
-          .alert-success.alert#userRemoved
-              strong User removed!
+              p #{flash.error}
+          - if (flash.info !== undefined)
+            .alert-info.alert#info
+              strong Info
               br
-              p Your user account and all data associated with it was removed.
+              p #{flash.info}
           .row
             .span6
               h1 Login
               hr
               p If you already have an account, you can sign in here.
-              form.form-horizontal(method='POST', action='/authenticated', onsubmit='return validateLoginForm();')
+              form.form-horizontal(id='loginform', method='POST', action='/authenticated', onsubmit="return PBHelperTools.validateLogin();")
                 fieldset
                   .control-group#cg-email
                     label.control-label(for='emailInput') eMail
@@ -59,7 +54,7 @@ html(lang='en')
             .span6
               h1 Register for free
               hr
-              form.form-horizontal(method='POST', action='/registered', onsubmit='return validateRegisterForm();')
+              form.form-horizontal(id='registrationform', method='POST', action='/registered', onsubmit="return PBHelperTools.validateRegistration();")
                 fieldset
                   .control-group#cg-email-reg
                     label.control-label(for='emailInputReg') eMail
@@ -78,74 +73,3 @@ html(lang='en')
       include includes/footer.jade
 
     include includes/libs.jade
-
-    script(type='text/javascript')
-      // hide all notifications which should not be displayed
-      if (typeof($.getUrlVar('loggedOut')) == 'undefined')
-        $('#loggedOut').hide();
-      if (typeof($.getUrlVar('wrongCredentials')) == 'undefined')
-        $('#credentialsWrong').hide();
-      if (typeof($.getUrlVar('userNotCreated')) == 'undefined')
-        $('#userNotCreated').hide();
-      if (typeof($.getUrlVar('userExists')) == 'undefined')
-        $('#userExists').hide();
-      if (typeof($.getUrlVar('removed')) == 'undefined')
-        $('#userRemoved').hide();
-
-      $('#fillInAllInfo').hide();
-      $('#passwordsDidntMatch').hide();
-
-
-
-      // validate login form
-      function validateLoginForm() {
-        var state = true;
-
-        if ($('#emailInput').val() == '') {
-          $('#cg-email').addClass('error');
-          state = false;
-        } else {
-          $('#cg-email').removeClass('error');
-        }
-
-        if ($('#passwordInput').val() == '') {
-          $('#cg-password').addClass('error');
-          state = false;
-        } else {
-          $('#cg-password').removeClass('error');
-        }
-
-        if (!state)
-          $('#fillInAllInfo').show();
-
-        return state;
-      }
-
-
-
-      // validate register form
-      function validateRegisterForm() {
-        var state = true;
-
-        if ($('#emailInputReg').val() == '') {
-          $('#cg-email-reg').addClass('error');
-          state = false;
-        } else {
-          $('#cg-email-reg').removeClass('error');
-        }
-
-        if ($('#passwordInputReg').val() == '' || $('#passwordInputReg').val() != $('#passwordConfirmInputReg').val()) {
-          state = false;
-          $('#passwordsDidntMatch').show();
-          $('#cg-password-reg').addClass('error');
-          $('#cg-passwordconfirm-reg').addClass('error');
-        } else {
-          $('#cg-password-reg').removeClass('error');
-          $('#cg-passwordconfirm-reg').removeClass('error');
-        }
-
-        if (!state)
-          $('#fillInAllInfo').show();
-
-        return state;
-      }

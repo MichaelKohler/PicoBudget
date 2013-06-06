@@ -14,28 +14,25 @@ html(lang='en')
             .span10
               h1 Settings
               hr
-              - if (locals.changed == true)
-                .alert-success.alert#settingsChanged
-                  strong Settings changed!
-                  br
-                  p You're settings are saved.
-              .alert-error.alert#fillInAllInfo
+              .alert-error.alert.hidden#fillInAllInfo
                 strong Error!
                 br
                 p Please fill in all the information!
-              .alert-error.alert#passwordsDidntMatch
+              .alert-error.alert.hidden#passwordsDidntMatch
                 strong Error!
                 br
                 p The passwords didn't match.
-              .alert-error.alert#oldPasswordNotOK
-                strong Error!
-                br
-                p Your old password is not correct.
-              .alert-error.alert#userNotRemoved
-                strong Error!
-                br
-                p Your user account could not be removed! Did you enter a correct password?
-              form.form-horizontal(method='POST', action='/settingsChanged', onsubmit='return validateSettingsForm();')
+              - if (flash.success !== undefined)
+                .alert-success.alert#success
+                  strong Well done!
+                  br
+                  p #{flash.success}
+              - if (flash.error !== undefined)
+                .alert-danger.alert#fail
+                  strong Oh no..
+                  br
+                  p #{flash.error}
+              form.form-horizontal(id='settingsform', method='POST', action='/settingsChanged', onsubmit='return PBHelperTools.validateSettings();')
                 fieldset
                   .control-group#cg-oldpassword
                     label.control-label(for='oldPasswordInput') Old password
@@ -86,38 +83,4 @@ html(lang='en')
                   button.btn.btn-danger(type='submit') Remove account!
        include includes/footer.jade
 
-    include includes/libs
-
-    script(type='text/javascript')
-      // hide all notifications which should not be displayed
-      if (typeof($.getUrlVar('oldPasswordNotOK')) == 'undefined')
-        $('#oldPasswordNotOK').hide();
-      if (typeof($.getUrlVar('removed')) == 'undefined')
-        $('#userNotRemoved').hide();
-
-      $('#fillInAllInfo').hide();
-      $('#passwordsDidntMatch').hide();
- 
-      // validate settings form
-      function validateSettingsForm() {
-        var state = false;
-
-        if ($('#newPasswordInput').val() != '') {
-          if ($('#oldPasswordInput').val() != '' && $('#confirmNewPasswordInput').val() != '')
-            state = true;
-          else
-            $('#fillInAllInfo').show(); // not all info entered -> show error
-
-          if ($('#newPasswordInput').val() != $('#confirmNewPasswordInput').val()) {
-            state = false;
-            $('#passwordsDidntMatch').show(); // passwords didn't match -> show error
-            $('#newPasswordInput').addClass('error');
-            $('#confirmNewPasswordInput').addClass('error');
-          }
-        }
-        else {
-          state = true;
-        }
-
-        return state;
-      }
+    include includes/libs.jade

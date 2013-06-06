@@ -22,6 +22,7 @@ exports.transactions = function (req, res) {
       });
     }
     else {
+      res.flash('error', 'Unfortunately there was an error of which we can not recover! Please try again later.');
       res.redirect('/transactions?error=true');
     }
   });
@@ -36,7 +37,13 @@ exports.transactionAdded = function (req, res) {
   var transAmount = req.body.transAmountInput;
   globals.transactions.addTransaction(req.session.user.user, transID, transAcc, transArt, transName,
     transTags, transAmount, globals.db, function (success) {
-      success ? res.redirect('/transactions?added=true') : res.redirect('/transactions?added=false');
+      if (success) {
+        res.flash('success', 'The transaction has been added successfully!');
+      }
+      else {
+        res.flash('error', 'Unfortunately there was an error while adding your transaction! Please try again later.');
+      }
+      res.redirect('/transactions');
     });
 };
 
@@ -48,13 +55,25 @@ exports.transactionEdited = function (req, res) {
   var transAmount = req.body.transEditAmount;
   globals.transactions.editTransaction(req.session.user.user, transID, transArt, transName,
     transTags, transAmount, globals.db, function (successTrans) {
-      successTrans ? res.redirect('/transactions?edited=true') : res.redirect('/transactions?edited=false');
+      if (successTrans) {
+        res.flash('success', 'The transaction has been edited successfully!');
+      }
+      else {
+        res.flash('error', 'Unfortunately there was an error while editing your transaction! Please try again later.');
+      }
+      res.redirect('/transactions');
     });
 };
 
 exports.transactionDeleted = function (req, res) {
   var transID = req.body['transID'];
   globals.transactions.removeTransaction(req.session.user.user, transID, globals.db, function (success) {
-    success ? res.redirect('/transactions?deleted=true') : res.redirect('/transactions?deleted=false');
+    if (success) {
+      res.flash('success', 'The transaction has been deleted successfully!');
+    }
+    else {
+      res.flash('error', 'Unfortunately there was an error while deleting your transaction! Please try again later.');
+    }
+    res.redirect('/transactions');
   });
 };

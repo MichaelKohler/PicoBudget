@@ -8,6 +8,7 @@
     "connect"   :  "2.7.*",
     "mongodb"   :  "1.2.*",
     "jade"      :  "0.28.*",
-    "crypto"    :  "0.0.3"
+    "crypto"    :  "0.0.3",
+    "flashify"  :  "0.1.2"
   }
 }

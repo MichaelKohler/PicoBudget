@@ -19,34 +19,20 @@ html(lang='en')
                 a(href='#') New account
             #overview
               h3 Account overview
-              .alert-success.alert#accountAdded
-                strong Account added!
-                br
-                p Your new account was added.
-              .alert-success.alert#accountEdited
-                strong Account edited!
-                br
-                p Your account was updated.
-              .alert-success.alert#accountDeleted
-                strong Account deleted!
-                br
-                p Your account was successfully deleted.
-              .alert-error.alert#fillInAllInfo
+              - if (flash.success !== undefined)
+                .alert-success.alert#success
+                  strong Well done!
+                  br
+                  p #{flash.success}
+              - if (flash.error !== undefined)
+                .alert-danger.alert#fail
+                  strong Oh no..
+                  br
+                  p #{flash.error}
+              .alert-error.alert.hidden#fillInAllInfo
                 strong Error!
                 br
                 p Please fill in all the information!
-              .alert-error.alert#notEdited
-                strong Error!
-                br
-                p This account could not be edited. Please try again!
-              .alert-error.alert#notDeleted
-                strong Error!
-                br
-                p This account could not be deleted. Please try again!
-              .alert-error.alert#accountExists
-                strong Error!
-                br
-                p There is already an account with this name. Please try another name!
               - if (locals.accounts.length > 0)
                 table.table
                   thead
@@ -74,7 +60,7 @@ html(lang='en')
                 p There are no accounts to be displayed.
 
               h3(id='editaccounttitle') Edit account
-              form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited', onsubmit='return validateEditAccountForm();')
+              form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited')
                 fieldset
                   .control-group#cg-editname
                     label.control-label(for='editNameInput') Name
@@ -103,7 +89,7 @@ html(lang='en')
                     button.btn.btn-warning(type='submit') Delete this account!
             #new
               h3(id='addaccounttitle') Add a new account
-              form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded', onsubmit='return validateAccountForm();')
+              form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded')
                 fieldset
                   .control-group#cg-name
                     label.control-label(for='nameInput') Name
@@ -128,112 +114,8 @@ html(lang='en')
     include includes/libs.jade
 
     script(type='text/javascript')
-      $(function () {
-        $('#new').hide();
-        $('#overviewlink').addClass('active');
-
-        $('#overviewlink').click(function (e) {
-          e.preventDefault();
-          $('#new').hide();
-          $('#newlink').removeClass('active');
-          $('#overviewlink').addClass('active');
-          $('#overview').show();
-          $('#overviewlink').addClass('active');
-        });
-        $('#newlink').click(function (e) {
-          e.preventDefault();
-          $('#overview').hide();
-          $('#overviewlink').removeClass('active');
-          $('#new').show();
-          $('#newlink').addClass('active');
-        });
-
-        // hide all notifications and forms which should not be displayed
-        if (typeof($.getUrlVar('accountAdded')) == 'undefined')
-          $('#accountAdded').hide();
-        if (typeof($.getUrlVar('accountEdited')) == 'undefined')
-          $('#accountEdited').hide();
-        if (typeof($.getUrlVar('notEdited')) == 'undefined')
-          $('#notEdited').hide();
-        if (typeof($.getUrlVar('accountAlreadyExists')) == 'undefined')
-          $('#accountExists').hide();
-        if (typeof($.getUrlVar('accountDeleted')) == 'undefined')
-          $('#accountDeleted').hide();
-        if (typeof($.getUrlVar('notDeleted')) == 'undefined')
-          $('#notDeleted').hide();
-        if (typeof($.getUrlVar('editAccount')) == 'undefined') {
-          $('#editaccountform').hide();
-          $('#editaccounttitle').hide();
-        }
-        if (typeof($.getUrlVar('deleteAccount')) == 'undefined') {
-          $('#deleteaccountform').hide();
-          $('#deleteaccounttitle').hide();
-        }
-        $('#fillInAllInfo').hide();
-
-        // EDIT MODE
-        if ($.getUrlVar('editAccount') == 'true') {
-          $('#addaccounttitle').hide();
-          $('#addaccountform').hide();
-          $('#hiddenOldName').val($.getUrlVar('n'));
-          $('#editNameInput').val($.getUrlVar('n'));
-          $('#editInitBalanceInput').val($.getUrlVar('b'));
-        }
-          // DELETE MODE
-        if ($.getUrlVar('deleteAccount') == 'true') {
-          $('#addaccounttitle').hide();
-          $('#addaccountform').hide();
-          $('#deleteNameInput').val($.getUrlVar('n'));
-        }
+      (function() {
+        PBHelperTools.addAccountListeners();
+        PBHelperTools.toggleAccountNavigationTabs();
+        PBHelperTools.toggleAccountMode();
       })();
-
-
-      // validate add account form
-      function validateAccountForm() {
-        var state = true;
-
-        if ($('#nameInput').val() ==  '') {
-          $('#cg-name').addClass('error');
-          state = false;
-        } else {
-          $('#cg-name').removeClass('error');
-        }
-
-        if ($('#initBalanceInput').val() ==  '' || isNaN($('#initBalanceInput').val())) {
-           $('#cg-initialbalance').addClass('error');
-           state = false;
-        } else {
-           $('#cg-initialbalance').removeClass('error');
-        }
-
-        if (!state)
-          $('#fillInAllInfo').show(); // not all info entered -> show error
-
-        return state;
-      }
-
-
-
-      // validate edit account form
-      function validateEditAccountForm() {
-        var state = true;
-
-        if ($('#editNameInput').val() ==  '') {
-          $('#cg-editname').addClass('error');
-          state = false;
-        } else {
-          $('#cg-editname').removeClass('error');
-        }
-
-        if ($('#editInitBalanceInput').val() ==  '' || isNaN($('#editInitBalanceInput').val())) {
-           $('#cg-editinitialbalance').addClass('error');
-           state = false;
-        } else {
-           $('#cg-editinitialbalance').removeClass('error');
-        }
-
-        if (!state)
-          $('#fillInAllInfo').show(); // not all info entered -> show error
-
-        return state;
-      }

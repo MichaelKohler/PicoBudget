@@ -38,22 +38,22 @@ module.exports.changeSettings = function (login, oldPassword, newPassword, prefC
   db.collection('users', function (err, collection) {
     collection.findOne({user: login}, function (err, user) {
       if (user) { // user was found
-        if (oldPassword !== '' && newPassword !== '') { // pw change needed?
-          if (user.pw === oldPassword) { // pw matches?
+        if (oldPassword !== '' && newPassword !== '') {
+          if (user.pw === oldPassword) {
             collection.update({user: login}, {$set: {pw: newPassword, curr: prefCurr}}, function (err) {
               user.pw = newPassword;
               user.curr = prefCurr;
-              typeof(err) === 'undefined' ? callback(user) : callback(null);
+              err ? callback(null) : callback(user);
             });
           }
-          else { // old password didn't match
-            callback("NOPWMATCH");
+          else {
+            callback(false);
           }
         }
         else { // only save prefcurr
           collection.update({user: login}, {$set: {curr: prefCurr}}, function (err) {
             user.curr = prefCurr;
-            typeof(err) === 'undefined' ? callback(user) : callback(null);
+            err ? callback(null) : callback(user);
           });
         }
       }

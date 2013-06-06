@@ -8,9 +8,9 @@ exports.index = function (req, res) {
       res.render('dashboard', { locals: {
         user: req.session.user || '',
         accounts: accountList,
-        accNumber: accountList.length,
         formatAmount: globals.helpers.formatAmount,
-        transactions: transactionList
+        transactions: transactionList,
+        registeredInfo: req.session.user.isNew
       }});
     });
   });

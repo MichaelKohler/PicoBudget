@@ -21,34 +21,16 @@ html(lang='en')
                 a(href='#') Manage tags
             #overview
               h3 Transaction overview
-              .alert-success.alert#added
-                strong Added!
-                br
-                p The transaction has been added successfully!
-              .alert-error.alert#notadded
-                strong Error while adding your transaction!
-                br
-                p Unfortunately there was an error while adding your transaction! Please try again later.
-              .alert-success.alert#edited
-                strong Edited!
-                br
-                p The transaction has been edited successfully!
-              .alert-error.alert#notedited
-                strong Error while editing your transaction!
-                br
-                p Unfortunately there was an error while editing your transaction! Please try again later.
-              .alert-success.alert#deleted
-                strong Deleted!
-                br
-                p The transaction has been deleted successfully!
-              .alert-error.alert#notdeleted
-                strong Error while deleting your transaction!
-                br
-                p Unfortunately there was an error while deleting your transaction! Please try again later.
-              .alert-error.alert#error
-                strong Error!
-                br
-                p Unfortunately there was an error what you told me to do! Please try again later.
+              - if (flash.success !== undefined)
+                .alert-success.alert#success
+                  strong Well done!
+                  br
+                  p #{flash.success}
+              - if (flash.error !== undefined)
+                .alert-danger.alert#fail
+                  strong Oh no..
+                  br
+                  p #{flash.error}
               - if (locals.transactions.length > 0)
                 table.table
                   thead
@@ -77,7 +59,7 @@ html(lang='en')
                 strong Error!
                 br
                 p Please fill in all the information!
-              form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit='return validateAddTransactionForm();')
+              form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded')
                 fieldset
                   .control-group#cg-id
                     .controls
@@ -114,87 +96,10 @@ html(lang='en')
 
       include includes/footer.jade
 
-    include includes/libs
+    include includes/libs.jade
 
-    script(type='text/javascript')
-      $(function () {
-        $('#new').hide();
-        $('#tags').hide();
-        $('#overviewlink').addClass('active');
-
-        $('#overviewlink').click(function (e) {
-          e.preventDefault();
-          $('#new').hide();
-          $('#newlink').removeClass('active');
-          $('#tags').hide();
-          $('#tagslink').removeClass('active');
-          $('#overview').show();
-          $('#overviewlink').addClass('active');
-        })
-        $('#newlink').click(function (e) {
-          e.preventDefault();
-          $('#overview').hide();
-          $('#overviewlink').removeClass('active');
-          $('#tags').hide();
-          $('#tagslink').removeClass('active');
-          $('#new').show();
-          $('#newlink').addClass('active');
-        })
-        $('#tagslink').click(function (e) {
-          e.preventDefault();
-          $('#overview').hide();
-          $('#overviewlink').removeClass('active');
-          $('#new').hide();
-          $('#newlink').removeClass('active');
-          $('#tags').show();
-          $('#tagslink').addClass('active');
-        })
-
-        $('#fillInAllInfo').hide();
-        $('#notadded').hide();
-        $('#added').hide();
-        $('#notedited').hide();
-        $('#edited').hide();
-        $('#notdeleted').hide();
-        $('#deleted').hide();
-        $('#error').hide();
-
-        if ($.getUrlVar('added') == 'false')
-          $('#notadded').show();
-        if ($.getUrlVar('added') == 'true')
-          $('#added').show();
-        if ($.getUrlVar('edited') == 'false')
-          $('#notedited').show();
-        if ($.getUrlVar('edited') == 'true')
-          $('#edited').show();
-        if ($.getUrlVar('deleted') == 'false')
-          $('#notdeleted').show();
-        if ($.getUrlVar('deleted') == 'true')
-          $('#deleted').show();
-        if ($.getUrlVar('error') == 'true')
-          $('#error').show();
-      })
-
-      // validate add transaction form
-      function validateAddTransactionForm() {
-        var state = true;
-
-        if ($('#transNameInput').val() ==  '') {
-          $('#cg-name').addClass('error');
-          state = false;
-        } else {
-          $('#cg-name').removeClass('error');
-        }
-
-        if ($('#transAmountInput').val() ==  '' || isNaN($('#transAmountInput').val())) {
-           $('#cg-transamount').addClass('error');
-           state = false;
-        } else {
-           $('#cg-transamount').removeClass('error');
-        }
-          
-        if (!state)
-          $('#fillInAllInfo').show();
-
-        return state;
-      }
+    script
+      (function() {
+        PBHelperTools.addTransactionListeners();
+        PBHelperTools.toggleTransactionNavigationTabs();
+      })();

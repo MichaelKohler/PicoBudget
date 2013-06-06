@@ -4,10 +4,12 @@ var globals = require('../globals').init();
 
 exports.login = function (req, res) {
   if (req.session.user) {
-    res.render('dashboard');
+    res.redirect('/dashboard');
   }
   else {
-    res.render('login', { locals: { user: req.session.user || '' } });
+    res.render('login', { locals: {
+      user: req.session.user || ''
+    }});
   }
 };
 
@@ -18,7 +20,10 @@ exports.authenticated = function (req, res) {
       res.redirect('/dashboard');
     }
     else {
-      res.redirect('/login?wrongCredentials=true');
+      res.flash('error', 'Either the username or password were wrong! Please try again.');
+      res.render('login', { locals: {
+        user: req.session.user || ''
+      }});
     }
   });
 };
@@ -26,20 +31,30 @@ exports.authenticated = function (req, res) {
 exports.registered = function (req, res) {
   globals.users.create(req.body.emailInputReg, req.body.passwordInputReg, globals.db, function (user) {
     if (user === "EXISTS") {
-      res.redirect('/login?userExists=true');
+      res.flash('error', 'The given email address is already used! Please log in on the left side with your email address or use another address.');
+      res.render('login', { locals: {
+        user: req.session.user || ''
+      }});
     }
     else if (user) {
       req.session.user = user;
-      res.redirect('/dashboard?registered=true');
+      req.session.user.isNew = true;
+      res.redirect('/dashboard');
       // TODO: send email to the user
     }
     else {
-      res.redirect('/login?userNotCreated=true');
+      res.flash('error', 'The user could not be created. Please try again.');
+      res.render('login', { locals: {
+        user: req.session.user || ''
+      }});
     }
   });
 };
 
 exports.logout = function (req, res) {
   delete req.session.user;
-  res.redirect('/login?loggedOut=true');
+  res.flash('info', 'You are logged out now.');
+  res.render('login', { locals: {
+    user: ''
+  }});
 };

@@ -29,12 +29,12 @@ module.exports.addAccount = function (login, accName, accCurrency, accBalance, d
             callback(true);
           }
           else {
-            callback(null);
+            callback(false);
           }
         });
       }
       else {
-        callback("EXISTS");
+        callback(false);
       }
     });
   });
@@ -45,16 +45,16 @@ module.exports.editAccount = function (login, oldName, accName, accBalance, db, 
     collection.findOne({name: oldName}, function (err, foundAccount) {
       if (foundAccount) {
         collection.update({name: oldName}, {$set: {name: accName, bal: accBalance}}, function (err) {
-          if (typeof(err) === 'undefined') {
+          if (!err) {
             callback(true);
           }
           else {
-            callback(null);
+            callback(false);
           }
         });
       }
       else {
-        callback(null);
+        callback(false);
       }
     });
   });
@@ -65,11 +65,11 @@ module.exports.deleteAccount = function (login, accName, db, callback) {
     collection.findOne({name: accName}, function (err, foundAccount) {
       if (foundAccount) {
         collection.remove({name: accName}, function (err) {
-          err ? callback(null) : callback(true);
+          err ? callback(false) : callback(true);
         });
       }
       else {
-        callback(null);
+        callback(false);
       }
     });
   });
