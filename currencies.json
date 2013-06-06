@@ -1,30 +1,11 @@
 {
-  "CHF": {
-    "ISO": "CHF",
-    "name": "Schweizer Franken"
-  },
-  "USD": {
-    "ISO": "USD",
-    "name": "US Dollar"
-  },
-  "EUR": {
-    "ISO": "EUR",
-    "name": "Euro"
-  },
-  "GBP": {
-    "ISO": "GBP",
-    "name": "Great Britain Pound"
-  },
-  "JPY": {
-    "ISO": "JPY",
-    "name": "Japanese Yen"
-  },
-  "CAD": {
-    "ISO": "CAD",
-    "name": "Canadian Dollar"
-  },
-  "AUD": {
-    "ISO": "AUD",
-    "name": "Australian Dollar"
-  }
+  "currencies": [
+    { "ISO": "CHF", "name": "Schweizer Franken" },
+    { "ISO": "USD", "name": "US Dollar" },
+    { "ISO": "EUR", "name": "Euro" },
+    { "ISO": "GBP", "name": "Great Britain Pound" },
+    { "ISO": "JPY", "name": "Japanese Yen" },
+    { "ISO": "CAD", "name": "Canadian Dollar" },
+    { "ISO": "AUD", "name": "Australian Dollar" }
+  ]
 }

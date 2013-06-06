@@ -15,7 +15,7 @@
     exports.tags = require('./models/tags.js');
 
     /** Configuration **/
-    exports.currencies = require('./currencies.json');
+    exports.currencies = require('./currencies.json').currencies;
 
     return exports;
   };

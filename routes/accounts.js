@@ -6,18 +6,14 @@ exports.accounts = function (req, res) {
   globals.accounts.getAllAccounts(req.session.user.user, globals.db, function (accountList) {
     if (accountList) {
       globals.accounts.sumBalance(accountList, function (sum) {
-        globals.helpers.getAllAvailableCurrencies(globals.db, function (currencyList) {
-          if (currencyList) {
-            res.render('accounts', { locals: {
-              user: req.session.user || '',
-              currencies: currencyList,
-              accounts: accountList,
-              balanceSum: sum,
-              formatAmount: globals.helpers.formatAmount,
-              accNumber: accountList.length
-            }});
-          }
-        });
+        res.render('accounts', { locals: {
+          user: req.session.user || '',
+          currencies: globals.currencies,
+          accounts: accountList,
+          balanceSum: sum,
+          formatAmount: globals.helpers.formatAmount,
+          accNumber: accountList.length
+        }});
       });
     }
   });
