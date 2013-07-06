@@ -32,7 +32,7 @@ html(lang='en')
                     tr
                       td #{account.name}
                       td #{account.curr}
-                      td(style='text-align:right;') #{locals.formatAmount(account.bal)}
+                      td(style='text-align:right;') #{functions.formatAmount(account.bal)}
             - else
               p There are no accounts to be displayed.
             hr
@@ -55,7 +55,7 @@ html(lang='en')
                       td #{trans.name}
                       td #{trans.art}
                       td #{trans.tags}
-                      td(style='text-align:right;') #{locals.formatAmount(trans.amount)}
+                      td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
             - else
               p There are no transactions to be displayed.
 

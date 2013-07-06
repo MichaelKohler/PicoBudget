@@ -88,4 +88,9 @@
   server.post('/settingsChanged', requiresLogin, settingsRoutes.settingsChanged);
   server.post('/userDeleted', requiresLogin, settingsRoutes.userDeleted);
 
+  server.locals({
+    functions : {
+      formatAmount: globals.helpers.formatAmount
+    }
+  });
 }());

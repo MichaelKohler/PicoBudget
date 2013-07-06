@@ -13,7 +13,6 @@ exports.transactions = function (req, res) {
                 user: req.session.user || '',
                 transactions: transactionList,
                 tags: tagList,
-                formatAmount: globals.helpers.formatAmount,
                 accounts: accList
               }});
             }

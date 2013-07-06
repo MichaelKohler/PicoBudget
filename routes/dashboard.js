@@ -8,7 +8,6 @@ exports.index = function (req, res) {
       res.render('dashboard', { locals: {
         user: req.session.user || '',
         accounts: accountList,
-        formatAmount: globals.helpers.formatAmount,
         transactions: transactionList,
         registeredInfo: req.session.user.isNew
       }});

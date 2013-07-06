@@ -10,8 +10,7 @@ exports.accounts = function (req, res) {
         user: req.session.user || '',
         currencies: globals.currencies,
         accounts: accountList,
-        balanceSum: sum,
-        formatAmount: globals.helpers.formatAmount
+        balanceSum: sum
       }});
     }
   });

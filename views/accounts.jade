@@ -46,7 +46,7 @@ html(lang='en')
                         tr
                           td #{account.name}
                           td #{account.curr}
-                          td(style='text-align:right;') #{locals.formatAmount(account.bal)}
+                          td(style='text-align:right;') #{functions.formatAmount(account.bal)}
                           td(style='text-align:right;')
                             a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
                           td(style='text-align:right;')
@@ -54,7 +54,7 @@ html(lang='en')
                       tr(style='font-weight:bold;')
                         td
                         td Total (#{locals.user.curr}):
-                        td(style='text-align:right;') #{locals.formatAmount(locals.balanceSum)}
+                        td(style='text-align:right;') #{functions.formatAmount(locals.balanceSum)}
                         td
                         td
                 - else

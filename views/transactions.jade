@@ -49,7 +49,7 @@ html(lang='en')
                         td #{trans.name}
                         td #{trans.art}
                         td #{trans.tags}
-                        td(style='text-align:right;') #{locals.formatAmount(trans.amount)}
+                        td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
               - else
                 p There are no transactions to be displayed.
             #new
