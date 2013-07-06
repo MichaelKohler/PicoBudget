@@ -34,13 +34,26 @@ exports.settingsChanged = function (req, res) {
 };
 
 exports.userDeleted = function (req, res) {
-  globals.users.removeUser(req.session.user.user, req.body.passwordInput, globals.db, function (removed) {
-    if (removed) {
-      delete req.session.user;
-      res.flash('success', 'Your user account and all data associated with it was removed.');
-      res.render('login', { locals: {
-        user: ''
-      }});
+  globals.users.removeUser(req.session.user.user, req.body.passwordInput, globals.db, function (userRemoved) {
+    if (userRemoved) {
+      globals.accounts.deleteAllAccounts(req.session.user.user, globals.db, function (accsRemoved) {
+        globals.transactions.deleteAllTransactions(req.session.user.user, globals.db, function (transRemoved) {
+          if (accsRemoved && transRemoved) {
+            delete req.session.user;
+            res.flash('success', 'Your user account and all data associated with it was removed.');
+            res.render('login', { locals: {
+              user: ''
+            }});
+          }
+          else {
+            delete req.session.user;
+            res.flash('error', 'Your user account was removed, but we could not delete all your data. Please contact us so we can remove it manually.');
+            res.render('about', { locals: {
+              user: ''
+            }});
+          }
+        });
+      });
     }
     else {
       req.flash('error', 'Your user account could not be removed. Did you enter a correct password?');
@@ -50,5 +63,4 @@ exports.userDeleted = function (req, res) {
       }});
     }
   });
-  // TODO: remove other data too!
 };

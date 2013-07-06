@@ -102,3 +102,16 @@ module.exports.removeTransaction = function (aLogin, aName, db, aCallback) {
     });
   });
 };
+
+module.exports.deleteAllTransactions = function (aLogin, db, aCallback) {
+  db.collection('transactions', function (err, collection) {
+    collection.remove({user: aLogin}, function (err) {
+      if (err) {
+        aCallback(false);
+      }
+      else {
+        aCallback(true);
+      }
+    });
+  });
+};

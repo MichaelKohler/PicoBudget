@@ -92,3 +92,16 @@ module.exports.deleteAccount = function (aLogin, db, aAccName, callback) {
     });
   });
 };
+
+module.exports.deleteAllAccounts = function (aLogin, db, aCallback) {
+  db.collection('accounts', function (err, collection) {
+    collection.remove({user: aLogin}, function (err) {
+      if (err) {
+        aCallback(false);
+      }
+      else {
+        aCallback(true);
+      }
+    });
+  });
+};

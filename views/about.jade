@@ -9,6 +9,11 @@ html(lang='en')
     .container
       section#content
         h1 About
+        - if (flash.error !== undefined)
+          .alert-danger.alert#fail
+            strong Oh no..
+            br
+            p #{flash.error}
         p Here should be the about page.
       include includes/footer.jade
 
