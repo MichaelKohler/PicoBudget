@@ -29,7 +29,6 @@
     server.use(express.cookieParser('' + require('crypto').randomBytes(64) + ''));
     server.use(express.session());
     server.use(flashify);
-    server.use(server.router);
   });
 
   server.configure('development', function () {
@@ -75,11 +74,8 @@
   var transactionsRoutes = require('./routes/transactions.js');
   server.get('/transactions', requiresLogin, transactionsRoutes.transactions);
   server.post('/transactionAdded', requiresLogin, transactionsRoutes.transactionAdded);
-  server.post('/transactionEdited', requiresLogin, transactionsRoutes.transactionEdited);
-  server.post('/transactionDeleted', requiresLogin, transactionsRoutes.transactionDeleted);
 
   var tagsRoutes = require('./routes/tags.js');
-  server.post('/tagDeleted', requiresLogin, tagsRoutes.tagDeleted);
 
   var budgetRoutes = require('./routes/budget.js');
   server.get('/budget', requiresLogin, budgetRoutes.budget);

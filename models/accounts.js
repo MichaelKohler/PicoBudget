@@ -1,8 +1,29 @@
 "use strict";
 
-module.exports.getAllAccounts = function (login, db, callback) {
+var globals = require('../globals').init();
+
+module.exports.Account = {
+  name: "",
+  currency: "",
+  balance: "",
+
+  initFull: function (aName, aCurrency, aBalance) {
+    this.name = aName;
+    this.currency = aCurrency;
+    this.balance = aBalance;
+    return this;
+  },
+
+  init: function(aName, aBalance) {
+    this.name = aName;
+    this.balance = aBalance;
+    return this;
+  }
+};
+
+module.exports.getAllAccounts = function (aLogin, db, callback) {
   db.collection('accounts', function (err, collection) {
-    collection.find({user: login}, function (err, cursor) {
+    collection.find({user: aLogin}, function (err, cursor) {
       cursor.toArray(function (err, items) {
         callback(items);
       });
@@ -10,20 +31,12 @@ module.exports.getAllAccounts = function (login, db, callback) {
   });
 };
 
-module.exports.sumBalance = function (accounts, callback) {
-  var sum = 0;
-  for (var i = 0; i < accounts.length; i++) {
-    sum += parseFloat(accounts[i].bal);
-  }
-  callback(sum);
-};
-
-module.exports.addAccount = function (login, accName, accCurrency, accBalance, db, callback) {
+module.exports.addAccount = function (aLogin, db, aAccount, callback) {
   db.collection('accounts', function (err, collection) {
-    collection.findOne({user: login, name: accName}, function (err, foundAccount) {
+    collection.findOne({user: aLogin, name: aAccount.name}, function (err, foundAccount) {
       if (!foundAccount) {
-        var newAccount = { user: login, name: accName, curr: accCurrency,
-          bal: parseFloat(accBalance).toFixed(2) };
+        var newAccount = { user: aLogin, name: aAccount.name, curr: aAccount.currency,
+          bal: parseFloat(aAccount.balance).toFixed(2) };
         collection.insert(newAccount, function (err, result) {
           if (result) {
             callback(true);
@@ -40,11 +53,11 @@ module.exports.addAccount = function (login, accName, accCurrency, accBalance, d
   });
 };
 
-module.exports.editAccount = function (login, oldName, accName, accBalance, db, callback) {
+module.exports.editAccount = function (aLogin, db, aOldName, aEditedAccount, callback) {
   db.collection('accounts', function (err, collection) {
-    collection.findOne({name: oldName}, function (err, foundAccount) {
+    collection.findOne({name: aOldName}, function (err, foundAccount) {
       if (foundAccount) {
-        collection.update({name: oldName}, {$set: {name: accName, bal: accBalance}}, function (err) {
+        collection.update({name: aOldName}, {$set: {name: aEditedAccount.name, bal: aEditedAccount.balance}}, function (err) {
           if (!err) {
             callback(true);
           }
@@ -60,12 +73,17 @@ module.exports.editAccount = function (login, oldName, accName, accBalance, db, 
   });
 };
 
-module.exports.deleteAccount = function (login, accName, db, callback) {
+module.exports.deleteAccount = function (aLogin, db, aAccName, callback) {
   db.collection('accounts', function (err, collection) {
-    collection.findOne({name: accName}, function (err, foundAccount) {
+    collection.findOne({name: aAccName}, function (err, foundAccount) {
       if (foundAccount) {
-        collection.remove({name: accName}, function (err) {
-          err ? callback(false) : callback(true);
+        collection.remove({name: aAccName}, function (err) {
+          if (err) {
+            callback(false);
+          }
+          else {
+            callback(true);
+          }
         });
       }
       else {

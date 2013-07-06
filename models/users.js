@@ -1,79 +1,84 @@
 "use strict";
 
-module.exports.authenticate = function (login, password, db, callback) {
+module.exports.authenticate = function (aLogin, aPassword, db, aCallback) {
   db.collection('users', function (err, collection) {
-    collection.findOne({user: login}, function (err, user) {
+    collection.findOne({user: aLogin}, function (err, user) {
       if (user) {
-        user.pw === password ? callback(user) : callback(null);
+        user.pw === aPassword ? aCallback(user) : aCallback(null);
       }
       else {
-        callback(null);
+        aCallback(null);
       }
     });
   });
 };
 
-module.exports.create = function (login, password, db, callback) {
+module.exports.create = function (aLogin, aPassword, db, aCallback) {
   db.collection('users', function (err, collection) {
-    collection.findOne({user: login}, function (err, foundUser) {
+    collection.findOne({user: aLogin}, function (err, foundUser) {
       if (!foundUser) {
-        var newUser = { user: login, pw: password, role: 'user', curr: "CHF" };
+        var newUser = { user: aLogin, pw: aPassword, role: 'user', curr: "CHF" };
         collection.insert(newUser, function (err, result) {
           if (result) {
-            callback(newUser);
+            aCallback(newUser);
           }
           else {
-            callback(null);
+            aCallback(null);
           }
         });
       }
       else {
-        callback("EXISTS");
+        aCallback("EXISTS");
       }
     });
   });
 };
 
-module.exports.changeSettings = function (login, oldPassword, newPassword, prefCurr, db, callback) {
+module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aPrefCurr, db, aCallback) {
   db.collection('users', function (err, collection) {
-    collection.findOne({user: login}, function (err, user) {
+    collection.findOne({user: aLogin}, function (err, user) {
       if (user) { // user was found
-        if (oldPassword !== '' && newPassword !== '') {
-          if (user.pw === oldPassword) {
-            collection.update({user: login}, {$set: {pw: newPassword, curr: prefCurr}}, function (err) {
-              user.pw = newPassword;
-              user.curr = prefCurr;
-              err ? callback(null) : callback(user);
+        if (aOldPassword !== '' && aNewPassword !== '') {
+          if (user.pw === aOldPassword) {
+            collection.update({user: aLogin}, {$set: {pw: aNewPassword, curr: aPrefCurr}}, function (err) {
+              user.pw = aNewPassword;
+              user.curr = aPrefCurr;
+              if (err) {
+                aCallback(null);
+              }
+              else {
+                aCallback(user);
+              }
             });
           }
           else {
-            callback(false);
+            aCallback(false);
           }
         }
         else { // only save prefcurr
-          collection.update({user: login}, {$set: {curr: prefCurr}}, function (err) {
+          collection.update({user: aLogin}, {$set: {curr: prefCurr}}, function (err) {
             user.curr = prefCurr;
-            err ? callback(null) : callback(user);
+            err ? aCallback(null) : aCallback(user);
           });
         }
       }
       else { // user was not found
-        callback(null);
+        aCallback(null);
       }
     });
   });
 };
 
-module.exports.removeUser = function (login, password, db, callback) {
+module.exports.removeUser = function (aLogin, aPassword, db, aCallback) {
   db.collection('users', function (err, collection) {
-    collection.findOne({user: login}, function (err, user) {
-      if (user.pw === password) {
-        collection.remove({user: login}, function (err) {
-          err ? callback(null) : callback(true);
+    collection.findOne({user: aLogin}, function (err, user) {
+      if (user.pw === aPassword) {
+        collection.remove({user: aLogin}, function (err) {
+          err ? aCallback(null) : aCallback(true);
         });
       }
       else {
-        callback(null);
+        aCallback(null);
       }
     });
   });

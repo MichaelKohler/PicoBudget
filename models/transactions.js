@@ -1,73 +1,103 @@
 "use strict";
 
-module.exports.getAllTransactions = function (login, db, callback) {
+module.exports.Transaction = {
+  account: "",
+  type: "",
+  name: "",
+  tags: [],
+  amount: "",
+
+  init: function (aAccount, aType, aName, aTags, aAmount) {
+    this.account = aAccount;
+    this.type = aType;
+    this.name = aName;
+    this.tags = aTags;
+    this.amount = aAmount;
+    return this;
+  }
+};
+
+module.exports.getAllTransactions = function (aLogin, db, aCallback) {
   db.collection('transactions', function (err, collection) {
-    collection.find({user: login}, {sort: [
+    collection.find({user: aLogin}, {sort: [
       ['date', -1]
     ]}, function (err, cursor) {
       cursor.toArray(function (err, items) {
-        callback(items);
+        aCallback(items);
       });
     });
   });
 };
 
-module.exports.getLimitedTransactions = function (login, db, limitedEntries, callback) {
+module.exports.getLimitedTransactions = function (aLogin, db, aLimitedEntries, aCallback) {
   db.collection('transactions', function (err, collection) {
-    collection.find({user: login}, {limit: limitedEntries, sort: [
+    collection.find({user: aLogin}, {limit: aLimitedEntries, sort: [
       ['date', -1]
     ]}, function (err, cursor) {
       cursor.toArray(function (err, items) {
-        callback(items);
+        aCallback(items);
       });
     });
   });
 };
 
-module.exports.addTransaction = function (login, transID, transAcc, transArt, transName, transTags, transAmount, db, callback) {
+module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
   db.collection('transactions', function (err, collection) {
     var currentDate = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate();
-    var newTransaction = { user: login, transID: transID, date: currentDate, acc: transAcc, art: transArt,
-      name: transName, tags: transTags, amount: parseFloat(transAmount).toFixed(2) };
+    var newTransaction = { user: aLogin, date: currentDate, acc: aTransaction.account, art: aTransaction.type,
+      name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount).toFixed(2) };
     collection.insert(newTransaction, function (err, result) {
       if (result) {
-        callback(newTransaction);
+        aCallback(newTransaction);
       }
       else {
-        callback(null);
+        aCallback(null);
       }
     });
   });
 };
 
-module.exports.editTransaction = function (login, transID, transArt, transName, transTags, transAmount, db, callback) {
+// not yet used:
+module.exports.editTransaction = function (aLogin, aTransaction, db, aCallback) {
   db.collection('transactions', function (err, collection) {
-    var transaction = { user: login, transID: transID };
-    var newTransaction = { art: transArt, name: transName, tags: transTags, amount: parseFloat(transAmount).toFixed(2) };
+    var transaction = { user: aLogin, name: aTransaction.name }; // we should not identify it with the name
+    var newTransaction = { art: aTransaction.type, name: aTransaction.name, tags: aTransaction.tags,
+                           amount: parseFloat(aTransaction.amount).toFixed(2) };
     collection.findOne(transaction, function (err, foundTransaction) {
       if (foundTransaction) {
         collection.update(transaction, {$set: newTransaction}, function (err) {
-          err ? callback(null) : callback(transaction);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(transaction);
+          }
         });
       }
       else {
-        callback(null);
+        aCallback(null);
       }
     });
   });
 };
 
-module.exports.removeTransaction = function (login, transID, db, callback) {
+// not yet used:
+module.exports.removeTransaction = function (aLogin, aName, db, aCallback) {
   db.collection('transactions', function (err, collection) {
-    var transaction = { user: login, transID: transID };
+    var transaction = { user: aLogin, name: aName };
     collection.findOne(transaction, function (err, foundTag) {
       if (foundTag) {
         collection.remove(transaction, function (err) {
-          err ? callback(null) : callback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
       else {
-        callback(null);
+        aCallback(null);
       }
     });
   });

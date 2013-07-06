@@ -29,14 +29,13 @@ exports.transactions = function (req, res) {
 };
 
 exports.transactionAdded = function (req, res) {
-  var transID = req.body.transIDInput;
   var transAcc = req.body.transAccDropdown;
-  var transArt = req.body.transArtDropdown;
+  var transType = req.body.transArtDropdown;
   var transName = req.body.transNameInput;
   var transTags = req.body.transTagsInput.split(',');
   var transAmount = req.body.transAmountInput;
-  globals.transactions.addTransaction(req.session.user.user, transID, transAcc, transArt, transName,
-    transTags, transAmount, globals.db, function (success) {
+  var newTransaction = globals.transactions.Transaction.init(transAcc, transType, transName, transTags, transAmount);
+  globals.transactions.addTransaction(req.session.user.user, newTransaction, globals.db, function (success) {
       if (success) {
         res.flash('success', 'The transaction has been added successfully!');
       }
@@ -45,35 +44,4 @@ exports.transactionAdded = function (req, res) {
       }
       res.redirect('/transactions');
     });
-};
-
-exports.transactionEdited = function (req, res) {
-  var transID = req.body.transID;
-  var transArt = req.body.transArtEditInput;
-  var transName = req.body.transNameEditInput;
-  var transTags = req.body.transTagsEdit;
-  var transAmount = req.body.transEditAmount;
-  globals.transactions.editTransaction(req.session.user.user, transID, transArt, transName,
-    transTags, transAmount, globals.db, function (successTrans) {
-      if (successTrans) {
-        res.flash('success', 'The transaction has been edited successfully!');
-      }
-      else {
-        res.flash('error', 'Unfortunately there was an error while editing your transaction! Please try again later.');
-      }
-      res.redirect('/transactions');
-    });
-};
-
-exports.transactionDeleted = function (req, res) {
-  var transID = req.body['transID'];
-  globals.transactions.removeTransaction(req.session.user.user, transID, globals.db, function (success) {
-    if (success) {
-      res.flash('success', 'The transaction has been deleted successfully!');
-    }
-    else {
-      res.flash('error', 'Unfortunately there was an error while deleting your transaction! Please try again later.');
-    }
-    res.redirect('/transactions');
-  });
 };

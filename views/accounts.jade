@@ -33,34 +33,35 @@ html(lang='en')
                 strong Error!
                 br
                 p Please fill in all the information!
-              - if (locals.accounts.length > 0)
-                table.table
-                  thead
-                    tr
-                      th Name
-                      th Currency
-                      th(style='text-align:right;') Balance
-                  tbody
-                    for account in locals.accounts
+              #accounttable
+                - if (locals.accounts.length > 0)
+                  table.table
+                    thead
                       tr
-                        td #{account.name}
-                        td #{account.curr}
-                        td(style='text-align:right;') #{locals.formatAmount(account.bal)}
-                        td(style='text-align:right;')
-                          a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
-                        td(style='text-align:right;')
-                          a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
-                    tr(style='font-weight:bold;')
-                      td
-                      td Total (#{locals.user.curr}):
-                      td(style='text-align:right;') #{locals.formatAmount(locals.balanceSum)}
-                      td
-                      td
-              - else
-                p There are no accounts to be displayed.
+                        th Name
+                        th Currency
+                        th(style='text-align:right;') Balance
+                    tbody
+                      for account in locals.accounts
+                        tr
+                          td #{account.name}
+                          td #{account.curr}
+                          td(style='text-align:right;') #{locals.formatAmount(account.bal)}
+                          td(style='text-align:right;')
+                            a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
+                          td(style='text-align:right;')
+                            a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
+                      tr(style='font-weight:bold;')
+                        td
+                        td Total (#{locals.user.curr}):
+                        td(style='text-align:right;') #{locals.formatAmount(locals.balanceSum)}
+                        td
+                        td
+                - else
+                  p There are no accounts to be displayed.
 
               h3(id='editaccounttitle') Edit account
-              form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited')
+              form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited', onsubmit="return PBHelperTools.validateEditAccount();")
                 fieldset
                   .control-group#cg-editname
                     label.control-label(for='editNameInput') Name
@@ -78,7 +79,7 @@ html(lang='en')
                     button.btn.btn-info(type='submit') Edit account
 
               h2(id='deleteaccounttitle') Delete account
-              form.form-horizontal(id='deleteaccountform', method='POST', action='/accountDeleted')
+              form.form-horizontal(id='deleteaccountform', method='POST', action='/accountDeleted', onsubmit="return PBHelperTools.validateDeleteAccount();")
                 fieldset
                   .control-group#cg-deletename
                     label.control-label(for='deleteNameInput') Name
@@ -89,7 +90,7 @@ html(lang='en')
                     button.btn.btn-warning(type='submit') Delete this account!
             #new
               h3(id='addaccounttitle') Add a new account
-              form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded')
+              form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded', onsubmit="return PBHelperTools.validateAddAccount();")
                 fieldset
                   .control-group#cg-name
                     label.control-label(for='nameInput') Name
@@ -115,7 +116,6 @@ html(lang='en')
 
     script(type='text/javascript')
       (function() {
-        PBHelperTools.addAccountListeners();
         PBHelperTools.toggleAccountNavigationTabs();
         PBHelperTools.toggleAccountMode();
       })();

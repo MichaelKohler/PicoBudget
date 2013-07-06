@@ -2,12 +2,6 @@
 
   var PBHelperTools = {
 
-    addTransactionListeners: function pb_addTransactionListeners() {
-      $('#addtransactionform').get(0).addEventListener('onsubmit', function() {
-        PBHelperTools.validateAddTransaction();
-      });
-    },
-
     toggleTransactionNavigationTabs: function pb_toggleTransactionNavigationTabs() {
       $('#new').hide();
       $('#tags').hide();
@@ -60,53 +54,54 @@
       }
 
       if (!state) {
-        $('#fillInAllInfo').show();
+        $('#fillInAllInfo').removeClass('hidden');
       }
 
       return state;
     },
 
     toggleAccountNavigationTabs: function pb_toggleAccountNavigationTabs() {
-      $('#new').hide();
+      $('#new').addClass('hidden');
       $('#overviewlink').addClass('active');
 
       $('#overviewlink').click(function (e) {
         e.preventDefault();
-        $('#new').hide();
+        $('#new').addClass('hidden');
         $('#newlink').removeClass('active');
         $('#overviewlink').addClass('active');
-        $('#overview').show();
+        $('#overview').removeClass('hidden');
         $('#overviewlink').addClass('active');
       });
       $('#newlink').click(function (e) {
         e.preventDefault();
-        $('#overview').hide();
+        $('#overview').addClass('hidden');
         $('#overviewlink').removeClass('active');
-        $('#new').show();
+        $('#new').removeClass('hidden');
         $('#newlink').addClass('active');
-      });
-    },
-
-    addAccountListeners: function pb_addAccountListeners() {
-      document.getElementById('editaccountform').addEventListener('onsubmit', function() {
-        PBHelperTools.validateEditAccount();
-      });
-      document.getElementById('addaccountform').addEventListener('onsubmit', function() {
-        PBHelperTools.validateAddAccount();
       });
     },
 
     toggleAccountMode: function pb_toggleAccountMode() {
       // EDIT MODE
       if ($.getUrlVar('editAccount') === 'true') {
+        $('#accounttable').addClass('hidden');
         $('#hiddenOldName').val($.getUrlVar('n'));
         $('#editNameInput').val($.getUrlVar('n'));
         $('#editInitBalanceInput').val($.getUrlVar('b'));
       }
+      else {
+        $('#editaccounttitle').addClass('hidden');
+        $('#editaccountform').addClass('hidden');
+      }
 
       // DELETE MODE
       if ($.getUrlVar('deleteAccount') === 'true') {
+        $('#accounttable').addClass('hidden');
         $('#deleteNameInput').val($.getUrlVar('n'));
+      }
+      else {
+        $('#deleteaccounttitle').addClass('hidden');
+        $('#deleteaccountform').addClass('hidden');
       }
     },
 
@@ -154,6 +149,20 @@
 
       if (!state) {
         $('#fillInAllInfo').removeClass('hidden'); // not all info entered -> show error
+      }
+
+      return state;
+    },
+
+    validateDeleteAccount: function pb_validateDeleteAccount() {
+      // validate delete account form
+      var state = true;
+
+      if ($('#deleteNameInput').val() ===  '') {
+        $('#cg-deletename').addClass('error');
+        state = false;
+      } else {
+        $('#cg-deletename').removeClass('error');
       }
 
       return state;
@@ -216,15 +225,24 @@
       if ($('#newPasswordInput').val() !== '' && $('#oldPasswordInput').val() !== '' &&
           $('#confirmNewPasswordInput').val() !== '') {
         $('#fillInAllInfo').addClass('hidden');
+
         if ($('#newPasswordInput').val() === $('#confirmNewPasswordInput').val()) {
           $('#passwordsDidntMatch').addClass('hidden');
         }
         else {
+          // the new passwords didn't match
           state = false;
           $('#passwordsDidntMatch').removeClass('hidden');
           $('#newPasswordInput').addClass('error');
           $('#confirmNewPasswordInput').addClass('error');
         }
+      }
+      else if ($('#newPasswordInput').val() !== '' && ($('#oldPasswordInput').val() === '' ||
+        $('#confirmNewPasswordInput').val() === '')) { // new password is set, but not all info provided
+        state = false;
+        $('#cg-oldpassword').addClass('error');
+        $('#cg-confirmnewpassword').addClass('error');
+        $('#fillInAllInfo').removeClass('hidden');
       }
 
       return state;

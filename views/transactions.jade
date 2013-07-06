@@ -54,12 +54,12 @@ html(lang='en')
                 p There are no transactions to be displayed.
             #new
               h3 Add a new transaction
-              .alert-error.alert#fillInAllInfo
+              .alert-error.alert.hidden#fillInAllInfo
                 button.close(date-dismiss='alert') ×
                 strong Error!
                 br
                 p Please fill in all the information!
-              form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded')
+              form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit="return PBHelperTools.validateAddTransaction();")
                 fieldset
                   .control-group#cg-id
                     .controls
@@ -78,8 +78,8 @@ html(lang='en')
                     label.control-label(for='artDropdown') +/-
                     .controls
                       select(name='transArtDropdown')
-                        option(value='einnahme') foo
-                        option(value='einnahme') bar
+                        option(value='+') +
+                        option(value='-') -
                   .control-group#cg-transtags
                     label.control-label(for='transTagsInput') Tags
                     .controls
@@ -100,6 +100,5 @@ html(lang='en')
 
     script
       (function() {
-        PBHelperTools.addTransactionListeners();
         PBHelperTools.toggleTransactionNavigationTabs();
       })();
