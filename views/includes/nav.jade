@@ -14,7 +14,7 @@ header
                     a(href='/') Home
                   - if (!locals.user)
                     li
-                      a(href='/login') Register
+                      a(href='/login') Login / Registration
                   li
                     a(href='/faq') FAQ
                   li
@@ -22,11 +22,3 @@ header
                   - if (locals.user)
                     li
                       a(href='/dashboard') Dashboard
-                - if (!locals.user)
-                  form.form-inline.pull-right(action='/authenticated', method='POST')
-                    input.input-small(type='email', placeholder='Email', name='emailInput')
-                    input.input-small(type='password', placeholder='Password', name='passwordInput')
-                    label.checkbox
-                      input(type='checkbox')
-                      | Remember me
-                    button.btn(type='submit') Sign in
