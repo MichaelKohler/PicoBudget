@@ -50,7 +50,7 @@ html(lang='en')
                     label.control-label(for='prefCurrDropdown') Preferred currency
                     .controls
                       select(name='prefCurrDropdown')
-                        for currency in locals.currencies
+                        for currency in data.currencies
                           - if (currency.ISO === locals.user.curr)
                             option(selected='true', value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
                           - else

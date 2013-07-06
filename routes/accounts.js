@@ -8,7 +8,6 @@ exports.accounts = function (req, res) {
       var sum = globals.helpers.sumAccountBalance(accountList);
       res.render('accounts', { locals: {
         user: req.session.user || '',
-        currencies: globals.currencies,
         accounts: accountList,
         balanceSum: sum
       }});

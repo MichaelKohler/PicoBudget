@@ -100,7 +100,7 @@ html(lang='en')
                     label.control-label(for='currDropdown') Currency
                     .controls
                       select(name='currDropdown')
-                        for currency in locals.currencies
+                        for currency in data.currencies
                           option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
                   .control-group#cg-initialbalance
                     label.control-label(for='initBalanceInput') Initial balance

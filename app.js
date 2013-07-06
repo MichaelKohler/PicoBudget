@@ -91,6 +91,9 @@
   server.locals({
     functions : {
       formatAmount: globals.helpers.formatAmount
+    },
+    data : {
+      currencies: globals.currencies
     }
   });
 }());

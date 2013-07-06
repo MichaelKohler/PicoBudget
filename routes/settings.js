@@ -4,8 +4,7 @@ var globals = require('../globals').init();
 
 exports.settings = function (req, res) {
   res.render('settings', { locals: {
-    user: req.session.user || '',
-    currencies: globals.currencies
+    user: req.session.user || ''
   }});
 };
 
@@ -19,15 +18,13 @@ exports.settingsChanged = function (req, res) {
       req.session.user = updatedUser; // we need to reinit the session because of the new password
       res.flash('success', 'Your settings are saved.');
       res.render('settings', { locals: {
-        user: req.session.user || '',
-        currencies: globals.currencies
+        user: req.session.user || ''
       }});
     }
     else {
       res.flash('error', 'We could not update the settings. Please try again.');
       res.render('settings', { locals: {
-        user: req.session.user || '',
-        currencies: globals.currencies
+        user: req.session.user || ''
       }});
     }
   });
@@ -58,8 +55,7 @@ exports.userDeleted = function (req, res) {
     else {
       req.flash('error', 'Your user account could not be removed. Did you enter a correct password?');
       res.render('settings', { locals: {
-        user: req.session.user || '',
-        currencies: globals.currencies
+        user: req.session.user || ''
       }});
     }
   });
