@@ -22,7 +22,7 @@ exports.transactions = function (req, res) {
     }
     else {
       res.flash('error', 'Unfortunately there was an error of which we can not recover! Please try again later.');
-      res.redirect('/transactions?error=true');
+      res.redirect('/transactions');
     }
   });
 };
@@ -36,7 +36,14 @@ exports.transactionAdded = function (req, res) {
   var newTransaction = globals.transactions.Transaction.init(transAcc, transType, transName, transTags, transAmount);
   globals.transactions.addTransaction(req.session.user.user, newTransaction, globals.db, function (success) {
       if (success) {
-        res.flash('success', 'The transaction has been added successfully!');
+        globals.accounts.setBalanceForTransaction(req.session.user.user, globals.db, newTransaction, function(err) {
+          if (err) {
+            res.flash('error', 'We could not update your balance correctly. Please change it manually.!');
+          }
+          else {
+            res.flash('success', 'The transaction has been added successfully!');
+          }
+        });
       }
       else {
         res.flash('error', 'Unfortunately there was an error while adding your transaction! Please try again later.');

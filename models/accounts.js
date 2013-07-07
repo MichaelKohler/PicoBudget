@@ -105,3 +105,31 @@ module.exports.deleteAllAccounts = function (aLogin, db, aCallback) {
     });
   });
 };
+
+module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aCallback) {
+  db.collection('accounts', function (err, collection) {
+    collection.findOne({name: aTransaction.account}, function (err, foundAccount) {
+      if (foundAccount) {
+        var newBalance = 0.00;
+        if (aTransaction.type === "+") {
+          newBalance = parseFloat(foundAccount.bal) + parseFloat(aTransaction.amount);
+        }
+        else if (aTransaction.type === "-") {
+          newBalance = parseFloat(foundAccount.bal) - parseFloat(aTransaction.amount);
+        }
+
+        collection.update({name: aTransaction.account}, {$set: {bal: newBalance}}, function (err) {
+          if (!err) {
+            aCallback(true);
+          }
+          else {
+            aCallback(null);
+          }
+        });
+      }
+      else {
+        aCallback(null);
+      }
+    });
+  });
+};
