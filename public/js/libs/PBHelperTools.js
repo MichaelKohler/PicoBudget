@@ -2,6 +2,8 @@
 
   var PBHelperTools = {
 
+    // TRANSACTIONS
+    // ===================
     toggleTransactionNavigationTabs: function pb_toggleTransactionNavigationTabs() {
       $('#new').hide();
       $('#transfer').hide();
@@ -92,6 +94,8 @@
       return state;
     },
 
+    // ACCOUNTS
+    // ===================
     toggleAccountNavigationTabs: function pb_toggleAccountNavigationTabs() {
       $('#new').addClass('hidden');
       $('#overviewlink').addClass('active');
@@ -200,6 +204,8 @@
       return state;
     },
 
+    // LOGIN / REGISTRATION
+    // ===================
     validateLogin: function pb_validateLogin() {
       var state = true;
 
@@ -251,6 +257,8 @@
       return state;
     },
 
+    // SETTINGS
+    // ===================
     validateSettings: function pb_validateSettings() {
       var state = true;
 
