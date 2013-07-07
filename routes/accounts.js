@@ -15,6 +15,20 @@ exports.accounts = function (req, res) {
   });
 };
 
+exports.accountOverview = function (req, res) {
+  globals.accounts.getAccount(req.session.user.user, globals.db, req.params.name, function (account) {
+    globals.transactions.getTransactionsByAccount(req.session.user.user, globals.db, req.params.name,function (transactionList) {
+      if (account && transactionList) {
+        res.render('account', { locals: {
+          user: req.session.user || '',
+          account: account,
+          transactions: transactionList
+        }});
+      }
+    });
+  });
+};
+
 exports.accountAdded = function (req, res) {
   var accName = req.body.nameInput;
   var accCurrency = req.body.currDropdown;

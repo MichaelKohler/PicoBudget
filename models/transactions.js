@@ -54,6 +54,18 @@ module.exports.getLimitedTransactions = function (aLogin, db, aLimitedEntries, a
   });
 };
 
+module.exports.getTransactionsByAccount = function (aLogin, db, aName, aCallback) {
+  db.collection('transactions', function (err, collection) {
+    collection.find({user: aLogin, $or:[{acc: aName}, {accTo: aName}, {accFrom: aName}]}, {sort: [
+      ['date', -1]
+    ]}, function (err, cursor) {
+      cursor.toArray(function (err, items) {
+        aCallback(items);
+      });
+    });
+  });
+};
+
 module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
   db.collection('transactions', function (err, collection) {
     var currentDate = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate();

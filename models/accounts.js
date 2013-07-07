@@ -31,6 +31,19 @@ module.exports.getAllAccounts = function (aLogin, db, callback) {
   });
 };
 
+module.exports.getAccount = function (aLogin, db, aName, callback) {
+  db.collection('accounts', function (err, collection) {
+    collection.findOne({user: aLogin, name: aName}, function (err, account) {
+      if (!err) {
+        callback(account);
+      }
+      else {
+        callback(null);
+      }
+    });
+  });
+};
+
 module.exports.addAccount = function (aLogin, db, aAccount, callback) {
   db.collection('accounts', function (err, collection) {
     collection.findOne({user: aLogin, name: aAccount.name}, function (err, foundAccount) {

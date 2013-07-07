@@ -70,6 +70,7 @@
   server.post('/accountAdded', requiresLogin, accountsRoutes.accountAdded);
   server.post('/accountEdited', requiresLogin, accountsRoutes.accountEdited);
   server.post('/accountDeleted', requiresLogin, accountsRoutes.accountDeleted);
+  server.get('/account/:name', requiresLogin, accountsRoutes.accountOverview);
 
   var transactionsRoutes = require('./routes/transactions.js');
   server.get('/transactions', requiresLogin, transactionsRoutes.transactions);

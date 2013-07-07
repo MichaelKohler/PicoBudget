@@ -46,7 +46,8 @@ html(lang='en')
                     for trans in locals.transactions
                       tr
                         td #{trans.date}
-                        td #{trans.acc}
+                        td
+                          a(href='/account/#{trans.acc}') #{trans.acc}
                         td #{trans.name}
                         td #{trans.tags}
                         - if (trans.art === "+")

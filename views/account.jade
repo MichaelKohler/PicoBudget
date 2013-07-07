@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    title Dashboard - PicoBudget - Expense tracking tool
+    title Accounts - PicoBudget - Expense tracking tool
     include includes/head.jade
   body
     include includes/dashboard_nav.jade
@@ -11,33 +11,24 @@ html(lang='en')
           include includes/dashboard_sidebar.jade
 
           .span10
-            - if (locals.registeredInfo)
-              .alert-success.alert#registeredInfo
-                strong Welcome!
-                br
-                p Your registration was successfull. You will receive a confirmation email within the next few minutes.
-            h1 Account Overview
-            p You can manage your accounts under&nbsp;
-              a(href='/accounts') "Accounts"
-              | .
-            - if (locals.accounts.length > 0)
-              table.table
-                thead
+            h1 Account - #{locals.account.name}
+            table.table
+              thead
+                tr
+                  th Name
+                  th Currency
+                  th(style='text-align:right;') Balance
+              tbody
                   tr
-                    th Name
-                    th Currency
-                    th(style='text-align:right;') Balance
-                tbody
-                  for account in locals.accounts
-                    tr
-                      td
-                        a(href='/account/#{account.name}') #{account.name}
-                      td #{account.curr}
-                      td(style='text-align:right;') #{functions.formatAmount(account.bal)}
-            - else
-              p There are no accounts to be displayed.
-            hr
-            h1 Recent transactions
+                    td #{locals.account.name}
+                    td #{locals.account.curr}
+                    td(style='text-align:right;') #{functions.formatAmount(locals.account.bal)}
+                    td(style='text-align:right;')
+                      a(href='/accounts?editAccount=true&n=#{locals.account.name}&b=#{locals.account.bal}') Edit
+                    td(style='text-align:right;')
+                      a(style='color:red;', href='/accounts?deleteAccount=true&n=#{locals.account.name}') Delete
+
+            h3 Transactions
             - if (locals.transactions.length > 0)
               table.table
                 thead
@@ -63,4 +54,5 @@ html(lang='en')
               p There are no transactions to be displayed.
 
       include includes/footer.jade
+
     include includes/libs.jade
