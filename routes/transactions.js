@@ -28,12 +28,13 @@ exports.transactions = function (req, res) {
 };
 
 exports.transactionAdded = function (req, res) {
+  var transID = parseInt(req.body.lastTransIDInput) + 1;
   var transAcc = req.body.transAccDropdown;
   var transType = req.body.transArtDropdown;
   var transName = req.body.transNameInput;
   var transTags = req.body.transTagsInput.split(',');
   var transAmount = req.body.transAmountInput;
-  var newTransaction = globals.transactions.Transaction.init(transAcc, transType, transName, transTags, transAmount);
+  var newTransaction = globals.transactions.Transaction.init(transID, transAcc, transType, transName, transTags, transAmount);
   globals.transactions.addTransaction(req.session.user.user, newTransaction, globals.db, function (success) {
       if (success) {
         globals.accounts.setBalanceForTransaction(req.session.user.user, globals.db, newTransaction, function(err) {

@@ -1,13 +1,15 @@
 "use strict";
 
 module.exports.Transaction = {
+  id: "",
   account: "",
   type: "",
   name: "",
   tags: [],
   amount: "",
 
-  init: function (aAccount, aType, aName, aTags, aAmount) {
+  init: function (aID, aAccount, aType, aName, aTags, aAmount) {
+    this.id = aID;
     this.account = aAccount;
     this.type = aType;
     this.name = aName;
@@ -44,7 +46,7 @@ module.exports.getLimitedTransactions = function (aLogin, db, aLimitedEntries, a
 module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
   db.collection('transactions', function (err, collection) {
     var currentDate = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate();
-    var newTransaction = { user: aLogin, date: currentDate, acc: aTransaction.account, art: aTransaction.type,
+    var newTransaction = { user: aLogin, date: currentDate, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
       name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount).toFixed(2) };
     collection.insert(newTransaction, function (err, result) {
       if (result) {
@@ -60,8 +62,8 @@ module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
 // not yet used:
 module.exports.editTransaction = function (aLogin, aTransaction, db, aCallback) {
   db.collection('transactions', function (err, collection) {
-    var transaction = { user: aLogin, name: aTransaction.name }; // we should not identify it with the name
-    var newTransaction = { art: aTransaction.type, name: aTransaction.name, tags: aTransaction.tags,
+    var transaction = { user: aLogin, id: aTransaction.id };
+    var newTransaction = { id: aTransaction.id, art: aTransaction.type, name: aTransaction.name, tags: aTransaction.tags,
                            amount: parseFloat(aTransaction.amount).toFixed(2) };
     collection.findOne(transaction, function (err, foundTransaction) {
       if (foundTransaction) {
@@ -82,9 +84,9 @@ module.exports.editTransaction = function (aLogin, aTransaction, db, aCallback) 
 };
 
 // not yet used:
-module.exports.removeTransaction = function (aLogin, aName, db, aCallback) {
+module.exports.removeTransaction = function (aLogin, aID, db, aCallback) {
   db.collection('transactions', function (err, collection) {
-    var transaction = { user: aLogin, name: aName };
+    var transaction = { user: aLogin, id: aID };
     collection.findOne(transaction, function (err, foundTag) {
       if (foundTag) {
         collection.remove(transaction, function (err) {

@@ -65,7 +65,7 @@ html(lang='en')
                   fieldset
                     .control-group#cg-id
                       .controls
-                        input.input-xlarge#transIDInput(type='hidden', name='transIDInput', value='1')
+                        input.input-xlarge#transIDInput(type='hidden', name='lastTransIDInput', value='#{locals.transactions.length}')
                     .control-group#cg-account
                       label.control-label(for='transAccDropdown') Account
                       .controls
