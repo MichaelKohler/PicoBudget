@@ -1,12 +1,12 @@
 "use strict";
 
 module.exports.Transaction = {
-  id: "",
+  id: 0,
   account: "",
   type: "",
   name: "",
   tags: [],
-  amount: "",
+  amount: 0.0,
 
   init: function (aID, aAccount, aType, aName, aTags, aAmount) {
     this.id = aID;
