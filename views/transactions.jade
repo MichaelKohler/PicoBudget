@@ -17,6 +17,8 @@ html(lang='en')
                 a(href='#') Overview
               li#newlink
                 a(href='#') New transaction
+              li#transferlink
+                a(href='#') Transfer
               li#tagslink
                 a(href='#') Manage tags
             #overview
@@ -95,6 +97,31 @@ html(lang='en')
                       button.btn.btn-info(type='submit') Add transaction
               - else
                 p Please add a new account before adding a transaction.
+            #transfer
+              h3 Transfer
+              form.form-horizontal(id='transferform', method='POST', action='/transferAdded', onsubmit="return PBHelperTools.validateAddTransfer();")
+                fieldset
+                  .control-group#cg-id
+                    .controls
+                      input.input-xlarge#transIDInput(type='hidden', name='lastTransIDInput', value='#{locals.transactions.length}')
+                  .control-group#cg-account-from
+                    label.control-label(for='transAccFromDropdown') from
+                    .controls
+                      select(name='transAccFromDropdown')
+                        for account in locals.accounts
+                          option(value='#{account.name}') #{account.name} - #{functions.formatAmount(account.bal)}
+                  .control-group#cg-account-to
+                    label.control-label(for='transAccToDropdown') to
+                    .controls
+                      select(name='transAccToDropdown')
+                        for account in locals.accounts
+                          option(value='#{account.name}') #{account.name} - #{functions.formatAmount(account.bal)}
+                  .control-group#cg-transferamount
+                    label.control-label(for='transferAmountInput') Amount
+                    .controls
+                      input.input-xlarge#transferAmountInput(type='text', name='transferAmountInput')
+                  .form-actions
+                    button.btn.btn-info(type='submit') Add transfer
             #tags
               h3 Tags
 

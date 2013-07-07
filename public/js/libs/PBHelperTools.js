@@ -4,6 +4,7 @@
 
     toggleTransactionNavigationTabs: function pb_toggleTransactionNavigationTabs() {
       $('#new').hide();
+      $('#transfer').hide();
       $('#tags').hide();
       $('#overviewlink').addClass('active');
 
@@ -11,6 +12,8 @@
         e.preventDefault();
         $('#new').hide();
         $('#newlink').removeClass('active');
+        $('#transfer').hide();
+        $('#transferlink').removeClass('active');
         $('#tags').hide();
         $('#tagslink').removeClass('active');
         $('#overview').show();
@@ -20,15 +23,30 @@
         e.preventDefault();
         $('#overview').hide();
         $('#overviewlink').removeClass('active');
+        $('#transfer').hide();
+        $('#transferlink').removeClass('active');
         $('#tags').hide();
         $('#tagslink').removeClass('active');
         $('#new').show();
         $('#newlink').addClass('active');
       });
+      $('#transferlink').click(function (e) {
+        e.preventDefault();
+        $('#overview').hide();
+        $('#overviewlink').removeClass('active');
+        $('#new').hide();
+        $('#newlink').removeClass('active');
+        $('#tags').hide();
+        $('#tagslink').removeClass('active');
+        $('#transfer').show();
+        $('#transferlink').addClass('active');
+      });
       $('#tagslink').click(function (e) {
         e.preventDefault();
         $('#overview').hide();
         $('#overviewlink').removeClass('active');
+        $('#transfer').hide();
+        $('#transferlink').removeClass('active');
         $('#new').hide();
         $('#newlink').removeClass('active');
         $('#tags').show();
@@ -55,6 +73,20 @@
 
       if (!state) {
         $('#fillInAllInfo').removeClass('hidden');
+      }
+
+      return state;
+    },
+
+    validateAddTransfer: function pb_validateAddTransfer() {
+      // validate add transfer form
+      var state = true;
+
+      if ($('#transferAmountInput').val() ===  '') {
+        $('#cg-transferamount').addClass('error');
+        state = false;
+      } else {
+        $('#cg-transferamount').removeClass('error');
       }
 
       return state;

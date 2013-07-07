@@ -133,3 +133,41 @@ module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aC
     });
   });
 };
+
+module.exports.setBalanceForTransfer = function (aLogin, db, aTransaction, aCallback) {
+  db.collection('accounts', function (err, collection) {
+    collection.findOne({name: aTransaction.fromAccount}, function (err, foundAccount) {
+      if (foundAccount) {
+        var newFromBalance = parseFloat(foundAccount.bal) - parseFloat(aTransaction.amount);
+
+        collection.update({name: aTransaction.fromAccount}, {$set: {bal: newFromBalance}}, function (err) {
+          if (!err) {
+            collection.findOne({name: aTransaction.toAccount}, function (err, foundAccount) {
+              if (foundAccount) {
+                var newToBalance = parseFloat(foundAccount.bal) + parseFloat(aTransaction.amount);
+
+                collection.update({name: aTransaction.toAccount}, {$set: {bal: newToBalance}}, function (err) {
+                  if (!err) {
+                    aCallback(true);
+                  }
+                  else {
+                    aCallback(null);
+                  }
+                });
+              }
+              else {
+                aCallback(null);
+              }
+            });
+          }
+          else {
+            aCallback(null);
+          }
+        });
+      }
+      else {
+        aCallback(null);
+      }
+    });
+  });
+};

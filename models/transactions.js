@@ -3,6 +3,8 @@
 module.exports.Transaction = {
   id: 0,
   account: "",
+  fromAccount: "",
+  toAccount: "",
   type: "",
   name: "",
   tags: [],
@@ -15,6 +17,15 @@ module.exports.Transaction = {
     this.name = aName;
     this.tags = aTags;
     this.amount = aAmount;
+    return this;
+  },
+
+  initTransfer: function (aID, aFromAccount, aToAccount, aAmount) {
+    this.id = aID;
+    this.fromAccount = aFromAccount;
+    this.toAccount = aToAccount;
+    this.amount = aAmount;
+    this.name = aFromAccount + " -> " + aToAccount;
     return this;
   }
 };
@@ -113,6 +124,23 @@ module.exports.deleteAllTransactions = function (aLogin, db, aCallback) {
       }
       else {
         aCallback(true);
+      }
+    });
+  });
+};
+
+module.exports.addTransfer = function (aLogin, aTransaction, db, aCallback) {
+  db.collection('transactions', function (err, collection) {
+    var currentDate = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate();
+    var newTransfer = { user: aLogin, date: currentDate, id: aTransaction.id, accFrom: aTransaction.fromAccount,
+                        accTo: aTransaction.toAccount, amount: parseFloat(aTransaction.amount).toFixed(2),
+                        name: aTransaction.name};
+    collection.insert(newTransfer, function (err, result) {
+      if (result) {
+        aCallback(newTransfer);
+      }
+      else {
+        aCallback(null);
       }
     });
   });

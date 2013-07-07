@@ -74,6 +74,7 @@
   var transactionsRoutes = require('./routes/transactions.js');
   server.get('/transactions', requiresLogin, transactionsRoutes.transactions);
   server.post('/transactionAdded', requiresLogin, transactionsRoutes.transactionAdded);
+  server.post('/transferAdded', requiresLogin, transactionsRoutes.transferAdded);
 
   var tagsRoutes = require('./routes/tags.js');
 

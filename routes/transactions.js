@@ -52,3 +52,27 @@ exports.transactionAdded = function (req, res) {
       res.redirect('/transactions');
     });
 };
+
+exports.transferAdded = function (req, res) {
+  var transID = parseInt(req.body.lastTransIDInput) + 1;
+  var transFromAcc = req.body.transAccFromDropdown;
+  var transToAcc = req.body.transAccToDropdown;
+  var transAmount = parseFloat(req.body.transferAmountInput);
+  var newTransfer = globals.transactions.Transaction.initTransfer(transID, transFromAcc, transToAcc, transAmount);
+  globals.transactions.addTransfer(req.session.user.user, newTransfer, globals.db, function (success) {
+    if (success) {
+      globals.accounts.setBalanceForTransfer(req.session.user.user, globals.db, newTransfer, function(err) {
+        if (err) {
+          res.flash('error', 'We could not update your balance correctly. Please change it manually.!');
+        }
+        else {
+          res.flash('success', 'The transfer has been added successfully!');
+        }
+      });
+    }
+    else {
+      res.flash('error', 'Unfortunately there was an error while adding your transfer! Please try again later.');
+    }
+    res.redirect('/transactions');
+  });
+};
