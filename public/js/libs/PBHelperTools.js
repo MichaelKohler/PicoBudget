@@ -82,7 +82,7 @@
       // validate add transfer form
       var state = true;
 
-      if ($('#transferAmountInput').val() ===  '') {
+      if ($('#transferAmountInput').val() ===  '' || isNaN($('#transferAmountInput').val())) {
         $('#cg-transferamount').addClass('error');
         state = false;
       } else {
