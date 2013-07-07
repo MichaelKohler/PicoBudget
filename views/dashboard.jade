@@ -44,7 +44,6 @@ html(lang='en')
                     th Date
                     th Account
                     th Descrition
-                    th +/-
                     th Tags
                     th(style='text-align:right;') Amount
                 tbody
@@ -53,9 +52,11 @@ html(lang='en')
                       td #{trans.date}
                       td #{trans.acc}
                       td #{trans.name}
-                      td #{trans.art}
                       td #{trans.tags}
-                      td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
+                      - if (trans.art === "+")
+                        td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
+                      - else
+                        td(style='text-align:right;') -#{functions.formatAmount(trans.amount)}
             - else
               p There are no transactions to be displayed.
 

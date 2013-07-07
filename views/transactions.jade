@@ -38,7 +38,6 @@ html(lang='en')
                       th Date
                       th Account
                       th Descrition
-                      th +/-
                       th Tags
                       th(style='text-align:right;') Amount
                   tbody
@@ -47,9 +46,11 @@ html(lang='en')
                         td #{trans.date}
                         td #{trans.acc}
                         td #{trans.name}
-                        td #{trans.art}
                         td #{trans.tags}
-                        td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
+                        - if (trans.art === "+")
+                          td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
+                        - else
+                          td(style='text-align:right;') -#{functions.formatAmount(trans.amount)}
               - else
                 p There are no transactions to be displayed.
             #new
@@ -68,8 +69,8 @@ html(lang='en')
                     label.control-label(for='transAccDropdown') Account
                     .controls
                       select(name='transAccDropdown')
-                        option(value='einnahme') Foo
-                        option(value='einnahme') Bar
+                        for account in locals.accounts
+                          option(value='#{account.name}') #{account.name} - #{functions.formatAmount(account.bal)}
                   .control-group#cg-name
                     label.control-label(for='transNameInput') Description
                     .controls
