@@ -55,43 +55,46 @@ html(lang='en')
                 p There are no transactions to be displayed.
             #new
               h3 Add a new transaction
-              .alert-error.alert.hidden#fillInAllInfo
-                button.close(date-dismiss='alert') ×
-                strong Error!
-                br
-                p Please fill in all the information!
-              form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit="return PBHelperTools.validateAddTransaction();")
-                fieldset
-                  .control-group#cg-id
-                    .controls
-                      input.input-xlarge#transIDInput(type='hidden', name='transIDInput', value='1')
-                  .control-group#cg-account
-                    label.control-label(for='transAccDropdown') Account
-                    .controls
-                      select(name='transAccDropdown')
-                        for account in locals.accounts
-                          option(value='#{account.name}') #{account.name} - #{functions.formatAmount(account.bal)}
-                  .control-group#cg-name
-                    label.control-label(for='transNameInput') Description
-                    .controls
-                      input.input-xlarge#transNameInput(type='text', name='transNameInput')
-                  .control-group#cg-art
-                    label.control-label(for='artDropdown') +/-
-                    .controls
-                      select(name='transArtDropdown')
-                        option(value='+') +
-                        option(value='-') -
-                  .control-group#cg-transtags
-                    label.control-label(for='transTagsInput') Tags
-                    .controls
-                      input.input-xlarge#transTagsInput(type='text', name='transTagsInput')
-                  .control-group#cg-transamount
-                    label.control-label(for='transAmountInput') Amount
-                    .controls
-                      input.input-xlarge#transAmountInput(type='text', name='transAmountInput')
-                  .control-group
-                  .form-actions
-                    button.btn.btn-info(type='submit') Add transaction
+              - if (locals.accounts.length > 0)
+                .alert-error.alert.hidden#fillInAllInfo
+                  button.close(date-dismiss='alert') ×
+                  strong Error!
+                  br
+                  p Please fill in all the information!
+                form.form-horizontal(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit="return PBHelperTools.validateAddTransaction();")
+                  fieldset
+                    .control-group#cg-id
+                      .controls
+                        input.input-xlarge#transIDInput(type='hidden', name='transIDInput', value='1')
+                    .control-group#cg-account
+                      label.control-label(for='transAccDropdown') Account
+                      .controls
+                        select(name='transAccDropdown')
+                          for account in locals.accounts
+                            option(value='#{account.name}') #{account.name} - #{functions.formatAmount(account.bal)}
+                    .control-group#cg-name
+                      label.control-label(for='transNameInput') Description
+                      .controls
+                        input.input-xlarge#transNameInput(type='text', name='transNameInput')
+                    .control-group#cg-art
+                      label.control-label(for='artDropdown') +/-
+                      .controls
+                        select(name='transArtDropdown')
+                          option(value='+') +
+                          option(value='-') -
+                    .control-group#cg-transtags
+                      label.control-label(for='transTagsInput') Tags
+                      .controls
+                        input.input-xlarge#transTagsInput(type='text', name='transTagsInput')
+                    .control-group#cg-transamount
+                      label.control-label(for='transAmountInput') Amount
+                      .controls
+                        input.input-xlarge#transAmountInput(type='text', name='transAmountInput')
+                    .control-group
+                    .form-actions
+                      button.btn.btn-info(type='submit') Add transaction
+              - else
+                p Please add a new account before adding a transaction.
             #tags
               h3 Tags
 
