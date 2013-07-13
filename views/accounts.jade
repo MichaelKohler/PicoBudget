@@ -45,7 +45,7 @@ html(lang='en')
                       for account in locals.accounts
                         tr
                           td
-                            a(href='/account/#{account.name}') #{account.name}
+                            a(href='/account/#{account.name}/1') #{account.name}
                           td #{account.curr}
                           td(style='text-align:right;') #{functions.formatAmount(account.bal)}
                           td(style='text-align:right;')

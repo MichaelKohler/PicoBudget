@@ -34,31 +34,27 @@ module.exports.getAllTransactions = function (aLogin, db, aCallback) {
   db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin}, {sort: [
       ['date', -1]
-    ]}, function (err, cursor) {
-      cursor.toArray(function (err, items) {
+    ]}).toArray(function (err, items) {
         aCallback(items);
-      });
     });
   });
 };
 
-module.exports.getLimitedTransactions = function (aLogin, db, aLimitedEntries, aCallback) {
+module.exports.getLimitedTransactions = function (aLogin, db, aPage, aLimitedEntries, aCallback) {
+  var begin = (aPage - 1) * aLimitedEntries;
   db.collection('transactions', function (err, collection) {
-    collection.find({user: aLogin}, {limit: aLimitedEntries, sort: [
+    collection.find({user: aLogin}, {skip: begin, limit: aLimitedEntries, sort: [
       ['date', -1]
-    ]}, function (err, cursor) {
-      cursor.toArray(function (err, items) {
+    ]}).toArray(function (err, items) {
         aCallback(items);
-      });
     });
   });
 };
 
 module.exports.getTransactionsByAccount = function (aLogin, db, aName, aCallback) {
   db.collection('transactions', function (err, collection) {
-    collection.find({user: aLogin, $or:[{acc: aName}, {accTo: aName}, {accFrom: aName}]}, {sort: [
-      ['date', -1]
-    ]}, function (err, cursor) {
+    collection.find({user: aLogin, $or:[{acc: aName}, {accTo: aName}, {accFrom: aName}]},
+                    {sort: [ ['date', -1] ]}, function (err, cursor) {
       cursor.toArray(function (err, items) {
         aCallback(items);
       });

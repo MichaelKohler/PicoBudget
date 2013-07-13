@@ -3,27 +3,27 @@
 var globals = require('../globals').init();
 
 exports.transactions = function (req, res) {
-  globals.transactions.getAllTransactions(req.session.user.user, globals.db, function (transactionList) {
-    if (transactionList) {
-      globals.tags.getAllTags(req.session.user.user, globals.db, function (tagList) {
-        if (tagList) {
-          globals.accounts.getAllAccounts(req.session.user.user, globals.db, function (accList) {
-            if (accList) {
-              res.render('transactions', { locals: {
-                user: req.session.user || '',
-                transactions: transactionList,
-                tags: tagList,
-                accounts: accList
-              }});
-            }
-          });
+  var transpage = parseInt(req.params.transpage);
+  var limit = 10;
+  globals.transactions.getAllTransactions(req.session.user.user, globals.db, function(allTransactionsList) {
+    globals.tags.getAllTags(req.session.user.user, globals.db, function (tagList) {
+      globals.accounts.getAllAccounts(req.session.user.user, globals.db, function (accList) {
+        if (allTransactionsList && tagList && accList) {
+          res.render('transactions', { locals: {
+            user: req.session.user || '',
+            transactions: allTransactionsList.slice(transpage*limit-limit, transpage*limit),
+            tags: tagList,
+            accounts: accList,
+            page: transpage,
+            needsMorePages: (allTransactionsList.length - transpage * 10 > 0)
+          }});
+        }
+        else {
+          res.flash('error', 'Unfortunately there was an error of which we can not recover! Please try again later.');
+          res.redirect('/transactions/1');
         }
       });
-    }
-    else {
-      res.flash('error', 'Unfortunately there was an error of which we can not recover! Please try again later.');
-      res.redirect('/transactions');
-    }
+    });
   });
 };
 
@@ -49,7 +49,7 @@ exports.transactionAdded = function (req, res) {
       else {
         res.flash('error', 'Unfortunately there was an error while adding your transaction! Please try again later.');
       }
-      res.redirect('/transactions');
+      res.redirect('/transactions/1');
     });
 };
 
@@ -73,6 +73,6 @@ exports.transferAdded = function (req, res) {
     else {
       res.flash('error', 'Unfortunately there was an error while adding your transfer! Please try again later.');
     }
-    res.redirect('/transactions');
+    res.redirect('/transactions/1');
   });
 };

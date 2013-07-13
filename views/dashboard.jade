@@ -31,7 +31,7 @@ html(lang='en')
                   for account in locals.accounts
                     tr
                       td
-                        a(href='/account/#{account.name}') #{account.name}
+                        a(href='/account/#{account.name}/1') #{account.name}
                       td #{account.curr}
                       td(style='text-align:right;') #{functions.formatAmount(account.bal)}
             - else
@@ -52,7 +52,7 @@ html(lang='en')
                     tr
                       td #{trans.date}
                       td
-                        a(href='/account/#{trans.acc}') #{trans.acc}
+                        a(href='/account/#{trans.acc}/1') #{trans.acc}
                       td #{trans.name}
                       td #{trans.tags}
                       - if (trans.art === "+")

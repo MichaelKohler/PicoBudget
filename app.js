@@ -70,10 +70,10 @@
   server.post('/accountAdded', requiresLogin, accountsRoutes.accountAdded);
   server.post('/accountEdited', requiresLogin, accountsRoutes.accountEdited);
   server.post('/accountDeleted', requiresLogin, accountsRoutes.accountDeleted);
-  server.get('/account/:name', requiresLogin, accountsRoutes.accountOverview);
+  server.get('/account/:name/:transpage', requiresLogin, accountsRoutes.accountOverview);
 
   var transactionsRoutes = require('./routes/transactions.js');
-  server.get('/transactions', requiresLogin, transactionsRoutes.transactions);
+  server.get('/transactions/:transpage', requiresLogin, transactionsRoutes.transactions);
   server.post('/transactionAdded', requiresLogin, transactionsRoutes.transactionAdded);
   server.post('/transferAdded', requiresLogin, transactionsRoutes.transferAdded);
 

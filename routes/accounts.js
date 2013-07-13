@@ -16,13 +16,18 @@ exports.accounts = function (req, res) {
 };
 
 exports.accountOverview = function (req, res) {
+  var transpage = parseInt(req.params.transpage);
+  var limit = 10;
   globals.accounts.getAccount(req.session.user.user, globals.db, req.params.name, function (account) {
-    globals.transactions.getTransactionsByAccount(req.session.user.user, globals.db, req.params.name,function (transactionList) {
-      if (account && transactionList) {
+    globals.transactions.getTransactionsByAccount(req.session.user.user, globals.db, req.params.name,
+                                                  function (allTransactionsList) {
+      if (account && allTransactionsList) {
         res.render('account', { locals: {
           user: req.session.user || '',
           account: account,
-          transactions: transactionList
+          transactions: allTransactionsList.slice(transpage*limit-limit, transpage*limit),
+          page: transpage,
+          needsMorePages: (allTransactionsList.length - transpage * 10 > 0)
         }});
       }
     });
