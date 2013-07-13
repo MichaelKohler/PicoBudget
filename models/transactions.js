@@ -33,7 +33,7 @@ module.exports.Transaction = {
 module.exports.getAllTransactions = function (aLogin, db, aCallback) {
   db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin}, {sort: [
-      ['date', -1]
+      ['date', 1]
     ]}).toArray(function (err, items) {
         aCallback(items);
     });
@@ -44,7 +44,7 @@ module.exports.getLimitedTransactions = function (aLogin, db, aPage, aLimitedEnt
   var begin = (aPage - 1) * aLimitedEntries;
   db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin}, {skip: begin, limit: aLimitedEntries, sort: [
-      ['date', -1]
+      ['date', 1]
     ]}).toArray(function (err, items) {
         aCallback(items);
     });
@@ -54,7 +54,7 @@ module.exports.getLimitedTransactions = function (aLogin, db, aPage, aLimitedEnt
 module.exports.getTransactionsByAccount = function (aLogin, db, aName, aCallback) {
   db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin, $or:[{acc: aName}, {accTo: aName}, {accFrom: aName}]},
-                    {sort: [ ['date', -1] ]}, function (err, cursor) {
+                    {sort: [ ['date', 1] ]}, function (err, cursor) {
       cursor.toArray(function (err, items) {
         aCallback(items);
       });
