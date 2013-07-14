@@ -21,7 +21,7 @@ html(lang='en')
               a(href='/accounts') "Accounts"
               | .
             - if (locals.accounts.length > 0)
-              table.table
+              table.table.table-hover
                 thead
                   tr
                     th Name
@@ -39,7 +39,7 @@ html(lang='en')
             hr
             h1 Recent transactions
             - if (locals.transactions.length > 0)
-              table.table
+              table.table.table-hover
                 thead
                   tr
                     th Date
