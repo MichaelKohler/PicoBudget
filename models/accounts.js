@@ -23,10 +23,10 @@ module.exports.Account = {
 
 module.exports.getAllAccounts = function (aLogin, db, callback) {
   db.collection('accounts', function (err, collection) {
-    collection.find({user: aLogin}, function (err, cursor) {
-      cursor.toArray(function (err, items) {
+    collection.find({user: aLogin}, {sort: [
+      ['name', 1]
+    ]}).toArray(function (err, items) {
         callback(items);
-      });
     });
   });
 };
