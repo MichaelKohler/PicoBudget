@@ -40,6 +40,16 @@ module.exports.getAllTransactions = function (aLogin, db, aCallback) {
   });
 };
 
+module.exports.getAllTransactionsByTag = function (aLogin, db, aTagName, aCallback) {
+  db.collection('transactions', function (err, collection) {
+    collection.find({user: aLogin, tags: aTagName}, {sort: [
+      ['date', 1]
+    ]}).toArray(function (err, items) {
+        aCallback(items);
+      });
+  });
+};
+
 module.exports.getLimitedTransactions = function (aLogin, db, aPage, aLimitedEntries, aCallback) {
   var begin = (aPage - 1) * aLimitedEntries;
   db.collection('transactions', function (err, collection) {
@@ -67,55 +77,9 @@ module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
     var currentDate = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate();
     var newTransaction = { user: aLogin, date: currentDate, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
       name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount).toFixed(2) };
-    collection.insert(newTransaction, function (err, result) {
-      if (result) {
+    collection.insert(newTransaction, function (err, resultTrans) {
+      if (resultTrans) {
         aCallback(newTransaction);
-      }
-      else {
-        aCallback(null);
-      }
-    });
-  });
-};
-
-// not yet used:
-module.exports.editTransaction = function (aLogin, aTransaction, db, aCallback) {
-  db.collection('transactions', function (err, collection) {
-    var transaction = { user: aLogin, id: aTransaction.id };
-    var newTransaction = { id: aTransaction.id, art: aTransaction.type, name: aTransaction.name, tags: aTransaction.tags,
-                           amount: parseFloat(aTransaction.amount).toFixed(2) };
-    collection.findOne(transaction, function (err, foundTransaction) {
-      if (foundTransaction) {
-        collection.update(transaction, {$set: newTransaction}, function (err) {
-          if (err) {
-            aCallback(null);
-          }
-          else {
-            aCallback(transaction);
-          }
-        });
-      }
-      else {
-        aCallback(null);
-      }
-    });
-  });
-};
-
-// not yet used:
-module.exports.removeTransaction = function (aLogin, aID, db, aCallback) {
-  db.collection('transactions', function (err, collection) {
-    var transaction = { user: aLogin, id: aID };
-    collection.findOne(transaction, function (err, foundTag) {
-      if (foundTag) {
-        collection.remove(transaction, function (err) {
-          if (err) {
-            aCallback(null);
-          }
-          else {
-            aCallback(true);
-          }
-        });
       }
       else {
         aCallback(null);

@@ -45,7 +45,9 @@ html(lang='en')
                       td
                         a(href='/account/#{trans.acc}/1') #{trans.acc}
                       td #{trans.name}
-                      td #{trans.tags}
+                      td
+                        for tag in trans.tags
+                          a(href='/tag/#{tag}/1') #{tag}&nbsp;
                       - if (trans.art === "+")
                         td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
                       - else

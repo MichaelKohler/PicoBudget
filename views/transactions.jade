@@ -49,7 +49,9 @@ html(lang='en')
                         td
                           a(href='/account/#{trans.acc}/1') #{trans.acc}
                         td #{trans.name}
-                        td #{trans.tags}
+                        td
+                          for tag in trans.tags
+                            a(href='/tag/#{tag}/1') #{tag}&nbsp;
                         - if (trans.art === "+")
                           td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
                         - else
@@ -102,6 +104,8 @@ html(lang='en')
                       label.control-label(for='transTagsInput') Tags
                       .controls
                         input.input-xlarge#transTagsInput(type='text', name='transTagsInput')
+                        p
+                          small Multiple tags can be entered with a space inbetween them.
                     .control-group#cg-transamount
                       label.control-label(for='transAmountInput') Amount
                       .controls
@@ -138,6 +142,33 @@ html(lang='en')
                     button.btn.btn-info(type='submit') Add transfer
             #tags
               h3 Tags
+              - if (locals.tags.length > 0)
+                table.table.table-hover
+                  tbody
+                    for tag, index in locals.tags
+                      - if (index % 4 === 0)
+                        tr
+                      td
+                        a(href='/tag/#{tag.name}/1') (#{tag.type}) #{tag.name}
+              - else
+                p There are not tags to be shown.
+              hr
+              h3(id='addtagtitle') Add a new tag
+              form.form-horizontal(id='addtagform', method='POST', action='/tagAdded', onsubmit="return PBHelperTools.validateAddTag();")
+                fieldset
+                  .control-group#cg-tagName
+                    label.control-label(for='tagNameInput') Name
+                    .controls
+                      input.input-xlarge#tagNameInput(type='text', name='tagNameInput')
+                  .control-group#cg-tagType
+                    label.control-label(for='tagTypeDropdown') Type
+                    .controls
+                      select(name='tagTypeDropdown')
+                        option(value='+') +
+                        option(value='-') -
+                  .control-group
+                  .form-actions
+                    button.btn.btn-info(type='submit') Add tag
 
       include includes/footer.jade
 

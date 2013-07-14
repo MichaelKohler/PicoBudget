@@ -32,7 +32,7 @@ exports.transactionAdded = function (req, res) {
   var transAcc = req.body.transAccDropdown;
   var transType = req.body.transArtDropdown;
   var transName = req.body.transNameInput;
-  var transTags = req.body.transTagsInput.split(',');
+  var transTags = req.body.transTagsInput.split(' ');
   var transAmount = parseFloat(req.body.transAmountInput);
   var newTransaction = globals.transactions.Transaction.init(transID, transAcc, transType, transName, transTags, transAmount);
   globals.transactions.addTransaction(req.session.user.user, newTransaction, globals.db, function (success) {

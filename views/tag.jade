@@ -1,7 +1,7 @@
 doctype html
 html(lang='en')
   head
-    title Dashboard - PicoBudget - Expense tracking tool
+    title Tag overview - PicoBudget - Expense tracking tool
     include includes/head.jade
   body
     include includes/dashboard_nav.jade
@@ -11,33 +11,7 @@ html(lang='en')
           include includes/dashboard_sidebar.jade
 
           .span10
-            - if (locals.registeredInfo)
-              .alert-success.alert#registeredInfo
-                strong Welcome!
-                br
-                p Your registration was successfull. You will receive a confirmation email within the next few minutes.
-            h1 Account Overview
-            p You can manage your accounts under&nbsp;
-              a(href='/accounts') "Accounts"
-              | .
-            - if (locals.accounts.length > 0)
-              table.table
-                thead
-                  tr
-                    th Name
-                    th Currency
-                    th(style='text-align:right;') Balance
-                tbody
-                  for account in locals.accounts
-                    tr
-                      td
-                        a(href='/account/#{account.name}/1') #{account.name}
-                      td #{account.curr}
-                      td(style='text-align:right;') #{functions.formatAmount(account.bal)}
-            - else
-              p There are no accounts to be displayed.
-            hr
-            h1 Recent transactions
+            h1 Transactions tagged with #{locals.tag}
             - if (locals.transactions.length > 0)
               table.table
                 thead
@@ -45,6 +19,7 @@ html(lang='en')
                     th Date
                     th Account
                     th Descrition
+                    th Tags
                     th(style='text-align:right;') Amount
                 tbody
                   for trans in locals.transactions
@@ -53,12 +28,29 @@ html(lang='en')
                       td
                         a(href='/account/#{trans.acc}/1') #{trans.acc}
                       td #{trans.name}
+                      td
+                        for tag in trans.tags
+                          a(href='/tag/#{tag}/1') #{tag}&nbsp;
                       - if (trans.art === "+")
                         td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
                       - else
                         td(style='text-align:right;') -#{functions.formatAmount(trans.amount)}
+              ul.pager
+                - if (locals.page == 1)
+                  li.previous.disabled
+                    a(href="#") &larr; Newer
+                - else
+                  li.previous
+                    a(href="/tag/#{locals.tag}/#{locals.page - 1}") &larr; Newer
+                - if (locals.needsMorePages)
+                  li.next
+                    a(href="/tag/#{locals.tag}/#{locals.page + 1}") Older &rarr;
+                - else
+                  li.next.disabled
+                    a(href="#") Older &rarr;
             - else
               p There are no transactions to be displayed.
 
       include includes/footer.jade
+
     include includes/libs.jade
