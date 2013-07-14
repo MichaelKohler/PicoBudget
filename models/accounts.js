@@ -68,9 +68,9 @@ module.exports.addAccount = function (aLogin, db, aAccount, callback) {
 
 module.exports.editAccount = function (aLogin, db, aOldName, aEditedAccount, callback) {
   db.collection('accounts', function (err, collection) {
-    collection.findOne({name: aOldName}, function (err, foundAccount) {
+    collection.findOne({user: aLogin, name: aOldName}, function (err, foundAccount) {
       if (foundAccount) {
-        collection.update({name: aOldName}, {$set: {name: aEditedAccount.name, bal: aEditedAccount.balance}}, function (err) {
+        collection.update({user: aLogin, name: aOldName}, {$set: {name: aEditedAccount.name, bal: aEditedAccount.balance}}, function (err) {
           if (!err) {
             callback(true);
           }
@@ -88,9 +88,9 @@ module.exports.editAccount = function (aLogin, db, aOldName, aEditedAccount, cal
 
 module.exports.deleteAccount = function (aLogin, db, aAccName, callback) {
   db.collection('accounts', function (err, collection) {
-    collection.findOne({name: aAccName}, function (err, foundAccount) {
+    collection.findOne({user: aLogin, name: aAccName}, function (err, foundAccount) {
       if (foundAccount) {
-        collection.remove({name: aAccName}, function (err) {
+        collection.remove({user: aLogin, name: aAccName}, function (err) {
           if (err) {
             callback(false);
           }
@@ -121,7 +121,7 @@ module.exports.deleteAllAccounts = function (aLogin, db, aCallback) {
 
 module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aCallback) {
   db.collection('accounts', function (err, collection) {
-    collection.findOne({name: aTransaction.account}, function (err, foundAccount) {
+    collection.findOne({user: aLogin, name: aTransaction.account}, function (err, foundAccount) {
       if (foundAccount) {
         var newBalance = 0.00;
         if (aTransaction.type === "+") {
@@ -149,17 +149,17 @@ module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aC
 
 module.exports.setBalanceForTransfer = function (aLogin, db, aTransaction, aCallback) {
   db.collection('accounts', function (err, collection) {
-    collection.findOne({name: aTransaction.fromAccount}, function (err, foundAccount) {
+    collection.findOne({user: aLogin, name: aTransaction.fromAccount}, function (err, foundAccount) {
       if (foundAccount) {
         var newFromBalance = parseFloat(foundAccount.bal) - parseFloat(aTransaction.amount);
 
-        collection.update({name: aTransaction.fromAccount}, {$set: {bal: newFromBalance}}, function (err) {
+        collection.update({user: aLogin, name: aTransaction.fromAccount}, {$set: {bal: newFromBalance}}, function (err) {
           if (!err) {
-            collection.findOne({name: aTransaction.toAccount}, function (err, foundAccount) {
+            collection.findOne({user: aLogin, name: aTransaction.toAccount}, function (err, foundAccount) {
               if (foundAccount) {
                 var newToBalance = parseFloat(foundAccount.bal) + parseFloat(aTransaction.amount);
 
-                collection.update({name: aTransaction.toAccount}, {$set: {bal: newToBalance}}, function (err) {
+                collection.update({user: aLogin, name: aTransaction.toAccount}, {$set: {bal: newToBalance}}, function (err) {
                   if (!err) {
                     aCallback(true);
                   }
