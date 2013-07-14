@@ -33,7 +33,7 @@ module.exports.Transaction = {
 module.exports.getAllTransactions = function (aLogin, db, aCallback) {
   db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin}, {sort: [
-      ['date', 1]
+      ['date', -1]
     ]}).toArray(function (err, items) {
         aCallback(items);
     });
@@ -43,7 +43,7 @@ module.exports.getAllTransactions = function (aLogin, db, aCallback) {
 module.exports.getAllTransactionsByTag = function (aLogin, db, aTagName, aCallback) {
   db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin, tags: aTagName}, {sort: [
-      ['date', 1]
+      ['date', -1]
     ]}).toArray(function (err, items) {
         aCallback(items);
       });
@@ -54,7 +54,7 @@ module.exports.getLimitedTransactions = function (aLogin, db, aPage, aLimitedEnt
   var begin = (aPage - 1) * aLimitedEntries;
   db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin}, {skip: begin, limit: aLimitedEntries, sort: [
-      ['date', 1]
+      ['date', -1]
     ]}).toArray(function (err, items) {
         aCallback(items);
     });
@@ -74,7 +74,7 @@ module.exports.getTransactionsByAccount = function (aLogin, db, aName, aCallback
 
 module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
   db.collection('transactions', function (err, collection) {
-    var currentDate = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate();
+    var currentDate = new Date();
     var newTransaction = { user: aLogin, date: currentDate, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
       name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount).toFixed(2) };
     collection.insert(newTransaction, function (err, resultTrans) {
@@ -103,7 +103,7 @@ module.exports.deleteAllTransactions = function (aLogin, db, aCallback) {
 
 module.exports.addTransfer = function (aLogin, aTransaction, db, aCallback) {
   db.collection('transactions', function (err, collection) {
-    var currentDate = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate();
+    var currentDate = new Date();
     var newTransfer = { user: aLogin, date: currentDate, id: aTransaction.id, accFrom: aTransaction.fromAccount,
                         accTo: aTransaction.toAccount, amount: parseFloat(aTransaction.amount).toFixed(2),
                         name: aTransaction.name};

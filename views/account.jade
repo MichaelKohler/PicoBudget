@@ -41,7 +41,7 @@ html(lang='en')
                 tbody
                   for trans in locals.transactions
                     tr
-                      td #{trans.date}
+                      td #{trans.date.toLocaleDateString()}
                       td
                         a(href='/account/#{trans.acc}/1') #{trans.acc}
                       td #{trans.name}
