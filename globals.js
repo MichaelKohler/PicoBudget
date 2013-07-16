@@ -2,6 +2,8 @@
   "use strict";
 
   exports.init = function () {
+    exports.async = require('async');
+
     /** MongoDB  */
     var mongo = require('mongodb');
     var dbServer = new mongo.Server('localhost', 27017, { auto_reconnect: true, poolSize: 1 });

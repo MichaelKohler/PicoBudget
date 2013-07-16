@@ -131,8 +131,8 @@ module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aC
           newBalance = parseFloat(foundAccount.bal) - parseFloat(aTransaction.amount);
         }
 
-        collection.update({name: aTransaction.account}, {$set: {bal: newBalance}}, function (err) {
-          if (!err) {
+        collection.update({name: aTransaction.account}, {$set: {bal: newBalance}}, function (result) {
+          if (result) {
             aCallback(true);
           }
           else {

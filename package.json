@@ -9,6 +9,7 @@
     "mongodb"   :  "1.2.*",
     "jade"      :  "0.28.*",
     "crypto"    :  "0.0.3",
-    "flashify"  :  "0.1.2"
+    "flashify"  :  "0.1.2",
+    "async"     :  "0.2.9"
   }
 }

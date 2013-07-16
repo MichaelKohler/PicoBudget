@@ -31,32 +31,49 @@ exports.settingsChanged = function (req, res) {
 };
 
 exports.userDeleted = function (req, res) {
-  globals.users.removeUser(req.session.user.user, req.body.passwordInput, globals.db, function (userRemoved) {
-    if (userRemoved) {
+  var locals = {};
+  globals.async.series([
+    function deleteUser(callback) {
+      globals.users.removeUser(req.session.user.user, req.body.passwordInput, globals.db, function (userRemoved) {
+        if (userRemoved) {
+          callback();
+        }
+        else {
+          callback(null);
+        }
+      });
+    },
+    function deleteAccounts(callback) {
       globals.accounts.deleteAllAccounts(req.session.user.user, globals.db, function (accsRemoved) {
-        globals.transactions.deleteAllTransactions(req.session.user.user, globals.db, function (transRemoved) {
-          if (accsRemoved && transRemoved) {
-            delete req.session.user;
-            res.flash('success', 'Your user account and all data associated with it was removed.');
-            res.render('login', { locals: {
-              user: ''
-            }});
-          }
-          else {
-            delete req.session.user;
-            res.flash('error', 'Your user account was removed, but we could not delete all your data. Please contact us so we can remove it manually.');
-            res.render('about', { locals: {
-              user: ''
-            }});
-          }
-        });
+        if (accsRemoved) {
+          callback();
+        }
+        else {
+          callback(null);
+        }
+      });
+    },
+    function deleteTransactions(callback) {
+      globals.transactions.deleteAllTransactions(req.session.user.user, globals.db, function (transRemoved) {
+        if (transRemoved) {
+          callback();
+        }
+        else {
+          callback(null);
+        }
       });
     }
+  ], function (err) {
+    if (err) {
+      locals.user = req.session.user || '';
+      res.flash('error', 'We could not remove all your data. Did you enter the correct password? If so, please contact us so we can remove it manually.');
+      res.render('about', locals);
+    }
     else {
-      req.flash('error', 'Your user account could not be removed. Did you enter a correct password?');
-      res.render('settings', { locals: {
-        user: req.session.user || ''
-      }});
+      locals.user = '';
+      delete req.session.user;
+      res.flash('success', 'Your user account and all data associated with it was removed.');
+      res.render('login', locals);
     }
   });
 };
