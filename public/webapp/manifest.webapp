@@ -1,0 +1,12 @@
+{
+  "name": "PicoBudget.com",
+  "description": "Awesome budgeting!",
+  "launch_path": "http://staging.picobudget.com",
+  "icons": {
+  },
+  "developer": {
+    "name": "PicoBudget.com",
+    "url": "http://www.picobudget.com"
+  },
+  "default_locale": "en"
+}

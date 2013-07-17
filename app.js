@@ -22,6 +22,7 @@
     server.use('/bootstrap', express.static(server.get('publicfolder') + '/bootstrap'));
     server.use('/css', express.static(server.get('publicfolder') + '/css'));
     server.use('/js', express.static(server.get('publicfolder') + '/js'));
+    server.use('/webapp', express.static(server.get('publicfolder') + '/webapp'));
     server.set('view engine', 'jade');
     server.set('views', __dirname + '/views');
     server.set('view options', { layout: false });
@@ -37,6 +38,11 @@
 
   server.listen(server.get('port'), function () {
     console.log("Server started on Port " + server.get('port'));
+  });
+
+  server.get('/webapp/*.webapp', function (req, res, next) {
+    res.contentType('application/x-web-app-manifest+json');
+    next();
   });
 
   /** SESSIONS **/
