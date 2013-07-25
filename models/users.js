@@ -4,8 +4,8 @@ module.exports.authenticate = function (aLogin, aPassword, db, aCallback) {
   var loginname = aLogin.toLowerCase();
   db.collection('users', function (err, collection) {
     collection.findOne({user: loginname}, function (err, user) {
-      if (user) {
-        user.pw === aPassword ? aCallback(user) : aCallback(null);
+      if (user.pw === aPassword) {
+        aCallback(user);
       }
       else {
         aCallback(null);

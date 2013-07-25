@@ -9,7 +9,6 @@ exports.transactions = function (req, res) {
   globals.async.parallel([
     function getAllTrans(callback) {
       globals.transactions.getAllTransactions(req.session.user.user, globals.db, function(allTransactionsList) {
-        console.log('trans: ' + JSON.stringify(allTransactionsList));
         if (!allTransactionsList) return callback(null);
         locals.transactions = allTransactionsList.slice(transpage*limit-limit, transpage*limit);
         locals.needsMorePages = (allTransactionsList.length - transpage * 10 > 0);
@@ -18,7 +17,6 @@ exports.transactions = function (req, res) {
     },
     function getAllTags(callback) {
       globals.tags.getAllTags(req.session.user.user, globals.db, function (tagList) {
-        console.log('tags: ' + JSON.stringify(tagList));
         if (!tagList) return callback(null);
         locals.tags = tagList;
         callback();
@@ -26,7 +24,6 @@ exports.transactions = function (req, res) {
     },
     function getAllAccounts(callback) {
       globals.accounts.getAllAccounts(req.session.user.user, globals.db, function (accList) {
-        console.log('accs: ' + accList);
         if (!accList) return callback(null);
         locals.accounts = accList;
         callback();
@@ -34,7 +31,6 @@ exports.transactions = function (req, res) {
     }
   ], function (err) {
     if (err) {
-      console.log('error: ' +  err);
       res.redirect('/dashboard');
     }
     else {
