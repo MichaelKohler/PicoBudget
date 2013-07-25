@@ -1,6 +1,5 @@
-/* jslint node: true */
 (function () {
-  "use strict";
+  'use strict';
 
   var globals = require('./globals').init();
 
@@ -8,7 +7,7 @@
     if (err) {
       console.log(err);
     } else {
-      console.log("Connected to DB on port 27017.");
+      console.log('Connected to DB on port 27017.');
     }
   });
 
@@ -37,7 +36,7 @@
   });
 
   server.listen(server.get('port'), function () {
-    console.log("Server started on Port " + server.get('port'));
+    console.log('Server started on Port ' + server.get('port'));
   });
 
   server.get('/webapp/*.webapp', function (req, res, next) {

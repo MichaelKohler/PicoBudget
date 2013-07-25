@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var globals = require('../globals').init();
 
@@ -30,7 +30,7 @@ exports.authenticated = function (req, res) {
 
 exports.registered = function (req, res) {
   globals.users.create(req.body.emailInputReg, req.body.passwordInputReg, globals.db, function (user) {
-    if (user === "EXISTS") {
+    if (user === 'EXISTS') {
       res.flash('error', 'The given email address is already used! Please log in on the left side with your email address or use another address.');
       res.render('login', { locals: {
         user: req.session.user || ''

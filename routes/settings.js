@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var globals = require('../globals').init();
 
@@ -34,33 +34,18 @@ exports.userDeleted = function (req, res) {
   var locals = {};
   globals.async.series([
     function deleteUser(callback) {
-      globals.users.removeUser(req.session.user.user, req.body.passwordInput, globals.db, function (userRemoved) {
-        if (userRemoved) {
-          callback();
-        }
-        else {
-          callback(null);
-        }
+      globals.users.removeUser(req.session.user.user, req.body.passwordInput, globals.db, function (success) {
+        success ? callback() : callback({err: 'We could not remove the user.'});
       });
     },
     function deleteAccounts(callback) {
-      globals.accounts.deleteAllAccounts(req.session.user.user, globals.db, function (accsRemoved) {
-        if (accsRemoved) {
-          callback();
-        }
-        else {
-          callback(null);
-        }
+      globals.accounts.deleteAllAccounts(req.session.user.user, globals.db, function (success) {
+        success ? callback() : callback({err: 'We could not remove the accounts.'});
       });
     },
     function deleteTransactions(callback) {
-      globals.transactions.deleteAllTransactions(req.session.user.user, globals.db, function (transRemoved) {
-        if (transRemoved) {
-          callback();
-        }
-        else {
-          callback(null);
-        }
+      globals.transactions.deleteAllTransactions(req.session.user.user, globals.db, function (success) {
+        success ? callback() : callback({err: 'We could not remove the transactions.'});
       });
     }
   ], function (err) {

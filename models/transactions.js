@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
 module.exports.Transaction = {
   id: 0,
-  account: "",
-  fromAccount: "",
-  toAccount: "",
-  type: "",
-  name: "",
+  account: '',
+  fromAccount: '',
+  toAccount: '',
+  type: '',
+  name: '',
   tags: [],
   amount: 0.0,
 
@@ -25,7 +25,7 @@ module.exports.Transaction = {
     this.fromAccount = aFromAccount;
     this.toAccount = aToAccount;
     this.amount = aAmount;
-    this.name = aFromAccount + " -> " + aToAccount;
+    this.name = aFromAccount + ' -> ' + aToAccount;
     return this;
   }
 };
@@ -77,13 +77,8 @@ module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
     var currentDate = new Date();
     var newTransaction = { user: aLogin, date: currentDate, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
       name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount).toFixed(2) };
-    collection.insert(newTransaction, function (err, resultTrans) {
-      if (resultTrans) {
-        aCallback(newTransaction);
-      }
-      else {
-        aCallback(null);
-      }
+    collection.insert(newTransaction, function (err, results) {
+      err ? aCallback(null) : aCallback(true);
     });
   });
 };
@@ -91,12 +86,7 @@ module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
 module.exports.deleteAllTransactions = function (aLogin, db, aCallback) {
   db.collection('transactions', function (err, collection) {
     collection.remove({user: aLogin}, function (err) {
-      if (err) {
-        aCallback(false);
-      }
-      else {
-        aCallback(true);
-      }
+      err ? aCallback(null) : aCallback(true);
     });
   });
 };
@@ -108,12 +98,7 @@ module.exports.addTransfer = function (aLogin, aTransaction, db, aCallback) {
                         accTo: aTransaction.toAccount, amount: parseFloat(aTransaction.amount).toFixed(2),
                         name: aTransaction.name};
     collection.insert(newTransfer, function (err, result) {
-      if (result) {
-        aCallback(newTransfer);
-      }
-      else {
-        aCallback(null);
-      }
+      err ? aCallback(null) : aCallback(true);
     });
   });
 };

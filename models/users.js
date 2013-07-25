@@ -1,15 +1,10 @@
-"use strict";
+'use strict';
 
 module.exports.authenticate = function (aLogin, aPassword, db, aCallback) {
   var loginname = aLogin.toLowerCase();
   db.collection('users', function (err, collection) {
     collection.findOne({user: loginname}, function (err, user) {
-      if (user.pw === aPassword) {
-        aCallback(user);
-      }
-      else {
-        aCallback(null);
-      }
+      (user && user.pw === aPassword) ? aCallback(user) : aCallback(null);
     });
   });
 };
@@ -19,18 +14,13 @@ module.exports.create = function (aLogin, aPassword, db, aCallback) {
   db.collection('users', function (err, collection) {
     collection.findOne({user: loginname}, function (err, foundUser) {
       if (!foundUser) {
-        var newUser = { user: loginname, pw: aPassword, role: 'user', curr: "CHF" };
+        var newUser = {user: loginname, pw: aPassword, role: 'user', curr: 'CHF'};
         collection.insert(newUser, function (err, result) {
-          if (result) {
-            aCallback(newUser);
-          }
-          else {
-            aCallback(null);
-          }
+          err ? aCallback(null) : aCallback(newUser);
         });
       }
       else {
-        aCallback("EXISTS");
+        aCallback('EXISTS');
       }
     });
   });
@@ -45,21 +35,16 @@ module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aP
             collection.update({user: aLogin}, {$set: {pw: aNewPassword, curr: aPrefCurr}}, function (err) {
               user.pw = aNewPassword;
               user.curr = aPrefCurr;
-              if (err) {
-                aCallback(null);
-              }
-              else {
-                aCallback(user);
-              }
+              err ? aCallback(null) : aCallback(user);
             });
           }
           else {
-            aCallback(false);
+            aCallback(null);
           }
         }
         else { // only save prefcurr
-          collection.update({user: aLogin}, {$set: {curr: prefCurr}}, function (err) {
-            user.curr = prefCurr;
+          collection.update({user: aLogin}, {$set: {curr: aPrefCurr}}, function (err) {
+            user.curr = aPrefCurr;
             err ? aCallback(null) : aCallback(user);
           });
         }

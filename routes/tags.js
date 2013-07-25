@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
 var globals = require('../globals').init();
 
 exports.tagOverview = function (req, res) {
   var tagname = req.params.tagname;
-  var transpage = parseInt(req.params.transpage);
+  var transpage = parseInt(req.params.transpage, 10);
   var limit = 10;
   globals.transactions.getAllTransactionsByTag(req.session.user.user, globals.db, tagname, function(allTransactionsList) {
     if (allTransactionsList) {

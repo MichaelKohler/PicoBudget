@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports.formatAmount = function (aAmount) {
   var fixedAmount = parseFloat(aAmount).toFixed(2);
-  var formattedAmount = fixedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+  var formattedAmount = fixedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\'');
   return formattedAmount;
 };
 

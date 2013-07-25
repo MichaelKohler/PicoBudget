@@ -1,5 +1,5 @@
 (function () {
-  "use strict";
+  'use strict';
 
   exports.init = function () {
     exports.async = require('async');

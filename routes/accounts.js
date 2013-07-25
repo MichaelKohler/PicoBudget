@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var globals = require('../globals').init();
 
@@ -16,7 +16,7 @@ exports.accounts = function (req, res) {
 };
 
 exports.accountOverview = function (req, res) {
-  var transpage = parseInt(req.params.transpage);
+  var transpage = parseInt(req.params.transpage, 10);
   var limit = 10;
   var locals = { user: req.session.user || '' };
   globals.async.parallel([
