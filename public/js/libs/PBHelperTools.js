@@ -94,6 +94,20 @@
       return state;
     },
 
+    validateAddTag: function pb_validateAddTag() {
+      // validate add tag form
+      var state = true;
+
+      if ($('#tagNameInput').val() ===  '') {
+        $('#cg-tagName').addClass('error');
+        state = false;
+      } else {
+        $('#cg-tagName').removeClass('error');
+      }
+
+      return state;
+    },
+
     // ACCOUNTS
     // ===================
     toggleAccountNavigationTabs: function pb_toggleAccountNavigationTabs() {
