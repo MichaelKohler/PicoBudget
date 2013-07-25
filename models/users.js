@@ -1,8 +1,9 @@
 "use strict";
 
 module.exports.authenticate = function (aLogin, aPassword, db, aCallback) {
+  var loginname = aLogin.toLowerCase();
   db.collection('users', function (err, collection) {
-    collection.findOne({user: aLogin}, function (err, user) {
+    collection.findOne({user: loginname}, function (err, user) {
       if (user) {
         user.pw === aPassword ? aCallback(user) : aCallback(null);
       }
@@ -14,10 +15,11 @@ module.exports.authenticate = function (aLogin, aPassword, db, aCallback) {
 };
 
 module.exports.create = function (aLogin, aPassword, db, aCallback) {
+  var loginname = aLogin.toLowerCase();
   db.collection('users', function (err, collection) {
-    collection.findOne({user: aLogin}, function (err, foundUser) {
+    collection.findOne({user: loginname}, function (err, foundUser) {
       if (!foundUser) {
-        var newUser = { user: aLogin, pw: aPassword, role: 'user', curr: "CHF" };
+        var newUser = { user: loginname, pw: aPassword, role: 'user', curr: "CHF" };
         collection.insert(newUser, function (err, result) {
           if (result) {
             aCallback(newUser);
