@@ -118,6 +118,7 @@ module.exports.setBalanceForTransaction = function (aLogin, aTransaction, aCallb
 };
 
 module.exports.setBalanceForTransfer = function (aLogin, aTransaction, aCallback) {
+  if (aTransaction.fromAccount === aTransaction.toAccount) { return aCallback(true); }
   globals.db.collection('accounts', function (err, collection) {
     globals.async.parallel([
       function updateFirstAccount(callback) {
