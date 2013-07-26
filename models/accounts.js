@@ -1,5 +1,7 @@
 'use strict';
 
+var globals = require('../globals').init();
+
 module.exports.Account = {
   name: '',
   currency: '',
@@ -105,7 +107,7 @@ module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aC
         }
 
         collection.update({name: aTransaction.account}, {$set: {bal: newBalance}}, function (result) {
-          err ? aCallback(null) : aCallback(true);
+          result ? aCallback(true) : aCallback(null);
         });
       }
       else {
@@ -117,33 +119,29 @@ module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aC
 
 module.exports.setBalanceForTransfer = function (aLogin, db, aTransaction, aCallback) {
   db.collection('accounts', function (err, collection) {
-    collection.findOne({user: aLogin, name: aTransaction.fromAccount}, function (err, foundAccount) {
-      if (foundAccount) {
-        var newFromBalance = parseFloat(foundAccount.bal) - parseFloat(aTransaction.amount);
-
-        collection.update({user: aLogin, name: aTransaction.fromAccount}, {$set: {bal: newFromBalance}}, function (err) {
-          if (!err) {
-            collection.findOne({user: aLogin, name: aTransaction.toAccount}, function (err, foundAccount) {
-              if (foundAccount) {
-                var newToBalance = parseFloat(foundAccount.bal) + parseFloat(aTransaction.amount);
-
-                collection.update({user: aLogin, name: aTransaction.toAccount}, {$set: {bal: newToBalance}}, function (err) {
-                  err ? aCallback(null) : aCallback(true);
-                });
-              }
-              else {
-                aCallback(null);
-              }
+    globals.async.parallel([
+      function updateFirstAccount(callback) {
+        collection.findOne({user: aLogin, name: aTransaction.fromAccount}, function (err, foundAccount) {
+          if (foundAccount) {
+            var newFromBalance = parseFloat(foundAccount.bal) - parseFloat(aTransaction.amount);
+            collection.update({user: aLogin, name: aTransaction.fromAccount}, {$set: {bal: newFromBalance}}, function (err) {
+              err ? callback(null) : callback();
             });
           }
-          else {
-            aCallback(null);
+        });
+      },
+      function updateSecondAccount(callback) {
+        collection.findOne({user: aLogin, name: aTransaction.toAccount}, function (err, foundAccount) {
+          if (foundAccount) {
+            var newToBalance = parseFloat(foundAccount.bal) + parseFloat(aTransaction.amount);
+            collection.update({user: aLogin, name: aTransaction.toAccount}, {$set: {bal: newToBalance}}, function (err) {
+              err ? callback(null) : callback();
+            });
           }
         });
       }
-      else {
-        aCallback(null);
-      }
+    ], function (err) {
+      err ? aCallback(null) : aCallback(true);
     });
   });
 };
