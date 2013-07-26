@@ -1,5 +1,6 @@
 'use strict';
 
 exports.reports = function (req, res) {
-  res.render('reports', { locals: { user: req.session.user || ''} });
+  var locals = {user: req.session.user || ''};
+  res.render('reports', locals);
 };

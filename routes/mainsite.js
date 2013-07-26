@@ -1,21 +1,26 @@
 'use strict';
 
 exports.index = function (req, res) {
-  res.render('index', { locals: { user: req.session.user || ''} });
+  var locals = {user: req.session.user || ''};
+  res.render('index', locals);
 };
 
 exports.faq = function (req, res) {
-  res.render('faq', { locals: { user: req.session.user || ''} });
+  var locals = {user: req.session.user || ''};
+  res.render('faq', locals);
 };
 
 exports.introduction = function (req, res) {
-  res.render('introduction', { locals: { user: req.session.user || ''} });
+  var locals = {user: req.session.user || ''};
+  res.render('introduction', locals);
 };
 
 exports.premium = function (req, res) {
-  res.render('premium', { locals: {user: req.session.user || ''} });
+  var locals = {user: req.session.user || ''};
+  res.render('premium', locals);
 };
 
 exports.about = function (req, res) {
-  res.render('about', { locals: { user: req.session.user || ''} });
+  var locals = {user: req.session.user || ''};
+  res.render('about', locals);
 };

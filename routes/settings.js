@@ -3,9 +3,8 @@
 var globals = require('../globals').init();
 
 exports.settings = function (req, res) {
-  res.render('settings', { locals: {
-    user: req.session.user || ''
-  }});
+  var locals = {user: req.session.user || ''};
+  res.render('settings', locals);
 };
 
 exports.settingsChanged = function (req, res) {
@@ -14,19 +13,15 @@ exports.settingsChanged = function (req, res) {
   var prefCurr = req.body.prefCurrDropdown;
 
   globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, globals.db, function (updatedUser) {
+    var locals = {user: req.session.user || ''};
     if (updatedUser) {
       req.session.user = updatedUser; // we need to reinit the session because of the new password
       res.flash('success', 'Your settings are saved.');
-      res.render('settings', { locals: {
-        user: req.session.user || ''
-      }});
     }
     else {
       res.flash('error', 'We could not update the settings. Please try again.');
-      res.render('settings', { locals: {
-        user: req.session.user || ''
-      }});
     }
+    res.render('settings', locals);
   });
 };
 

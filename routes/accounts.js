@@ -6,11 +6,11 @@ exports.accounts = function (req, res) {
   globals.accounts.getAllAccounts(req.session.user.user, globals.db, function (accountList) {
     if (accountList) {
       var sum = globals.helpers.sumAccountBalance(accountList);
-      res.render('accounts', { locals: {
-        user: req.session.user || '',
-        accounts: accountList,
-        balanceSum: sum
-      }});
+      var locals = {};
+      locals.user = req.session.user || '';
+      locals.accounts = accountList;
+      locals.balanceSum = sum;
+      res.render('accounts', locals);
     }
   });
 };

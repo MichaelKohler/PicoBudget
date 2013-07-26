@@ -1,5 +1,6 @@
 'use strict';
 
 exports.budget = function (req, res) {
-  res.render('budget', { locals: { user: req.session.user || ''} });
+  var locals = {user: req.session.user || ''};
+  res.render('budget', locals);
 };
