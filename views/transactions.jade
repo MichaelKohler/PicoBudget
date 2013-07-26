@@ -90,7 +90,7 @@ html(lang='en')
                       .controls
                         select(name='transAccDropdown')
                           for account in locals.accounts
-                            option(value='#{account.name}') #{account.name} - #{functions.formatAmount(account.bal)}
+                            option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
                     .control-group#cg-name
                       label.control-label(for='transNameInput') Description
                       .controls
@@ -128,13 +128,13 @@ html(lang='en')
                     .controls
                       select(name='transAccFromDropdown')
                         for account in locals.accounts
-                          option(value='#{account.name}') #{account.name} - #{functions.formatAmount(account.bal)}
+                          option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
                   .control-group#cg-account-to
                     label.control-label(for='transAccToDropdown') to
                     .controls
                       select(name='transAccToDropdown')
                         for account in locals.accounts
-                          option(value='#{account.name}') #{account.name} - #{functions.formatAmount(account.bal)}
+                          option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
                   .control-group#cg-transferamount
                     label.control-label(for='transferAmountInput') Amount
                     .controls
