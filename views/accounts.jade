@@ -34,7 +34,7 @@ html(lang='en')
                 br
                 p Please fill in all the information!
               #accounttable
-                - if (locals.accounts.length > 0)
+                - if (locals.accounts && locals.accounts.length > 0)
                   table.table.table-hover
                     thead
                       tr
