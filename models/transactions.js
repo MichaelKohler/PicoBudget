@@ -1,5 +1,7 @@
 'use strict';
 
+var globals = require('../globals');
+
 module.exports.Transaction = {
   id: 0,
   account: '',
@@ -30,8 +32,8 @@ module.exports.Transaction = {
   }
 };
 
-module.exports.getAllTransactions = function (aLogin, db, aCallback) {
-  db.collection('transactions', function (err, collection) {
+module.exports.getAllTransactions = function (aLogin, aCallback) {
+  globals.db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin}, {sort: [
       ['date', -1]
     ]}).toArray(function (err, items) {
@@ -40,8 +42,8 @@ module.exports.getAllTransactions = function (aLogin, db, aCallback) {
   });
 };
 
-module.exports.getAllTransactionsByTag = function (aLogin, db, aTagName, aCallback) {
-  db.collection('transactions', function (err, collection) {
+module.exports.getAllTransactionsByTag = function (aLogin, aTagName, aCallback) {
+  globals.db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin, tags: aTagName}, {sort: [
       ['date', -1]
     ]}).toArray(function (err, items) {
@@ -50,9 +52,9 @@ module.exports.getAllTransactionsByTag = function (aLogin, db, aTagName, aCallba
   });
 };
 
-module.exports.getLimitedTransactions = function (aLogin, db, aPage, aLimitedEntries, aCallback) {
+module.exports.getLimitedTransactions = function (aLogin, aPage, aLimitedEntries, aCallback) {
   var begin = (aPage - 1) * aLimitedEntries;
-  db.collection('transactions', function (err, collection) {
+  globals.db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin}, {skip: begin, limit: aLimitedEntries, sort: [
       ['date', -1]
     ]}).toArray(function (err, items) {
@@ -61,8 +63,8 @@ module.exports.getLimitedTransactions = function (aLogin, db, aPage, aLimitedEnt
   });
 };
 
-module.exports.getTransactionsByAccount = function (aLogin, db, aName, aCallback) {
-  db.collection('transactions', function (err, collection) {
+module.exports.getTransactionsByAccount = function (aLogin, aName, aCallback) {
+  globals.db.collection('transactions', function (err, collection) {
     collection.find({user: aLogin, $or:[{acc: aName}, {accTo: aName}, {accFrom: aName}]},
                     {sort: [ ['date', 1] ]}, function (err, cursor) {
       cursor.toArray(function (err, items) {
@@ -72,8 +74,8 @@ module.exports.getTransactionsByAccount = function (aLogin, db, aName, aCallback
   });
 };
 
-module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
-  db.collection('transactions', function (err, collection) {
+module.exports.addTransaction = function (aLogin, aTransaction, aCallback) {
+  globals.db.collection('transactions', function (err, collection) {
     var currentDate = new Date();
     var newTransaction = { user: aLogin, date: currentDate, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
       name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount).toFixed(2) };
@@ -83,16 +85,16 @@ module.exports.addTransaction = function (aLogin, aTransaction, db, aCallback) {
   });
 };
 
-module.exports.deleteAllTransactions = function (aLogin, db, aCallback) {
-  db.collection('transactions', function (err, collection) {
+module.exports.deleteAllTransactions = function (aLogin, aCallback) {
+  globals.db.collection('transactions', function (err, collection) {
     collection.remove({user: aLogin}, function (err) {
       err ? aCallback(null) : aCallback(true);
     });
   });
 };
 
-module.exports.addTransfer = function (aLogin, aTransaction, db, aCallback) {
-  db.collection('transactions', function (err, collection) {
+module.exports.addTransfer = function (aLogin, aTransaction, aCallback) {
+  globals.db.collection('transactions', function (err, collection) {
     var currentDate = new Date();
     var newTransfer = { user: aLogin, date: currentDate, id: aTransaction.id, accFrom: aTransaction.fromAccount,
                         accTo: aTransaction.toAccount, amount: parseFloat(aTransaction.amount).toFixed(2),

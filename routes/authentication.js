@@ -1,6 +1,6 @@
 'use strict';
 
-var globals = require('../globals').init();
+var globals = require('../globals');
 
 exports.login = function (req, res) {
   var locals = {user: req.session.user || ''};
@@ -13,7 +13,7 @@ exports.login = function (req, res) {
 };
 
 exports.authenticated = function (req, res) {
-  globals.users.authenticate(req.body.emailInput, req.body.passwordInput, globals.db, function (user) {
+  globals.users.authenticate(req.body.emailInput, req.body.passwordInput, function (user) {
     if (user) {
       req.session.user = user;
       res.redirect('/dashboard');
@@ -27,7 +27,7 @@ exports.authenticated = function (req, res) {
 };
 
 exports.registered = function (req, res) {
-  globals.users.create(req.body.emailInputReg, req.body.passwordInputReg, globals.db, function (user) {
+  globals.users.create(req.body.emailInputReg, req.body.passwordInputReg, function (user) {
     var locals = {user: req.session.user || ''};
     if (user === 'EXISTS') {
       res.flash('error', 'The given email address is already used! Please log in on the left side with your email address or use another address.');

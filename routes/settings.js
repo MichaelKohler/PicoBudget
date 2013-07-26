@@ -1,6 +1,6 @@
 'use strict';
 
-var globals = require('../globals').init();
+var globals = require('../globals');
 
 exports.settings = function (req, res) {
   var locals = {user: req.session.user || ''};
@@ -12,7 +12,7 @@ exports.settingsChanged = function (req, res) {
   var newPW = req.body.newPasswordInput;
   var prefCurr = req.body.prefCurrDropdown;
 
-  globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, globals.db, function (updatedUser) {
+  globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, function (updatedUser) {
     var locals = {user: req.session.user || ''};
     if (updatedUser) {
       req.session.user = updatedUser; // we need to reinit the session because of the new password
@@ -29,17 +29,17 @@ exports.userDeleted = function (req, res) {
   var locals = {};
   globals.async.series([
     function deleteUser(callback) {
-      globals.users.removeUser(req.session.user.user, req.body.passwordInput, globals.db, function (success) {
+      globals.users.removeUser(req.session.user.user, req.body.passwordInput, function (success) {
         success ? callback() : callback({err: 'We could not remove the user.'});
       });
     },
     function deleteAccounts(callback) {
-      globals.accounts.deleteAllAccounts(req.session.user.user, globals.db, function (success) {
+      globals.accounts.deleteAllAccounts(req.session.user.user, function (success) {
         success ? callback() : callback({err: 'We could not remove the accounts.'});
       });
     },
     function deleteTransactions(callback) {
-      globals.transactions.deleteAllTransactions(req.session.user.user, globals.db, function (success) {
+      globals.transactions.deleteAllTransactions(req.session.user.user, function (success) {
         success ? callback() : callback({err: 'We could not remove the transactions.'});
       });
     }

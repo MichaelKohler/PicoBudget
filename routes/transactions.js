@@ -1,6 +1,6 @@
 'use strict';
 
-var globals = require('../globals').init();
+var globals = require('../globals');
 
 exports.transactions = function (req, res) {
   var transpage = parseInt(req.params.transpage, 10);
@@ -8,7 +8,7 @@ exports.transactions = function (req, res) {
   var limit = 10;
   globals.async.parallel([
     function getAllTrans(callback) {
-      globals.transactions.getAllTransactions(req.session.user.user, globals.db, function(allTransactionsList) {
+      globals.transactions.getAllTransactions(req.session.user.user, function(allTransactionsList) {
         if (!allTransactionsList) { return callback(null); }
         locals.transactions = allTransactionsList.slice(transpage*limit-limit, transpage*limit);
         locals.needsMorePages = (allTransactionsList.length - transpage * 10 > 0);
@@ -16,14 +16,14 @@ exports.transactions = function (req, res) {
       });
     },
     function getAllTags(callback) {
-      globals.tags.getAllTags(req.session.user.user, globals.db, function (tagList) {
+      globals.tags.getAllTags(req.session.user.user, function (tagList) {
         if (!tagList) { return callback(null); }
         locals.tags = tagList;
         callback();
       });
     },
     function getAllAccounts(callback) {
-      globals.accounts.getAllAccounts(req.session.user.user, globals.db, function (accList) {
+      globals.accounts.getAllAccounts(req.session.user.user, function (accList) {
         if (!accList) { return callback(null); }
         locals.accounts = accList;
         callback();
@@ -49,12 +49,12 @@ exports.transactionAdded = function (req, res) {
   var newTransaction = globals.transactions.Transaction.init(transID, transAcc, transType, transName, transTags, transAmount);
   globals.async.series([
     function addTransaction(callback) {
-      globals.transactions.addTransaction(req.session.user.user, newTransaction, globals.db, function (success) {
+      globals.transactions.addTransaction(req.session.user.user, newTransaction, function (success) {
         success ? callback() : callback({err: 'We could not add the transaction.'});
       });
     },
     function setBalance(callback) {
-      globals.accounts.setBalanceForTransaction(req.session.user.user, globals.db, newTransaction, function(success) {
+      globals.accounts.setBalanceForTransaction(req.session.user.user, newTransaction, function(success) {
         success ? callback() : callback({err: 'We could not set the new balance.'});
       });
     }
@@ -77,12 +77,12 @@ exports.transferAdded = function (req, res) {
   var newTransfer = globals.transactions.Transaction.initTransfer(transID, transFromAcc, transToAcc, transAmount);
   globals.async.series([
     function addTransfer(callback) {
-      globals.transactions.addTransfer(req.session.user.user, newTransfer, globals.db, function (success) {
+      globals.transactions.addTransfer(req.session.user.user, newTransfer, function (success) {
         success ? callback() : callback({err: 'We could not add the transfer.'});
       });
     },
     function setBalance(callback) {
-      globals.accounts.setBalanceForTransfer(req.session.user.user, globals.db, newTransfer, function(success) {
+      globals.accounts.setBalanceForTransfer(req.session.user.user, newTransfer, function(success) {
         success ? callback() : callback({err: 'We could not set the new balance.'});
       });
     }

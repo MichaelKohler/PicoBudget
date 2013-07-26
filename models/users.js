@@ -1,17 +1,19 @@
 'use strict';
 
-module.exports.authenticate = function (aLogin, aPassword, db, aCallback) {
+var globals = require('../globals');
+
+module.exports.authenticate = function (aLogin, aPassword, aCallback) {
   var loginname = aLogin.toLowerCase();
-  db.collection('users', function (err, collection) {
+  globals.db.collection('users', function (err, collection) {
     collection.findOne({user: loginname}, function (err, user) {
       (user && user.pw === aPassword) ? aCallback(user) : aCallback(null);
     });
   });
 };
 
-module.exports.create = function (aLogin, aPassword, db, aCallback) {
+module.exports.create = function (aLogin, aPassword, aCallback) {
   var loginname = aLogin.toLowerCase();
-  db.collection('users', function (err, collection) {
+  globals.db.collection('users', function (err, collection) {
     collection.findOne({user: loginname}, function (err, foundUser) {
       if (!foundUser) {
         var newUser = {user: loginname, pw: aPassword, role: 'user', curr: 'CHF'};
@@ -26,8 +28,8 @@ module.exports.create = function (aLogin, aPassword, db, aCallback) {
   });
 };
 
-module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aPrefCurr, db, aCallback) {
-  db.collection('users', function (err, collection) {
+module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aPrefCurr, aCallback) {
+  globals.db.collection('users', function (err, collection) {
     collection.findOne({user: aLogin}, function (err, user) {
       if (user) { // user was found
         if (aOldPassword !== '' && aNewPassword !== '') {
@@ -56,8 +58,8 @@ module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aP
   });
 };
 
-module.exports.removeUser = function (aLogin, aPassword, db, aCallback) {
-  db.collection('users', function (err, collection) {
+module.exports.removeUser = function (aLogin, aPassword, aCallback) {
+  globals.db.collection('users', function (err, collection) {
     collection.findOne({user: aLogin}, function (err, user) {
       if (user.pw === aPassword) {
         collection.remove({user: aLogin}, function (err) {

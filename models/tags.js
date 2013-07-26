@@ -1,7 +1,9 @@
 'use strict';
 
-module.exports.getAllTags = function (aLogin, db, aCallback) {
-  db.collection('tags', function (err, collection) {
+var globals = require('../globals');
+
+module.exports.getAllTags = function (aLogin, aCallback) {
+  globals.db.collection('tags', function (err, collection) {
     collection.find({user: aLogin}, {sort: [
       ['name', 1]
     ]}).toArray(function (err, items) {
@@ -10,8 +12,8 @@ module.exports.getAllTags = function (aLogin, db, aCallback) {
   });
 };
 
-module.exports.addTag = function (aLogin, db, aTagName, aTagType, aCallback) {
-  db.collection('tags', function (err, collection) {
+module.exports.addTag = function (aLogin, aTagName, aTagType, aCallback) {
+  globals.db.collection('tags', function (err, collection) {
     collection.findOne({user: aLogin, name: aTagName}, function (err, foundTag) {
       if (!foundTag) {
         var newTag = { user: aLogin, name: aTagName, type: aTagType };
@@ -26,8 +28,8 @@ module.exports.addTag = function (aLogin, db, aTagName, aTagType, aCallback) {
   });
 };
 
-module.exports.deleteTag = function (aLogin, db, aTagName, aCallback) {
-  db.collection('tags', function (err, collection) {
+module.exports.deleteTag = function (aLogin, aTagName, aCallback) {
+  globals.db.collection('tags', function (err, collection) {
     collection.findOne({user: aLogin, name: aTagName}, function (err, foundTag) {
       if (foundTag) {
         collection.remove({user: aLogin, name: aTagName}, function (err) {

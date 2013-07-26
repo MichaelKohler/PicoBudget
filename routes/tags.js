@@ -1,12 +1,12 @@
 'use strict';
 
-var globals = require('../globals').init();
+var globals = require('../globals');
 
 exports.tagOverview = function (req, res) {
   var tagname = req.params.tagname;
   var transpage = parseInt(req.params.transpage, 10);
   var limit = 10;
-  globals.transactions.getAllTransactionsByTag(req.session.user.user, globals.db, tagname, function(allTransactionsList) {
+  globals.transactions.getAllTransactionsByTag(req.session.user.user, tagname, function(allTransactionsList) {
     if (allTransactionsList) {
       res.render('tag', { locals: {
         user: req.session.user || '',
@@ -26,7 +26,7 @@ exports.tagOverview = function (req, res) {
 exports.tagAdded = function (req, res) {
   var tagName = req.body.tagNameInput;
   var tagType = req.body.tagTypeDropdown;
-  globals.tags.addTag(req.session.user.user, globals.db, tagName, tagType, function (success) {
+  globals.tags.addTag(req.session.user.user, tagName, tagType, function (success) {
     if (success) {
       res.flash('success', 'The tag has been added.');
     }
@@ -39,7 +39,7 @@ exports.tagAdded = function (req, res) {
 
 exports.tagDeleted = function (req, res) {
   var tagName = req.body.tagNameInput;
-  globals.tags.deleteTag(req.session.user.user, globals.db, tagName, function (success) {
+  globals.tags.deleteTag(req.session.user.user, tagName, function (success) {
     if (success) {
       res.flash('success', 'The tag has been deleted.');
     }

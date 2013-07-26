@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var globals = require('./globals').init();
+  var globals = require('./globals');
 
   globals.db.open(function (err, db) {
     if (err) {

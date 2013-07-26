@@ -1,9 +1,9 @@
 'use strict';
 
-var globals = require('../globals').init();
+var globals = require('../globals');
 
 exports.accounts = function (req, res) {
-  globals.accounts.getAllAccounts(req.session.user.user, globals.db, function (accountList) {
+  globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
     if (accountList) {
       var sum = globals.helpers.sumAccountBalance(accountList);
       var locals = {};
@@ -21,13 +21,13 @@ exports.accountOverview = function (req, res) {
   var locals = { user: req.session.user || '' };
   globals.async.parallel([
     function getAccount(callback) {
-      globals.accounts.getAccount(req.session.user.user, globals.db, req.params.name, function (account) {
+      globals.accounts.getAccount(req.session.user.user, req.params.name, function (account) {
         locals.account = account;
         callback();
       });
     },
     function getTransByAccount(callback) {
-      globals.transactions.getTransactionsByAccount(req.session.user.user, globals.db, req.params.name, function (allTransactionsList) {
+      globals.transactions.getTransactionsByAccount(req.session.user.user, req.params.name, function (allTransactionsList) {
         locals.transactions = allTransactionsList;
         locals.page = transpage;
         locals.needsMorePages = (allTransactionsList.length - transpage * limit > 0);
@@ -44,7 +44,7 @@ exports.accountAdded = function (req, res) {
   var accCurrency = req.body.currDropdown;
   var accBalance = req.body.initBalanceInput;
   var newAccount = globals.accounts.Account.initFull(accName, accCurrency, accBalance);
-  globals.accounts.addAccount(req.session.user.user, globals.db, newAccount, function (success) {
+  globals.accounts.addAccount(req.session.user.user, newAccount, function (success) {
     if (success) {
       res.flash('success', 'The account has been added.');
     }
@@ -60,7 +60,7 @@ exports.accountEdited = function (req, res) {
   var accName = req.body.editNameInput;
   var accBalance = req.body.editInitBalanceInput;
   var editedAccount = globals.accounts.Account.init(accName, accBalance);
-  globals.accounts.editAccount(req.session.user.user, globals.db, oldName, editedAccount, function (success) {
+  globals.accounts.editAccount(req.session.user.user, oldName, editedAccount, function (success) {
     if (success) {
       res.flash('success', 'The account has been updated.');
     }
@@ -73,7 +73,7 @@ exports.accountEdited = function (req, res) {
 
 exports.accountDeleted = function (req, res) {
   var accName = req.body.deleteNameInput;
-  globals.accounts.deleteAccount(req.session.user.user, globals.db, accName, function (success) {
+  globals.accounts.deleteAccount(req.session.user.user, accName, function (success) {
     if (success) {
       res.flash('success', 'The account has been deleted.');
     }

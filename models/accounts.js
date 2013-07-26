@@ -1,6 +1,6 @@
 'use strict';
 
-var globals = require('../globals').init();
+var globals = require('../globals');
 
 module.exports.Account = {
   name: '',
@@ -21,8 +21,8 @@ module.exports.Account = {
   }
 };
 
-module.exports.getAllAccounts = function (aLogin, db, callback) {
-  db.collection('accounts', function (err, collection) {
+module.exports.getAllAccounts = function (aLogin, callback) {
+  globals.db.collection('accounts', function (err, collection) {
     collection.find({user: aLogin}, {sort: [
       ['name', 1]
     ]}).toArray(function (err, items) {
@@ -31,16 +31,16 @@ module.exports.getAllAccounts = function (aLogin, db, callback) {
   });
 };
 
-module.exports.getAccount = function (aLogin, db, aName, aCallback) {
-  db.collection('accounts', function (err, collection) {
+module.exports.getAccount = function (aLogin, aName, aCallback) {
+  globals.db.collection('accounts', function (err, collection) {
     collection.findOne({user: aLogin, name: aName}, function (err, account) {
       err ? aCallback(null) : aCallback(account);
     });
   });
 };
 
-module.exports.addAccount = function (aLogin, db, aAccount, aCallback) {
-  db.collection('accounts', function (err, collection) {
+module.exports.addAccount = function (aLogin, aAccount, aCallback) {
+  globals.db.collection('accounts', function (err, collection) {
     collection.findOne({user: aLogin, name: aAccount.name}, function (err, foundAccount) {
       if (!foundAccount) {
         var newAccount = { user: aLogin, name: aAccount.name, curr: aAccount.currency,
@@ -56,8 +56,8 @@ module.exports.addAccount = function (aLogin, db, aAccount, aCallback) {
   });
 };
 
-module.exports.editAccount = function (aLogin, db, aOldName, aEditedAccount, aCallback) {
-  db.collection('accounts', function (err, collection) {
+module.exports.editAccount = function (aLogin, aOldName, aEditedAccount, aCallback) {
+  globals.db.collection('accounts', function (err, collection) {
     collection.findOne({user: aLogin, name: aOldName}, function (err, foundAccount) {
       if (foundAccount) {
         collection.update({user: aLogin, name: aOldName}, {$set: {name: aEditedAccount.name, bal: aEditedAccount.balance}}, function (err) {
@@ -71,8 +71,8 @@ module.exports.editAccount = function (aLogin, db, aOldName, aEditedAccount, aCa
   });
 };
 
-module.exports.deleteAccount = function (aLogin, db, aAccName, aCallback) {
-  db.collection('accounts', function (err, collection) {
+module.exports.deleteAccount = function (aLogin, aAccName, aCallback) {
+  globals.db.collection('accounts', function (err, collection) {
     collection.findOne({user: aLogin, name: aAccName}, function (err, foundAccount) {
       if (foundAccount) {
         collection.remove({user: aLogin, name: aAccName}, function (err) {
@@ -86,16 +86,16 @@ module.exports.deleteAccount = function (aLogin, db, aAccName, aCallback) {
   });
 };
 
-module.exports.deleteAllAccounts = function (aLogin, db, aCallback) {
-  db.collection('accounts', function (err, collection) {
+module.exports.deleteAllAccounts = function (aLogin, aCallback) {
+  globals.db.collection('accounts', function (err, collection) {
     collection.remove({user: aLogin}, function (err) {
       err ? aCallback(null) : aCallback(true);
     });
   });
 };
 
-module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aCallback) {
-  db.collection('accounts', function (err, collection) {
+module.exports.setBalanceForTransaction = function (aLogin, aTransaction, aCallback) {
+  globals.db.collection('accounts', function (err, collection) {
     collection.findOne({user: aLogin, name: aTransaction.account}, function (err, foundAccount) {
       if (foundAccount) {
         var newBalance = 0.00;
@@ -117,8 +117,8 @@ module.exports.setBalanceForTransaction = function (aLogin, db, aTransaction, aC
   });
 };
 
-module.exports.setBalanceForTransfer = function (aLogin, db, aTransaction, aCallback) {
-  db.collection('accounts', function (err, collection) {
+module.exports.setBalanceForTransfer = function (aLogin, aTransaction, aCallback) {
+  globals.db.collection('accounts', function (err, collection) {
     globals.async.parallel([
       function updateFirstAccount(callback) {
         collection.findOne({user: aLogin, name: aTransaction.fromAccount}, function (err, foundAccount) {
