@@ -13,3 +13,7 @@ module.exports.sumAccountBalance = function (aAccounts) {
   }
   return sum;
 };
+
+module.exports.sanitizeForJSON = function (aInput) {
+  return aInput.replace('{', '').replace('}', '');
+};

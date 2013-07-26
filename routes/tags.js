@@ -24,8 +24,8 @@ exports.tagOverview = function (req, res) {
 };
 
 exports.tagAdded = function (req, res) {
-  var tagName = req.body.tagNameInput;
-  var tagType = req.body.tagTypeDropdown;
+  var tagName = globals.helpers.sanitizeForJSON(req.body.tagNameInput);
+  var tagType = globals.helpers.sanitizeForJSON(req.body.tagTypeDropdown);
   globals.tags.addTag(req.session.user.user, tagName, tagType, function (success) {
     if (success) {
       res.flash('success', 'The tag has been added.');
@@ -38,7 +38,7 @@ exports.tagAdded = function (req, res) {
 };
 
 exports.tagDeleted = function (req, res) {
-  var tagName = req.body.tagNameInput;
+  var tagName = globals.helpers.sanitizeForJSON(req.body.tagNameInput);
   globals.tags.deleteTag(req.session.user.user, tagName, function (success) {
     if (success) {
       res.flash('success', 'The tag has been deleted.');

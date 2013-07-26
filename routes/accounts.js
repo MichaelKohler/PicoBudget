@@ -40,9 +40,9 @@ exports.accountOverview = function (req, res) {
 };
 
 exports.accountAdded = function (req, res) {
-  var accName = req.body.nameInput;
-  var accCurrency = req.body.currDropdown;
-  var accBalance = req.body.initBalanceInput;
+  var accName = globals.helpers.sanitizeForJSON(req.body.nameInput);
+  var accCurrency = globals.helpers.sanitizeForJSON(req.body.currDropdown);
+  var accBalance = globals.helpers.sanitizeForJSON(req.body.initBalanceInput);
   var newAccount = globals.accounts.Account.initFull(accName, accCurrency, accBalance);
   globals.accounts.addAccount(req.session.user.user, newAccount, function (success) {
     if (success) {
@@ -56,9 +56,9 @@ exports.accountAdded = function (req, res) {
 };
 
 exports.accountEdited = function (req, res) {
-  var oldName = req.body.hiddenOldName;
-  var accName = req.body.editNameInput;
-  var accBalance = req.body.editInitBalanceInput;
+  var oldName = globals.helpers.sanitizeForJSON(req.body.hiddenOldName);
+  var accName = globals.helpers.sanitizeForJSON(req.body.editNameInput);
+  var accBalance = globals.helpers.sanitizeForJSON(req.body.editInitBalanceInput);
   var editedAccount = globals.accounts.Account.init(accName, accBalance);
   globals.accounts.editAccount(req.session.user.user, oldName, editedAccount, function (success) {
     if (success) {
@@ -72,7 +72,7 @@ exports.accountEdited = function (req, res) {
 };
 
 exports.accountDeleted = function (req, res) {
-  var accName = req.body.deleteNameInput;
+  var accName = globals.helpers.sanitizeForJSON(req.body.deleteNameInput);
   globals.accounts.deleteAccount(req.session.user.user, accName, function (success) {
     if (success) {
       res.flash('success', 'The account has been deleted.');

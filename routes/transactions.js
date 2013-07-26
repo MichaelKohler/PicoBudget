@@ -40,12 +40,12 @@ exports.transactions = function (req, res) {
 };
 
 exports.transactionAdded = function (req, res) {
-  var transID = parseInt(req.body.lastTransIDInput, 10) + 1;
-  var transAcc = req.body.transAccDropdown;
-  var transType = req.body.transArtDropdown;
-  var transName = req.body.transNameInput;
-  var transTags = req.body.transTagsInput.split(' ');
-  var transAmount = parseFloat(req.body.transAmountInput);
+  var transID = parseInt(globals.helpers.sanitizeForJSON(req.body.lastTransIDInput), 10) + 1;
+  var transAcc = globals.helpers.sanitizeForJSON(req.body.transAccDropdown);
+  var transType = globals.helpers.sanitizeForJSON(req.body.transArtDropdown);
+  var transName = globals.helpers.sanitizeForJSON(req.body.transNameInput);
+  var transTags = globals.helpers.sanitizeForJSON(req.body.transTagsInput).split(' ');
+  var transAmount = parseFloat(globals.helpers.sanitizeForJSON(req.body.transAmountInput));
   var newTransaction = globals.transactions.Transaction.init(transID, transAcc, transType, transName, transTags, transAmount);
   globals.async.series([
     function addTransaction(callback) {
@@ -70,10 +70,10 @@ exports.transactionAdded = function (req, res) {
 };
 
 exports.transferAdded = function (req, res) {
-  var transID = parseInt(req.body.lastTransIDInput, 10) + 1;
-  var transFromAcc = req.body.transAccFromDropdown;
-  var transToAcc = req.body.transAccToDropdown;
-  var transAmount = parseFloat(req.body.transferAmountInput);
+  var transID = parseInt(globals.helpers.sanitizeForJSON(req.body.lastTransIDInput), 10) + 1;
+  var transFromAcc = globals.helpers.sanitizeForJSON(req.body.transAccFromDropdown);
+  var transToAcc = globals.helpers.sanitizeForJSON(req.body.transAccToDropdown);
+  var transAmount = parseFloat(globals.helpers.sanitizeForJSON(req.body.transferAmountInput));
   var newTransfer = globals.transactions.Transaction.initTransfer(transID, transFromAcc, transToAcc, transAmount);
   globals.async.series([
     function addTransfer(callback) {
