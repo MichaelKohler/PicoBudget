@@ -2,6 +2,7 @@
   'use strict';
 
   exports.async = require('async');
+  exports.bcrypt = require('bcrypt');
 
   /** MongoDB  */
   var mongo = require('mongodb');
