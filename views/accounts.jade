@@ -102,7 +102,10 @@ html(lang='en')
                     .controls
                       select(name='currDropdown')
                         for currency in data.currencies
-                          option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
+                          - if (currency.ISO === locals.user.curr)
+                            option(value='#{currency.ISO}', selected='true') #{currency.ISO} - #{currency.name}
+                          - else
+                            option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
                   .control-group#cg-initialbalance
                     label.control-label(for='initBalanceInput') Initial balance
                     .controls
