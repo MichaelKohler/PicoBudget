@@ -52,7 +52,7 @@ html(lang='en')
                         td
                           - if (trans.tags)
                             for tag in trans.tags
-                              a(href='/tag/#{tag}/1') #{tag}&nbsp;
+                              a(href='/tag/#{tag}/#{trans.art}/1') #{tag}&nbsp;
                         - if (trans.art === "+")
                           td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
                         - else
@@ -150,7 +150,7 @@ html(lang='en')
                       - if (index % 4 === 0)
                         tr
                       td
-                        a(href='/tag/#{tag.name}/1') (#{tag.type}) #{tag.name}
+                        a(href='/tag/#{tag.name}/#{tag.type}/1') (#{tag.type}) #{tag.name}
               - else
                 p There are not tags to be shown.
               hr

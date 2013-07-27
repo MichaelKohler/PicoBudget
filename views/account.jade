@@ -48,7 +48,7 @@ html(lang='en')
                       td
                         - if (trans.tags)
                           for tag in trans.tags
-                            a(href='/tag/#{tag}/1') #{tag}&nbsp;
+                            a(href='/tag/#{tag}/#{trans.art}/1') #{tag}&nbsp;
                       - if (trans.art === "+")
                         td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
                       - else
