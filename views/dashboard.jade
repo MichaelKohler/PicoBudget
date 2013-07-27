@@ -16,6 +16,16 @@ html(lang='en')
                 strong Welcome!
                 br
                 p Your registration was successfull. You will receive a confirmation email within the next few minutes.
+            - if (flash.success !== undefined)
+              .alert-success.alert#success
+                strong Well done!
+                br
+                p #{flash.success}
+            - if (flash.error !== undefined)
+              .alert-danger.alert#fail
+                strong Oh no..
+                br
+                p #{flash.error}
             h1 Account Overview
             p You can manage your accounts under&nbsp;
               a(href='/accounts') "Accounts"

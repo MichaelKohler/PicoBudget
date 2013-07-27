@@ -13,7 +13,9 @@ exports.login = function (req, res) {
 };
 
 exports.authenticated = function (req, res) {
-  globals.users.authenticate(req.body.emailInput, req.body.passwordInput, function (user) {
+  var email = globals.helpers.sanitizeForJSON(req.body.emailInput);
+  var password = globals.helpers.sanitizeForJSON(req.body.passwordInput);
+  globals.users.authenticate(email, password, function (user) {
     if (user) {
       req.session.user = user;
       res.redirect('/dashboard');
@@ -27,7 +29,9 @@ exports.authenticated = function (req, res) {
 };
 
 exports.registered = function (req, res) {
-  globals.users.create(req.body.emailInputReg, req.body.passwordInputReg, function (user) {
+  var email = globals.helpers.sanitizeForJSON(req.body.emailInputReg);
+  var password = globals.helpers.sanitizeForJSON(req.body.passwordInputReg);
+  globals.users.create(email, password, function (user) {
     var locals = {user: req.session.user || ''};
     if (user === 'EXISTS') {
       res.flash('error', 'The given email address is already used! Please log in on the left side with your email address or use another address.');
@@ -36,13 +40,26 @@ exports.registered = function (req, res) {
     else if (user) {
       req.session.user = user;
       req.session.user.isNew = true;
+      globals.users.startActivationProcess(email, function(success) {});
       res.redirect('/dashboard');
-      // TODO: send email to the user
     }
     else {
       res.flash('error', 'The user could not be created. Please try again.');
       res.render('login', locals);
     }
+  });
+};
+
+exports.activated = function (req, res) {
+  var code = req.params.code;
+  globals.users.activate(code, function (success) {
+    if (success) {
+      res.flash('success', 'The account has been activated.');
+    }
+    else {
+      res.flash('error', 'The account could not be activated. Please get in touch with us.');
+    }
+    res.redirect('/dashboard');
   });
 };
 

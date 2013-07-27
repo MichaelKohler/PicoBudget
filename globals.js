@@ -3,6 +3,7 @@
 
   exports.async = require('async');
   exports.bcrypt = require('bcrypt');
+  exports.nodemailer = require('nodemailer');
 
   /** MongoDB  */
   var mongo = require('mongodb');

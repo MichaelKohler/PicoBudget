@@ -59,6 +59,7 @@
   server.post('/authenticated', authenticationRoutes.authenticated);
   server.post('/registered', authenticationRoutes.registered);
   server.get('/logout', authenticationRoutes.logout);
+  server.get('/activate/:code', authenticationRoutes.activated);
 
   var mainsiteRoutes = require('./routes/mainsite.js');
   server.get('/', mainsiteRoutes.index);
