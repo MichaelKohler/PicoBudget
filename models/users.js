@@ -6,7 +6,12 @@ module.exports.authenticate = function (aLogin, aPassword, aCallback) {
   var loginname = aLogin.toLowerCase();
   globals.db.collection('users', function (err, collection) {
     collection.findOne({user: loginname}, function (err, user) {
-      globals.bcrypt.compareSync(aPassword, user.pw) ? aCallback(user) : aCallback(null);
+      if (user) {
+        globals.bcrypt.compareSync(aPassword, user.pw) ? aCallback(user) : aCallback(null);
+      }
+      else {
+        aCallback(null);
+      }
     });
   });
 };
