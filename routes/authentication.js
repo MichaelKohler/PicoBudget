@@ -34,8 +34,17 @@ exports.registered = function (req, res) {
   globals.users.create(email, password, function (user) {
     var locals = {user: req.session.user || ''};
     if (user === 'EXISTS') {
-      res.flash('error', 'The given email address is already used! Please log in on the left side with your email address or use another address.');
-      res.render('login', locals);
+      globals.users.authenticate(email, password, function (user) {
+        if (user) {
+          req.session.user = user;
+          res.redirect('/dashboard');
+        }
+        else {
+          res.flash('error', 'Either the username or password were wrong! Please try again.');
+          var locals = {user: req.session.user || ''};
+          res.render('login', locals);
+        }
+      });
     }
     else if (user) {
       req.session.user = user;
