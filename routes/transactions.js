@@ -57,10 +57,19 @@ exports.transactionAdded = function (req, res) {
       globals.accounts.setBalanceForTransaction(req.session.user.user, newTransaction, function(success) {
         success ? callback() : callback({err: 'We could not set the new balance.'});
       });
+    },
+    function addTagsToDB(callback) {
+      globals.async.forEach(transTags, function(tag, callback) {
+        globals.tags.saveTag(req.session.user.user, tag, transType, function (success) {
+          success ? callback() : callback({err: 'We could not save a tag.'});
+        });
+      }, function (err) {
+        err ? callback({err: 'We could not save all new tags.'}) : callback();
+      });
     }
   ], function (err) {
     if (err) {
-      res.flash('error', 'Unfortunately there was an error while adding your transaction! Please try again later.');
+      res.flash('error', 'Unfortunately there was an error while adding your transaction: ' + err.err);
     }
     else {
       res.flash('success', 'The transaction has been added successfully!');

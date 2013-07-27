@@ -26,12 +26,12 @@ exports.tagOverview = function (req, res) {
 exports.tagAdded = function (req, res) {
   var tagName = globals.helpers.sanitizeForJSON(req.body.tagNameInput);
   var tagType = globals.helpers.sanitizeForJSON(req.body.tagTypeDropdown);
-  globals.tags.addTag(req.session.user.user, tagName, tagType, function (success) {
+  globals.tags.saveTag(req.session.user.user, tagName, tagType, function (success) {
     if (success) {
       res.flash('success', 'The tag has been added.');
     }
     else {
-      res.flash('error', 'The tag could not be added. Please try again later.');
+      res.flash('error', 'The tag could not be added.');
     }
     res.redirect('/transactions/1');
   });

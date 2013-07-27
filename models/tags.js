@@ -12,27 +12,26 @@ module.exports.getAllTags = function (aLogin, aCallback) {
   });
 };
 
-module.exports.addTag = function (aLogin, aTagName, aTagType, aCallback) {
+module.exports.saveTag = function (aLogin, aTagName, aTagType, aCallback) {
   globals.db.collection('tags', function (err, collection) {
-    collection.findOne({user: aLogin, name: aTagName}, function (err, foundTag) {
+    collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
       if (!foundTag) {
-        var newTag = { user: aLogin, name: aTagName, type: aTagType };
-        collection.insert(newTag, function (err, result) {
+        collection.insert({user: aLogin, name: aTagName, type: aTagType}, function (err, result) {
           err ? aCallback(null) : aCallback(true);
         });
       }
       else {
-        aCallback(null);
+        aCallback(true);
       }
     });
   });
 };
 
-module.exports.deleteTag = function (aLogin, aTagName, aCallback) {
+module.exports.deleteTag = function (aLogin, aTagName, aTagType, aCallback) {
   globals.db.collection('tags', function (err, collection) {
-    collection.findOne({user: aLogin, name: aTagName}, function (err, foundTag) {
+    collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
       if (foundTag) {
-        collection.remove({user: aLogin, name: aTagName}, function (err) {
+        collection.remove({user: aLogin, name: aTagName, type: aTagType}, function (err) {
           err ? aCallback(null) : aCallback(true);
         });
       }
