@@ -80,32 +80,38 @@ exports.authenticated = function (req, res) {
 exports.registered = function (req, res) {
   var email = globals.helpers.sanitizeForJSON(req.body.emailInputReg);
   var password = globals.helpers.sanitizeForJSON(req.body.passwordInputReg);
-  globals.users.create(email, password, function (user) {
-    var locals = {user: req.session.user || ''};
-    if (user === 'EXISTS') {
-      globals.users.authenticate(email, password, function (user) {
-        if (user) {
-          req.session.user = user;
-          res.redirect('/dashboard');
-        }
-        else {
-          res.flash('error', 'Either the username or password were wrong! Please try again.');
-          var locals = {user: req.session.user || ''};
-          res.render('login', locals);
-        }
-      });
-    }
-    else if (user) {
-      req.session.user = user;
-      req.session.user.isNew = true;
-      globals.users.startActivationProcess(email, function(success) {});
-      res.redirect('/dashboard');
-    }
-    else {
-      res.flash('error', 'The user could not be created. Please try again.');
-      res.render('login', locals);
-    }
-  });
+  var confirmPassword = globals.helpers.sanitizeForJSON(req.body.passwordConfirmInputReg);
+  var locals = {user: req.session.user || ''};
+  if (password === confirmPassword) {
+    globals.users.create(email, password, function (user) {
+      if (user === 'EXISTS') {
+        globals.users.authenticate(email, password, function (user) {
+          if (user) {
+            req.session.user = user;
+            res.redirect('/dashboard');
+          }
+          else {
+            res.flash('error', 'Either the username or password were wrong! Please try again.');
+            res.render('login', locals);
+          }
+        });
+      }
+      else if (user) {
+        req.session.user = user;
+        req.session.user.isNew = true;
+        globals.users.startActivationProcess(email, function(success) {});
+        res.redirect('/dashboard');
+      }
+      else {
+        res.flash('error', 'The user could not be created. Please try again.');
+        res.render('login', locals);
+      }
+    });
+  }
+  else {
+    res.flash('error', 'The passwords did not match! Please try again.');
+    res.render('login', locals);
+  }
 };
 
 exports.activated = function (req, res) {
