@@ -42,6 +42,11 @@ exports.userDeleted = function (req, res) {
       globals.transactions.deleteAllTransactions(req.session.user.user, function (success) {
         success ? callback() : callback({err: 'We could not remove the transactions.'});
       });
+    },
+    function deletePasswordResetsAndActivation(callback) {
+      globals.users.deleteAllTemporaryCodes(req.session.user.user, function (success) {
+        success ? callback() : callback({err: 'We could not delete all temporary data.'});
+      });
     }
   ], function (err) {
     if (err) {

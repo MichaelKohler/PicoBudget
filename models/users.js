@@ -70,6 +70,27 @@ module.exports.startActivationProcess = function (aLogin, aCallback) {
   });
 };
 
+module.exports.deleteAllTemporaryCodes = function (aLogin, aCallback) {
+  globals.async.parallel([
+    function deleteAllActivationCodes(callback) {
+      globals.db.collection('activation', function (err, collection) {
+        collection.remove({user: aLogin}, function (err) {
+          err ? callback({err: 'We could not remove all activation codes!'}) : callback();
+        });
+      });
+    },
+    function deleteAllPasswordResets(callback) {
+      globals.db.collection('passwordreset', function (err, collection) {
+        collection.remove({user: aLogin}, function (err) {
+          err ? callback({err: 'We could not remove all activation codes!'}) : callback();
+        });
+      });
+    }
+  ], function (err) {
+    err ? aCallback(null) : aCallback(true);
+  });
+};
+
 module.exports.activate = function (aCode, aCallback) {
   globals.db.collection('activation', function (err, collection) {
     collection.findOne({code: aCode}, function (err, entry) {
