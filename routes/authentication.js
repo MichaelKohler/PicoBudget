@@ -12,6 +12,55 @@ exports.login = function (req, res) {
   }
 };
 
+exports.forgotPassword = function (req, res) {
+  var locals = {user: req.session.user || ''};
+  res.render('forgotPassword', locals);
+};
+
+exports.sendResetPasswordMail = function (req, res) {
+  var email = globals.helpers.sanitizeForJSON(req.body.emailInput);
+  globals.users.checkIfUserExists(email, function (success) {
+    if (success) {
+      globals.users.sendNewPassword(email, function (success) {
+        res.flash('success', 'The reset password email has been sent to your email address.');
+        res.redirect('/forgotPassword');
+      });
+    }
+    else {
+      res.flash('error', 'The password reset request failed. Please get in touch with us.');
+      res.redirect('/forgotPassword');
+    }
+  });
+};
+
+exports.newPassword = function (req, res) {
+  var locals = {user: req.session.user || ''};
+  locals.code = globals.helpers.sanitizeForJSON(req.params.code);
+  res.render('newPassword', locals);
+};
+
+exports.saveNewPassword = function (req, res) {
+  var code = globals.helpers.sanitizeForJSON(req.body.codeInput);
+  var password = globals.helpers.sanitizeForJSON(req.body.passwordInput);
+  var confirmPassword = globals.helpers.sanitizeForJSON(req.body.confirmPasswordInput);
+  if (password === confirmPassword) {
+    globals.users.saveNewPasswordForCode(code, password, function (success) {
+      if (success) {
+        res.flash('success', 'The password reset was successful. Please login with your new password.');
+        res.redirect('/login');
+      }
+      else {
+        res.flash('error', 'The password reset failed. Please get in touch with us.');
+        res.redirect('/newPassword/' + code);
+      }
+    });
+  }
+  else {
+    res.flash('error', 'The password reset failed. Did your password match?');
+    res.redirect('/newPassword/' + code);
+  }
+};
+
 exports.authenticated = function (req, res) {
   var email = globals.helpers.sanitizeForJSON(req.body.emailInput);
   var password = globals.helpers.sanitizeForJSON(req.body.passwordInput);

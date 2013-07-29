@@ -79,6 +79,94 @@ module.exports.activate = function (aCode, aCallback) {
   });
 };
 
+module.exports.checkIfUserExists = function (aMail, aCallback) {
+  globals.db.collection('users', function (err, collection) {
+    collection.findOne({user: aMail}, function (err, user) {
+      user ? aCallback(true) : aCallback(null);
+    });
+  });
+};
+
+module.exports.sendNewPassword = function (aMail, aCallback) {
+  var generatedCode = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+    return v.toString(16);
+  });
+  globals.db.collection('passwordreset', function (err, collection) {
+    collection.insert({user: aMail, code: generatedCode}, function (err) {
+      var smtpTransport = globals.nodemailer.createTransport('SMTP',{
+        service: 'Gmail',
+        auth: {
+          user: 'mkohler@picobudget.com',
+          pass: 'ger4dyxjer9885gc'
+        }
+      });
+      var messageText = '<p>Hi there,<br /><br />somebody just did a password recovery for your email address on PicoBudget.com! ' +
+        'If this was you, click on the following link and set a new password: <a href=\'http://www.picobudget.com/newPassword/' +
+        generatedCode + '\'>http://www.picobudget.com/newPassword/' + generatedCode + '</a></p>' +
+        '<p>If this was not you, you can ignore this mail and continue to use our services.</p>' +
+        '<p>We hope you enjoy our product. If you have any questions, feel free to contact us at servicedesk@picobudget.com.</p>' +
+        '<p>Have a nice day,<br />Michael Kohler<br />Founder PicoBudget.com</p>';
+      var mailOptions = {
+        from: 'PicoBudget.com <no-reply@picobudget.com>',
+        to: aMail,
+        subject: "PicoBudget.com - Password reset request",
+        html: messageText
+      };
+      smtpTransport.sendMail(mailOptions, function(err, response) {
+        smtpTransport.close();
+        aCallback(true);
+      });
+    });
+  });
+};
+
+module.exports.saveNewPasswordForCode = function (aCode, aPassword, aCallback) {
+  var account = '';
+  globals.async.series([
+    function getAccountForCode(callback) {
+      globals.db.collection('passwordreset', function (err, collection) {
+        collection.findOne({code: aCode}, function (err, codeItem) {
+          if (!err) {
+            account = codeItem.user;
+            callback();
+          }
+          else {
+            callback({err: 'Could not find account for code!'});
+          }
+        });
+      });
+    },
+    function savePasswordForAccount(callback) {
+      globals.db.collection('users', function (err, collection) {
+        collection.findOne({user: account}, function (err, user) {
+          var salt = globals.bcrypt.genSaltSync(10);
+          var hash = globals.bcrypt.hashSync(aPassword, salt);
+          collection.update({user: account}, {$set: {pw: hash}}, function (err) {
+            err ? callback({err: 'Could not update password for account!'}) : callback();
+          });
+        });
+      });
+    },
+    function removeCode(callback) {
+      globals.db.collection('passwordreset', function (err, collection) {
+        collection.findOne({code: aCode}, function (err, codeItem) {
+          if (!err) {
+            collection.remove({code: aCode}, function (err) {
+              err ? callback({err: 'Could not remove code!'}) : callback();
+            });
+          }
+          else {
+            callback({err: 'Could not remove code!'});
+          }
+        });
+      });
+    }
+  ], function (err) {
+    err ? aCallback(null) : aCallback(true);
+  });
+};
+
 module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aPrefCurr, aCallback) {
   globals.db.collection('users', function (err, collection) {
     collection.findOne({user: aLogin}, function (err, user) {

@@ -271,6 +271,34 @@
       return state;
     },
 
+    validateForgotPassword: function pb_validateForgotPassword() {
+      var state = true;
+
+      if ($('#emailInput').val() === '') {
+        $('#cg-email').addClass('error');
+        state = false;
+      } else {
+        $('#cg-email').removeClass('error');
+      }
+
+      return state;
+    },
+
+    validateNewPassword: function pb_validateNewPassword() {
+      var state = true;
+
+      if ($('#passwordInput').val() === '' || $('#passwordInput').val() !== $('#confirmPasswordInput').val()) {
+        state = false;
+        $('#cg-password').addClass('error');
+        $('#cg-confirmpassword').addClass('error');
+      } else {
+        $('#cg-password').removeClass('error');
+        $('#cg-confirmpassword').removeClass('error');
+      }
+
+      return state;
+    },
+
     // SETTINGS
     // ===================
     validateSettings: function pb_validateSettings() {

@@ -60,6 +60,10 @@
   server.post('/registered', authenticationRoutes.registered);
   server.get('/logout', authenticationRoutes.logout);
   server.get('/activate/:code', authenticationRoutes.activated);
+  server.get('/forgotPassword', authenticationRoutes.forgotPassword);
+  server.post('/resetPassword', authenticationRoutes.sendResetPasswordMail);
+  server.get('/newPassword/:code', authenticationRoutes.newPassword);
+  server.post('/savePassword', authenticationRoutes.saveNewPassword);
 
   var mainsiteRoutes = require('./routes/mainsite.js');
   server.get('/', mainsiteRoutes.index);
