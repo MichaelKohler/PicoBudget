@@ -58,7 +58,7 @@ module.exports.startActivationProcess = function (aLogin, aCallback) {
       var mailOptions = {
         from: 'PicoBudget.com <no-reply@picobudget.com>',
         to: aLogin,
-        subject: "Welcome to PicoBudget.com - Please activate your account",
+        subject: 'Welcome to PicoBudget.com - Please activate your account',
         html: messageText
       };
       smtpTransport.sendMail(mailOptions, function(err, response) {
@@ -97,8 +97,8 @@ module.exports.sendNewPassword = function (aMail, aCallback) {
       var smtpTransport = globals.nodemailer.createTransport('SMTP',{
         service: 'Gmail',
         auth: {
-          user: 'mkohler@picobudget.com',
-          pass: 'ger4dyxjer9885gc'
+          user: 'YOUREMAILADDRESSHERE!',
+          pass: 'YOURPASSWORDHERE!'
         }
       });
       var messageText = '<p>Hi there,<br /><br />somebody just did a password recovery for your email address on PicoBudget.com! ' +
@@ -110,7 +110,7 @@ module.exports.sendNewPassword = function (aMail, aCallback) {
       var mailOptions = {
         from: 'PicoBudget.com <no-reply@picobudget.com>',
         to: aMail,
-        subject: "PicoBudget.com - Password reset request",
+        subject: 'PicoBudget.com - Password reset request',
         html: messageText
       };
       smtpTransport.sendMail(mailOptions, function(err, response) {
