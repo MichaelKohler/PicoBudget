@@ -40,8 +40,9 @@ module.exports.startActivationProcess = function (aLogin, aCallback) {
     var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
     return v.toString(16);
   });
+  var dateNow = new Date();
   globals.db.collection('activation', function (err, collection) {
-    collection.insert({user: aLogin, code: generatedCode}, function (err) {
+    collection.insert({user: aLogin, code: generatedCode, date: dateNow}, function (err) {
       var smtpTransport = globals.nodemailer.createTransport('SMTP',{
         service: 'Gmail',
         auth: {
@@ -92,8 +93,9 @@ module.exports.sendNewPassword = function (aMail, aCallback) {
     var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
     return v.toString(16);
   });
+  var dateNow = new Date();
   globals.db.collection('passwordreset', function (err, collection) {
-    collection.insert({user: aMail, code: generatedCode}, function (err) {
+    collection.insert({user: aMail, code: generatedCode, date: dateNow}, function (err) {
       var smtpTransport = globals.nodemailer.createTransport('SMTP',{
         service: 'Gmail',
         auth: {
