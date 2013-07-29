@@ -202,7 +202,7 @@ module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aP
 module.exports.removeUser = function (aLogin, aPassword, aCallback) {
   globals.db.collection('users', function (err, collection) {
     collection.findOne({user: aLogin}, function (err, user) {
-      if (user.pw === aPassword) {
+      if (globals.bcrypt.compareSync(aPassword, user.pw)) {
         collection.remove({user: aLogin}, function (err) {
           err ? aCallback(null) : aCallback(true);
         });
