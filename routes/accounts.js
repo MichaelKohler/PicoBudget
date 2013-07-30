@@ -3,13 +3,20 @@
 var globals = require('../globals');
 
 exports.accounts = function (req, res) {
+  var locals = {user: req.session.user || ''};
+  locals.editmode = globals.helpers.sanitize(req.query.editAccount || '');
+  if (locals.editmode !== '') {
+    locals.editname = globals.helpers.sanitize(req.query.n || '');
+    locals.editbalance = globals.helpers.sanitize(req.query.b || '');
+  }
+  if (locals.deletemode !== '') {
+    locals.deletename = globals.helpers.sanitize(req.query.n || '');
+  }
+  locals.deletemode = globals.helpers.sanitize(req.query.deleteAccount || '');
   globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
     if (accountList) {
-      var sum = globals.helpers.sumAccountBalance(accountList);
-      var locals = {};
-      locals.user = req.session.user || '';
       locals.accounts = accountList;
-      locals.balanceSum = sum;
+      locals.balanceSum = globals.helpers.sumAccountBalance(accountList);
       res.render('accounts', locals);
     }
   });
@@ -19,7 +26,7 @@ exports.accountOverview = function (req, res) {
   var transpage = parseInt(globals.helpers.sanitize(req.params.transpage), 10);
   var name = globals.helpers.sanitize(req.params.name);
   var limit = 10;
-  var locals = { user: req.session.user || '' };
+  var locals = {user: req.session.user || ''};
   globals.async.parallel([
     function getAccount(callback) {
       globals.accounts.getAccount(req.session.user.user, name, function (account) {

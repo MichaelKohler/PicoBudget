@@ -61,34 +61,35 @@ html(lang='en')
                 - else
                   p There are no accounts to be displayed.
 
-              h3(id='editaccounttitle') Edit account
-              form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited', onsubmit="return PBHelperTools.validateEditAccount();")
-                fieldset
-                  .control-group#cg-editname
-                    label.control-label(for='editNameInput') Name
-                    .controls
-                      input.input-xlarge#editNameInput(type='text', name='editNameInput')
-                  .control-group#cg-hiddenoldname
-                    .controls
-                      input.input-xlarge#hiddenOldName(type='hidden', name='hiddenOldName')
-                  .control-group#cg-editinitialbalance
-                    label.control-label(for='editInitBalanceInput') Balance
-                    .controls
-                      input.input-xlarge#editInitBalanceInput(type='text', name='editInitBalanceInput')
-                  .control-group
-                  .form-actions
-                    button.btn.btn-info(type='submit') Edit account
-
-              h2(id='deleteaccounttitle') Delete account
-              form.form-horizontal(id='deleteaccountform', method='POST', action='/accountDeleted', onsubmit="return PBHelperTools.validateDeleteAccount();")
-                fieldset
-                  .control-group#cg-deletename
-                    label.control-label(for='deleteNameInput') Name
-                    .controls
-                      input.input-xlarge.uneditable-input#deleteNameInput(type='text', name='deleteNameInput')
-                  .control-group
-                  .form-actions
-                    button.btn.btn-warning(type='submit') Delete this account!
+              - if (locals.editmode !== '')
+                h3(id='editaccounttitle') Edit account
+                form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited', onsubmit="return PBHelperTools.validateEditAccount();")
+                  fieldset
+                    .control-group#cg-editname
+                      label.control-label(for='editNameInput') Name
+                      .controls
+                        input.input-xlarge#editNameInput(type='text', name='editNameInput', value='#{locals.editname}')
+                    .control-group#cg-hiddenoldname
+                      .controls
+                        input.input-xlarge#hiddenOldName(type='hidden', name='hiddenOldName', value='#{locals.editname}')
+                    .control-group#cg-editinitialbalance
+                      label.control-label(for='editInitBalanceInput') Balance
+                      .controls
+                        input.input-xlarge#editInitBalanceInput(type='text', name='editInitBalanceInput', value='#{locals.editbalance}')
+                    .control-group
+                    .form-actions
+                      button.btn.btn-info(type='submit') Edit account
+              - if (locals.deletemode !== '')
+                h3(id='deleteaccounttitle') Delete account
+                form.form-horizontal(id='deleteaccountform', method='POST', action='/accountDeleted', onsubmit="return PBHelperTools.validateDeleteAccount();")
+                  fieldset
+                    .control-group#cg-deletename
+                      label.control-label(for='deleteNameInput') Name
+                      .controls
+                        input.input-xlarge.uneditable-input#deleteNameInput(type='text', name='deleteNameInput', value='#{locals.deletename}')
+                    .control-group
+                    .form-actions
+                      button.btn.btn-warning(type='submit') Delete this account!
             #new
               h3(id='addaccounttitle') Add a new account
               form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded', onsubmit="return PBHelperTools.validateAddAccount();")
