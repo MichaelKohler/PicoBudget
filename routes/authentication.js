@@ -18,7 +18,7 @@ exports.forgotPassword = function (req, res) {
 };
 
 exports.sendResetPasswordMail = function (req, res) {
-  var email = globals.helpers.sanitizeForJSON(req.body.emailInput);
+  var email = globals.helpers.sanitize(req.body.emailInput);
   globals.users.checkIfUserExists(email, function (success) {
     if (success) {
       globals.users.sendNewPassword(email, function (success) {
@@ -35,14 +35,14 @@ exports.sendResetPasswordMail = function (req, res) {
 
 exports.newPassword = function (req, res) {
   var locals = {user: req.session.user || ''};
-  locals.code = globals.helpers.sanitizeForJSON(req.params.code);
+  locals.code = globals.helpers.sanitize(req.params.code);
   res.render('newPassword', locals);
 };
 
 exports.saveNewPassword = function (req, res) {
-  var code = globals.helpers.sanitizeForJSON(req.body.codeInput);
-  var password = globals.helpers.sanitizeForJSON(req.body.passwordInput);
-  var confirmPassword = globals.helpers.sanitizeForJSON(req.body.confirmPasswordInput);
+  var code = globals.helpers.sanitize(req.body.codeInput);
+  var password = globals.helpers.sanitize(req.body.passwordInput);
+  var confirmPassword = globals.helpers.sanitize(req.body.confirmPasswordInput);
   if (password === confirmPassword) {
     globals.users.saveNewPasswordForCode(code, password, function (success) {
       if (success) {
@@ -62,8 +62,8 @@ exports.saveNewPassword = function (req, res) {
 };
 
 exports.authenticated = function (req, res) {
-  var email = globals.helpers.sanitizeForJSON(req.body.emailInput);
-  var password = globals.helpers.sanitizeForJSON(req.body.passwordInput);
+  var email = globals.helpers.sanitize(req.body.emailInput);
+  var password = globals.helpers.sanitize(req.body.passwordInput);
   globals.users.authenticate(email, password, function (user) {
     if (user) {
       req.session.user = user;
@@ -78,9 +78,9 @@ exports.authenticated = function (req, res) {
 };
 
 exports.registered = function (req, res) {
-  var email = globals.helpers.sanitizeForJSON(req.body.emailInputReg);
-  var password = globals.helpers.sanitizeForJSON(req.body.passwordInputReg);
-  var confirmPassword = globals.helpers.sanitizeForJSON(req.body.passwordConfirmInputReg);
+  var email = globals.helpers.sanitize(req.body.emailInputReg);
+  var password = globals.helpers.sanitize(req.body.passwordInputReg);
+  var confirmPassword = globals.helpers.sanitize(req.body.passwordConfirmInputReg);
   var locals = {user: req.session.user || ''};
   if (password === confirmPassword) {
     globals.users.create(email, password, function (user) {

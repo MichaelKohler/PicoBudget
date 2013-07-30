@@ -3,9 +3,9 @@
 var globals = require('../globals');
 
 exports.tagOverview = function (req, res) {
-  var tagname = req.params.tagname;
-  var tagtype = req.params.tagtype;
-  var transpage = parseInt(req.params.transpage, 10);
+  var tagname = globals.helpers.sanitize(req.params.tagname);
+  var tagtype = globals.helpers.sanitize(req.params.tagtype);
+  var transpage = parseInt(globals.helpers.sanitize(req.params.transpage), 10);
   var limit = 10;
   globals.transactions.getAllTransactionsByTag(req.session.user.user, tagname, function(allTransactionsList) {
     if (allTransactionsList) {
@@ -25,8 +25,8 @@ exports.tagOverview = function (req, res) {
 };
 
 exports.tagAdded = function (req, res) {
-  var tagName = globals.helpers.sanitizeForJSON(req.body.tagNameInput);
-  var tagType = globals.helpers.sanitizeForJSON(req.body.tagTypeDropdown);
+  var tagName = globals.helpers.sanitize(req.body.tagNameInput);
+  var tagType = globals.helpers.sanitize(req.body.tagTypeDropdown);
   globals.tags.saveTag(req.session.user.user, tagName, tagType, function (success) {
     if (success) {
       res.flash('success', 'The tag has been added.');

@@ -8,9 +8,9 @@ exports.settings = function (req, res) {
 };
 
 exports.settingsChanged = function (req, res) {
-  var oldPW = globals.helpers.sanitizeForJSON(req.body.oldPasswordInput);
-  var newPW = globals.helpers.sanitizeForJSON(req.body.newPasswordInput);
-  var prefCurr = globals.helpers.sanitizeForJSON(req.body.prefCurrDropdown);
+  var oldPW = globals.helpers.sanitize(req.body.oldPasswordInput);
+  var newPW = globals.helpers.sanitize(req.body.newPasswordInput);
+  var prefCurr = globals.helpers.sanitize(req.body.prefCurrDropdown);
 
   globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, function (updatedUser) {
     var locals = {user: req.session.user || ''};
@@ -29,7 +29,7 @@ exports.userDeleted = function (req, res) {
   var locals = {};
   globals.async.series([
     function deleteUser(callback) {
-      globals.users.removeUser(req.session.user.user, globals.helpers.sanitizeForJSON(req.body.passwordInput), function (success) {
+      globals.users.removeUser(req.session.user.user, globals.helpers.sanitize(req.body.passwordInput), function (success) {
         success ? callback() : callback({err: 'We could not remove the user.'});
       });
     },

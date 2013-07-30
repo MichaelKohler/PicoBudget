@@ -16,18 +16,19 @@ exports.accounts = function (req, res) {
 };
 
 exports.accountOverview = function (req, res) {
-  var transpage = parseInt(req.params.transpage, 10);
+  var transpage = parseInt(globals.helpers.sanitize(req.params.transpage), 10);
+  var name = globals.helpers.sanitize(req.params.name);
   var limit = 10;
   var locals = { user: req.session.user || '' };
   globals.async.parallel([
     function getAccount(callback) {
-      globals.accounts.getAccount(req.session.user.user, req.params.name, function (account) {
+      globals.accounts.getAccount(req.session.user.user, name, function (account) {
         locals.account = account;
         callback();
       });
     },
     function getTransByAccount(callback) {
-      globals.transactions.getTransactionsByAccount(req.session.user.user, req.params.name, function (allTransactionsList) {
+      globals.transactions.getTransactionsByAccount(req.session.user.user, name, function (allTransactionsList) {
         locals.transactions = allTransactionsList;
         locals.page = transpage;
         locals.needsMorePages = (allTransactionsList.length - transpage * limit > 0);
@@ -40,9 +41,9 @@ exports.accountOverview = function (req, res) {
 };
 
 exports.accountAdded = function (req, res) {
-  var accName = globals.helpers.sanitizeForJSON(req.body.nameInput);
-  var accCurrency = globals.helpers.sanitizeForJSON(req.body.currDropdown);
-  var accBalance = globals.helpers.sanitizeForJSON(req.body.initBalanceInput);
+  var accName = globals.helpers.sanitize(req.body.nameInput);
+  var accCurrency = globals.helpers.sanitize(req.body.currDropdown);
+  var accBalance = globals.helpers.sanitize(req.body.initBalanceInput);
   var newAccount = globals.accounts.Account.initFull(accName, accCurrency, accBalance);
   globals.accounts.addAccount(req.session.user.user, newAccount, function (success) {
     if (success) {
@@ -56,9 +57,9 @@ exports.accountAdded = function (req, res) {
 };
 
 exports.accountEdited = function (req, res) {
-  var oldName = globals.helpers.sanitizeForJSON(req.body.hiddenOldName);
-  var accName = globals.helpers.sanitizeForJSON(req.body.editNameInput);
-  var accBalance = globals.helpers.sanitizeForJSON(req.body.editInitBalanceInput);
+  var oldName = globals.helpers.sanitize(req.body.hiddenOldName);
+  var accName = globals.helpers.sanitize(req.body.editNameInput);
+  var accBalance = globals.helpers.sanitize(req.body.editInitBalanceInput);
   var editedAccount = globals.accounts.Account.init(accName, accBalance);
   globals.accounts.editAccount(req.session.user.user, oldName, editedAccount, function (success) {
     if (success) {
@@ -72,7 +73,7 @@ exports.accountEdited = function (req, res) {
 };
 
 exports.accountDeleted = function (req, res) {
-  var accName = globals.helpers.sanitizeForJSON(req.body.deleteNameInput);
+  var accName = globals.helpers.sanitize(req.body.deleteNameInput);
   globals.accounts.deleteAccount(req.session.user.user, accName, function (success) {
     if (success) {
       res.flash('success', 'The account has been deleted.');

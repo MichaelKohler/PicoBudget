@@ -1,5 +1,7 @@
 'use strict';
 
+var validator = require('validator');
+
 module.exports.formatAmount = function (aAmount) {
   var fixedAmount = parseFloat(aAmount).toFixed(2);
   var formattedAmount = fixedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\'');
@@ -14,6 +16,8 @@ module.exports.sumAccountBalance = function (aAccounts) {
   return sum;
 };
 
-module.exports.sanitizeForJSON = function (aInput) {
-  return aInput.replace('{', '').replace('}', '');
+module.exports.sanitize = function (aInput) {
+  var sanitizedForJSON = aInput.replace('{', '').replace('}', '');
+  var sanitized = validator.sanitize(sanitizedForJSON).xss();
+  return sanitized;
 };

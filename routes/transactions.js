@@ -3,7 +3,7 @@
 var globals = require('../globals');
 
 exports.transactions = function (req, res) {
-  var transpage = parseInt(req.params.transpage, 10);
+  var transpage = parseInt(globals.helpers.sanitize(req.params.transpage), 10);
   var locals = { user: req.session.user || '', page: transpage };
   var limit = 10;
   globals.async.parallel([
@@ -40,12 +40,12 @@ exports.transactions = function (req, res) {
 };
 
 exports.transactionAdded = function (req, res) {
-  var transID = parseInt(globals.helpers.sanitizeForJSON(req.body.lastTransIDInput), 10) + 1;
-  var transAcc = globals.helpers.sanitizeForJSON(req.body.transAccDropdown);
-  var transType = globals.helpers.sanitizeForJSON(req.body.transArtDropdown);
-  var transName = globals.helpers.sanitizeForJSON(req.body.transNameInput);
-  var transTags = globals.helpers.sanitizeForJSON(req.body.transTagsInput).split(' ');
-  var transAmount = parseFloat(globals.helpers.sanitizeForJSON(req.body.transAmountInput));
+  var transID = parseInt(globals.helpers.sanitize(req.body.lastTransIDInput), 10) + 1;
+  var transAcc = globals.helpers.sanitize(req.body.transAccDropdown);
+  var transType = globals.helpers.sanitize(req.body.transArtDropdown);
+  var transName = globals.helpers.sanitize(req.body.transNameInput);
+  var transTags = globals.helpers.sanitize(req.body.transTagsInput).split(' ');
+  var transAmount = parseFloat(globals.helpers.sanitize(req.body.transAmountInput));
   var newTransaction = globals.transactions.Transaction.init(transID, transAcc, transType, transName, transTags, transAmount);
   globals.async.series([
     function addTransaction(callback) {
@@ -79,10 +79,10 @@ exports.transactionAdded = function (req, res) {
 };
 
 exports.transferAdded = function (req, res) {
-  var transID = parseInt(globals.helpers.sanitizeForJSON(req.body.lastTransIDInput), 10) + 1;
-  var transFromAcc = globals.helpers.sanitizeForJSON(req.body.transAccFromDropdown);
-  var transToAcc = globals.helpers.sanitizeForJSON(req.body.transAccToDropdown);
-  var transAmount = parseFloat(globals.helpers.sanitizeForJSON(req.body.transferAmountInput));
+  var transID = parseInt(globals.helpers.sanitize(req.body.lastTransIDInput), 10) + 1;
+  var transFromAcc = globals.helpers.sanitize(req.body.transAccFromDropdown);
+  var transToAcc = globals.helpers.sanitize(req.body.transAccToDropdown);
+  var transAmount = parseFloat(globals.helpers.sanitize(req.body.transferAmountInput));
   var newTransfer = globals.transactions.Transaction.initTransfer(transID, transFromAcc, transToAcc, transAmount);
   globals.async.series([
     function addTransfer(callback) {
