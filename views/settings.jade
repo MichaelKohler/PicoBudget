@@ -10,77 +10,67 @@ html(lang='en')
         .row
           include includes/dashboard_sidebar.jade
 
-          .row
-            .span10
-              h1 Settings
-              hr
-              .alert-error.alert.hidden#fillInAllInfo
-                strong Error!
+          .col-lg-10
+            h1 Settings
+            hr
+            .alert-error.alert.hidden#fillInAllInfo
+              strong Error!
+              br
+              p Please fill in all the information!
+            .alert-error.alert.hidden#passwordsDidntMatch
+              strong Error!
+              br
+              p The passwords didn't match.
+            - if (flash.success !== undefined)
+              .alert-success.alert#success
+                strong Well done!
                 br
-                p Please fill in all the information!
-              .alert-error.alert.hidden#passwordsDidntMatch
-                strong Error!
+                p #{flash.success}
+            - if (flash.error !== undefined)
+              .alert-danger.alert#fail
+                strong Oh no..
                 br
-                p The passwords didn't match.
-              - if (flash.success !== undefined)
-                .alert-success.alert#success
-                  strong Well done!
-                  br
-                  p #{flash.success}
-              - if (flash.error !== undefined)
-                .alert-danger.alert#fail
-                  strong Oh no..
-                  br
-                  p #{flash.error}
-              form.form-horizontal(id='settingsform', method='POST', action='/settingsChanged', onsubmit='return PBHelperTools.validateSettings();')
-                fieldset
-                  .control-group#cg-oldpassword
-                    label.control-label(for='oldPasswordInput') Old password
-                    .controls
-                      input.input-xlarge#oldPasswordInput(type='password', name='oldPasswordInput')
-                  .control-group#cg-newpassword
-                    label.control-label(for='newPasswordInput') New password
-                    .controls
-                      input.input-xlarge#newPasswordInput(type='password', name='newPasswordInput')
-                  .control-group#cg-confirmnewpassword
-                    label.control-label(for='confirmNewPasswordInput') Confirm new password
-                    .controls
-                      input.input-xlarge#confirmNewPasswordInput(type='password', name='confirmNewPasswordInput')
-                  .control-group#cg-prefCurr
-                    label.control-label(for='prefCurrDropdown') Preferred currency
-                    .controls
-                      select(name='prefCurrDropdown')
-                        for currency in data.currencies
-                          - if (currency.ISO === locals.user.curr)
-                            option(selected='true', value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
-                          - else
-                            option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
-                  .control-group
-                  .form-actions
-                    button.btn.btn-info(type='submit') Change settings
+                p #{flash.error}
+            form(id='settingsform', method='POST', action='/settingsChanged', onsubmit='return PBHelperTools.validateSettings();')
+              fieldset
+                .form-group#cg-oldpassword
+                  label(for='oldPasswordInput') Old password
+                  input.form-control#oldPasswordInput(type='password', name='oldPasswordInput')
+                .form-group#cg-newpassword
+                  label(for='newPasswordInput') New password
+                  input.form-control#newPasswordInput(type='password', name='newPasswordInput')
+                .form-group#cg-confirmnewpassword
+                  label(for='confirmNewPasswordInput') Confirm new password
+                  input.form-control#confirmNewPasswordInput(type='password', name='confirmNewPasswordInput')
+                .form-group#cg-prefCurr
+                  p Please choose your preferred currency. This will be the default value of all the currency dropdowns in this app.
+                  select.selectpicker(name='prefCurrDropdown')
+                    for currency in data.currencies
+                      - if (currency.ISO === locals.user.curr)
+                        option(selected='true', value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
+                      - else
+                        option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
+                button.btn.btn-success(type='submit') Change settings
         .row
-          .span2(style='text-align:justify; padding-top: 40px;')
+          .col-lg-2(style='text-align:justify; padding-top: 40px;')
             p You can delete your account on the right hand side. We would like you to reconsider it, maybe getting in touch with us to instantly improve your experience would be enough for you? Feel free to contact us!
-          .span10
+          .col-lg-10
+            hr
             h3 Delete account
             hr
             .alert-warning.alert#disclaimer
-              button.close(date-dismiss='alert') ×
               strong Attention!
               br
               - if (locals.user.role == 'premium')
                 p Deleting your account is permanent and deletes all the data which is stored in our database. You will not get any money back if you delete your account.
               - if (locals.user.role == 'user')
                 p Deleting your account is permanent and deletes all the data which is stored in our database.
-             form.form-horizontal(method='POST', action='/userDeleted', onsubmit="return confirm('Are you sure you want to remove all you data from our servers?');")
+             form(method='POST', action='/userDeleted', onsubmit="return confirm('Are you sure you want to remove all you data from our servers?');")
               fieldset
-                .control-group#cg-password
-                  label.control-label(for='passwordInput') Password
-                  .controls
-                    input.input-xlarge#passwordInput(type='password', name='passwordInput')
-                .control-group
-                .form-actions
-                  button.btn.btn-danger(type='submit') Remove account!
+                .form-group#cg-password
+                  label(for='passwordInput') Password
+                  input.form-control#passwordInput(type='password', name='passwordInput')
+                button.btn.btn-danger(type='submit') Remove account!
        include includes/footer.jade
 
     include includes/libs.jade

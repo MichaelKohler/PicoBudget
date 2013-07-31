@@ -10,7 +10,7 @@ html(lang='en')
         .row
           include includes/dashboard_sidebar.jade
 
-          .span10
+          .col-lg-10
             h1 Accounts
             ul(style='padding-top:20px;').nav.nav-tabs#tabnav
               li#overviewlink
@@ -63,57 +63,43 @@ html(lang='en')
 
               - if (locals.editmode !== '')
                 h3(id='editaccounttitle') Edit account
-                form.form-horizontal(id='editaccountform', method='POST', action='/accountEdited', onsubmit="return PBHelperTools.validateEditAccount();")
+                form(id='editaccountform', method='POST', action='/accountEdited', onsubmit="return PBHelperTools.validateEditAccount();")
                   fieldset
-                    .control-group#cg-editname
-                      label.control-label(for='editNameInput') Name
-                      .controls
-                        input.input-xlarge#editNameInput(type='text', name='editNameInput', value='#{locals.editname}')
-                    .control-group#cg-hiddenoldname
-                      .controls
-                        input.input-xlarge#hiddenOldName(type='hidden', name='hiddenOldName', value='#{locals.editname}')
-                    .control-group#cg-editinitialbalance
-                      label.control-label(for='editInitBalanceInput') Balance
-                      .controls
-                        input.input-xlarge#editInitBalanceInput(type='text', name='editInitBalanceInput', value='#{locals.editbalance}')
-                    .control-group
-                    .form-actions
-                      button.btn.btn-info(type='submit') Edit account
+                    .form-group#cg-editname
+                      label(for='editNameInput') Name
+                      input.form-control#editNameInput(type='text', name='editNameInput', value='#{locals.editname}')
+                    .form-group#cg-hiddenoldname
+                      input.form-control#hiddenOldName(type='hidden', name='hiddenOldName', value='#{locals.editname}')
+                    .form-group#cg-editinitialbalance
+                      label(for='editInitBalanceInput') Balance
+                      input.form-control#editInitBalanceInput(type='text', name='editInitBalanceInput', value='#{locals.editbalance}')
+                    button.btn.btn-success(type='submit') Edit account
               - if (locals.deletemode !== '')
                 h3(id='deleteaccounttitle') Delete account
-                form.form-horizontal(id='deleteaccountform', method='POST', action='/accountDeleted', onsubmit="return PBHelperTools.validateDeleteAccount();")
+                form(id='deleteaccountform', method='POST', action='/accountDeleted', onsubmit="return PBHelperTools.validateDeleteAccount();")
                   fieldset
-                    .control-group#cg-deletename
-                      label.control-label(for='deleteNameInput') Name
-                      .controls
-                        input.input-xlarge.uneditable-input#deleteNameInput(type='text', name='deleteNameInput', value='#{locals.deletename}')
-                    .control-group
-                    .form-actions
-                      button.btn.btn-warning(type='submit') Delete this account!
+                    .form-group#cg-deletename
+                      label(for='deleteNameInput') Name
+                      input.form-control.uneditable-input#deleteNameInput(type='text', name='deleteNameInput', value='#{locals.deletename}')
+                    button.btn.btn-warning(type='submit') Delete this account!
             #new
               h3(id='addaccounttitle') Add a new account
-              form.form-horizontal(id='addaccountform', method='POST', action='/accountAdded', onsubmit="return PBHelperTools.validateAddAccount();")
+              form(id='addaccountform', method='POST', action='/accountAdded', onsubmit="return PBHelperTools.validateAddAccount();")
                 fieldset
-                  .control-group#cg-name
-                    label.control-label(for='nameInput') Name
-                    .controls
-                      input.input-xlarge#nameInput(type='text', name='nameInput')
-                  .control-group#cg-currency
-                    label.control-label(for='currDropdown') Currency
-                    .controls
-                      select(name='currDropdown')
-                        for currency in data.currencies
-                          - if (currency.ISO === locals.user.curr)
-                            option(value='#{currency.ISO}', selected='true') #{currency.ISO} - #{currency.name}
-                          - else
-                            option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
-                  .control-group#cg-initialbalance
-                    label.control-label(for='initBalanceInput') Initial balance
-                    .controls
-                      input.input-xlarge#initBalanceInput(type='text', name='initBalanceInput')
-                  .control-group
-                  .form-actions
-                    button.btn.btn-info(type='submit') Add account
+                  .form-group#cg-name
+                    label(for='nameInput') Name
+                    input.form-control#nameInput(type='text', name='nameInput')
+                  .form-group#cg-currency
+                    select.selectpicker(name='currDropdown')
+                      for currency in data.currencies
+                        - if (currency.ISO === locals.user.curr)
+                          option(value='#{currency.ISO}', selected='true') #{currency.ISO} - #{currency.name}
+                        - else
+                          option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
+                  .form-group#cg-initialbalance
+                    label(for='initBalanceInput') Initial balance
+                    input.form-control#initBalanceInput(type='text', name='initBalanceInput')
+                  button.btn.btn-success(type='submit') Add account
 
       include includes/footer.jade
 

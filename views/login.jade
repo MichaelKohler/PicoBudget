@@ -34,43 +34,36 @@ html(lang='en')
               br
               p #{flash.info}
           .row
-            .span6
+            .col-lg-6
               h1 Login
               hr
               p If you already have an account, you can sign in here.
-              form.form-horizontal(id='loginform', method='POST', action='/authenticated', onsubmit="return PBHelperTools.validateLogin();")
+              form(id='loginform', method='POST', action='/authenticated', onsubmit="return PBHelperTools.validateLogin();")
                 fieldset
-                  .control-group#cg-email
-                    label.control-label(for='emailInput') eMail
-                    .controls
-                      input.input-xlarge#emailInput(type='email', name='emailInput')
-                  .control-group#cg-password
-                    label.control-label(for='passwordInput') Password
-                    .controls
-                      input.input-xlarge#passwordInput(type='password', name='passwordInput')
-                  a(href='/forgotPassword') I don't remember my password
-                  .control-group
-                  .form-actions
-                    button.btn.btn-info(type='submit') Login
-            .span6
+                  .form-group#cg-email
+                    label(for='emailInput') eMail
+                    input.form-control.col-lg-4#emailInput(type='email', name='emailInput')
+                  .form-group#cg-password
+                    label(for='passwordInput') Password
+                    input.form-control.col-lg-4#passwordInput(type='password', name='passwordInput')
+                  .help-block
+                    a(href='/forgotPassword') I don't remember my password
+                  button.btn.btn-default(type='submit') Login
+            .col-lg-6
               h1 Register for free
               hr
-              form.form-horizontal(id='registrationform', method='POST', action='/registered', onsubmit="return PBHelperTools.validateRegistration();")
+              form(id='registrationform', method='POST', action='/registered', onsubmit="return PBHelperTools.validateRegistration();")
                 fieldset
-                  .control-group#cg-email-reg
-                    label.control-label(for='emailInputReg') eMail
-                    .controls
-                      input.input-xlarge#emailInputReg(type='email', name='emailInputReg')
-                  .control-group#cg-password-reg
-                    label.control-label(for='passwordInputReg') Password
-                    .controls
-                      input.input-xlarge#passwordInputReg(type='password', name='passwordInputReg')
-                  .control-group#cg-passwordconfirm-reg
-                    label.control-label(for='passwordConfirmInputReg') Confirm password
-                    .controls
-                      input.input-xlarge#passwordConfirmInputReg(type='password', name='passwordConfirmInputReg')
-                  .form-actions
-                      button.btn.btn-info(type='submit') Login
+                  .form-group#cg-email-reg
+                    label(for='emailInputReg') eMail
+                    input.form-control#emailInputReg(type='email', name='emailInputReg')
+                  .form-group#cg-password-reg
+                    label(for='passwordInputReg') Password
+                    input.form-control#passwordInputReg(type='password', name='passwordInputReg')
+                  .form-group#cg-passwordconfirm-reg
+                    label(for='passwordConfirmInputReg') Confirm password
+                    input.form-control#passwordConfirmInputReg(type='password', name='passwordConfirmInputReg')
+                  button.btn.btn-default(type='submit') Register
       include includes/footer.jade
 
     include includes/libs.jade

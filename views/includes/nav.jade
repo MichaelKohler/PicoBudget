@@ -1,15 +1,14 @@
 header
       nav
         .navbar.navbar-fixed-top
-          .navbar-inner
-            .container
-              a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+          .container
+              a.btn.btn-default.navbar-btn.navbar-toggle(data-toggle='collapse', data-target='.navbar-responsive-collapse')
                 span.icon-bar
                 span.icon-bar
                 span.icon-bar
-              a.brand(href='') PicoBudget
-              .nav-collapse
-                ul.nav
+              a.navbar-brand(href='') PicoBudget
+              .nav-collapse.collapse.navbar-responsive-collapse
+                ul.nav.navbar-nav
                   li
                     a(href='/') Home
                   - if (!locals.user)
@@ -22,5 +21,5 @@ header
                   - if (locals.user)
                     li
                       a(href='/dashboard') Dashboard
-                button.btn.btn-info.pull-right(id="installbutton") Install as web app
+                button.btn.btn-default.btn-small.navbar-btn.pull-right(id="installbutton") Install as web app
                 #installlabel
