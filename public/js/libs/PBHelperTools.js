@@ -60,17 +60,17 @@
       var state = true;
 
       if ($('#transNameInput').val() ===  '') {
-        $('#cg-name').addClass('error');
+        $('#cg-name').addClass('has-error');
         state = false;
       } else {
-        $('#cg-name').removeClass('error');
+        $('#cg-name').removeClass('has-error');
       }
 
       if ($('#transAmountInput').val() ===  '' || isNaN($('#transAmountInput').val())) {
-        $('#cg-transamount').addClass('error');
+        $('#cg-transamount').addClass('has-error');
         state = false;
       } else {
-        $('#cg-transamount').removeClass('error');
+        $('#cg-transamount').removeClass('has-error');
       }
 
       if (!state) {
@@ -85,10 +85,10 @@
       var state = true;
 
       if ($('#transferAmountInput').val() ===  '' || isNaN($('#transferAmountInput').val())) {
-        $('#cg-transferamount').addClass('error');
+        $('#cg-transferamount').addClass('has-error');
         state = false;
       } else {
-        $('#cg-transferamount').removeClass('error');
+        $('#cg-transferamount').removeClass('has-error');
       }
 
       return state;
@@ -99,10 +99,10 @@
       var state = true;
 
       if ($('#tagNameInput').val() ===  '') {
-        $('#cg-tagName').addClass('error');
+        $('#cg-tagName').addClass('has-error');
         state = false;
       } else {
-        $('#cg-tagName').removeClass('error');
+        $('#cg-tagName').removeClass('has-error');
       }
 
       return state;
@@ -160,17 +160,17 @@
       var state = true;
 
       if ($('#nameInput').val() ===  '') {
-        $('#cg-name').addClass('error');
+        $('#cg-name').addClass('has-error');
         state = false;
       } else {
-        $('#cg-name').removeClass('error');
+        $('#cg-name').removeClass('has-error');
       }
 
       if ($('#initBalanceInput').val() ===  '' || isNaN($('#initBalanceInput').val())) {
-        $('#cg-initialbalance').addClass('error');
+        $('#cg-initialbalance').addClass('has-error');
         state = false;
       } else {
-        $('#cg-initialbalance').removeClass('error');
+        $('#cg-initialbalance').removeClass('has-error');
       }
 
       if (!state) {
@@ -184,17 +184,17 @@
       var state = true;
 
       if ($('#editNameInput').val() ===  '') {
-        $('#cg-editname').addClass('error');
+        $('#cg-editname').addClass('has-error');
         state = false;
       } else {
-        $('#cg-editname').removeClass('error');
+        $('#cg-editname').removeClass('has-error');
       }
 
       if ($('#editInitBalanceInput').val() ===  '' || isNaN($('#editInitBalanceInput').val())) {
-        $('#cg-editinitialbalance').addClass('error');
+        $('#cg-editinitialbalance').addClass('has-error');
         state = false;
       } else {
-        $('#cg-editinitialbalance').removeClass('error');
+        $('#cg-editinitialbalance').removeClass('has-error');
       }
 
       if (!state) {
@@ -209,10 +209,10 @@
       var state = true;
 
       if ($('#deleteNameInput').val() ===  '') {
-        $('#cg-deletename').addClass('error');
+        $('#cg-deletename').addClass('has-error');
         state = false;
       } else {
-        $('#cg-deletename').removeClass('error');
+        $('#cg-deletename').removeClass('has-error');
       }
 
       return state;
@@ -224,17 +224,17 @@
       var state = true;
 
       if ($('#emailInput').val() === '') {
-        $('#cg-email').addClass('error');
+        $('#cg-email').addClass('has-error');
         state = false;
       } else {
-        $('#cg-email').removeClass('error');
+        $('#cg-email').removeClass('has-error');
       }
 
       if ($('#passwordInput').val() === '') {
-        $('#cg-password').addClass('error');
+        $('#cg-password').addClass('has-error');
         state = false;
       } else {
-        $('#cg-password').removeClass('error');
+        $('#cg-password').removeClass('has-error');
       }
 
       if (!state) {
@@ -248,20 +248,20 @@
       var state = true;
 
       if ($('#emailInputReg').val() === '') {
-        $('#cg-email-reg').addClass('error');
+        $('#cg-email-reg').addClass('has-error');
         state = false;
       } else {
-        $('#cg-email-reg').removeClass('error');
+        $('#cg-email-reg').removeClass('has-error');
       }
 
       if ($('#passwordInputReg').val() === '' || $('#passwordInputReg').val() !== $('#passwordConfirmInputReg').val()) {
         state = false;
         $('#passwordsDidntMatch').removeClass('hidden');
-        $('#cg-password-reg').addClass('error');
-        $('#cg-passwordconfirm-reg').addClass('error');
+        $('#cg-password-reg').addClass('has-error');
+        $('#cg-passwordconfirm-reg').addClass('has-error');
       } else {
-        $('#cg-password-reg').removeClass('error');
-        $('#cg-passwordconfirm-reg').removeClass('error');
+        $('#cg-password-reg').removeClass('has-error');
+        $('#cg-passwordconfirm-reg').removeClass('has-error');
       }
 
       if (!state) {
@@ -275,10 +275,10 @@
       var state = true;
 
       if ($('#emailInput').val() === '') {
-        $('#cg-email').addClass('error');
+        $('#cg-email').addClass('has-error');
         state = false;
       } else {
-        $('#cg-email').removeClass('error');
+        $('#cg-email').removeClass('has-error');
       }
 
       return state;
@@ -289,11 +289,11 @@
 
       if ($('#passwordInput').val() === '' || $('#passwordInput').val() !== $('#confirmPasswordInput').val()) {
         state = false;
-        $('#cg-password').addClass('error');
-        $('#cg-confirmpassword').addClass('error');
+        $('#cg-password').addClass('has-error');
+        $('#cg-confirmpassword').addClass('has-error');
       } else {
-        $('#cg-password').removeClass('error');
-        $('#cg-confirmpassword').removeClass('error');
+        $('#cg-password').removeClass('has-error');
+        $('#cg-confirmpassword').removeClass('has-error');
       }
 
       return state;
@@ -315,15 +315,15 @@
           // the new passwords didn't match
           state = false;
           $('#passwordsDidntMatch').removeClass('hidden');
-          $('#newPasswordInput').addClass('error');
-          $('#confirmNewPasswordInput').addClass('error');
+          $('#newPasswordInput').addClass('has-error');
+          $('#confirmNewPasswordInput').addClass('has-error');
         }
       }
       else if ($('#newPasswordInput').val() !== '' && ($('#oldPasswordInput').val() === '' ||
         $('#confirmNewPasswordInput').val() === '')) { // new password is set, but not all info provided
         state = false;
-        $('#cg-oldpassword').addClass('error');
-        $('#cg-confirmnewpassword').addClass('error');
+        $('#cg-oldpassword').addClass('has-error');
+        $('#cg-confirmnewpassword').addClass('has-error');
         $('#fillInAllInfo').removeClass('hidden');
       }
 
