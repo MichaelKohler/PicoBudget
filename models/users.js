@@ -36,35 +36,18 @@ module.exports.create = function (aLogin, aPassword, aCallback) {
 };
 
 module.exports.startActivationProcess = function (aLogin, aCallback) {
-  var generatedCode = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
-    return v.toString(16);
-  });
-  var dateNow = new Date();
+  var generatedCode = globals.helpers.getGeneratedCode();
+  var subject = 'Welcome to PicoBudget.com - Please activate your account';
+  var messageText = '<p>Hi there,<br /><br />thanks for registering at PicoBudget.com! ' +
+    'Please activate your account by clicking the following link: <a href=\'http://www.picobudget.com/activate/' +
+    generatedCode + '\'>http://www.picobudget.com/activate/' + generatedCode + '</a></p>' +
+    '<p>Please note, that your account will be deleted after <b>5 days</b> if you do not activate it.</p>' +
+    '<p>We hope you enjoy our product. If you have any questions, feel free to contact us at servicedesk@picobudget.com.</p>' +
+    '<p>Have a nice day,<br />Michael Kohler<br />Founder PicoBudget.com</p>';
   globals.db.collection('activation', function (err, collection) {
-    collection.insert({user: aLogin, code: generatedCode, date: dateNow}, function (err) {
-      var smtpTransport = globals.nodemailer.createTransport('SMTP',{
-        service: 'Gmail',
-        auth: {
-          user: 'EMAILHERE!',
-          pass: 'PASSWORDHERE!'
-        }
-      });
-      var messageText = '<p>Hi there,<br /><br />thanks for registering at PicoBudget.com! ' +
-        'Please activate your account by clicking the following link: <a href=\'http://www.picobudget.com/activate/' +
-        generatedCode + '\'>http://www.picobudget.com/activate/' + generatedCode + '</a></p>' +
-        '<p>Please note, that your account will be deleted after <b>5 days</b> if you do not activate it.</p>' +
-        '<p>We hope you enjoy our product. If you have any questions, feel free to contact us at servicedesk@picobudget.com.</p>' +
-        '<p>Have a nice day,<br />Michael Kohler<br />Founder PicoBudget.com</p>';
-      var mailOptions = {
-        from: 'PicoBudget.com <no-reply@picobudget.com>',
-        to: aLogin,
-        subject: 'Welcome to PicoBudget.com - Please activate your account',
-        html: messageText
-      };
-      smtpTransport.sendMail(mailOptions, function(err, response) {
-        smtpTransport.close();
-        aCallback(true);
+    collection.insert({user: aLogin, code: generatedCode, date: new Date()}, function (err) {
+      globals.helpers.sendMail(aLogin, subject, messageText, function (success) {
+        success ? aCallback(true) : aCallback(null);
       });
     });
   });
@@ -110,35 +93,18 @@ module.exports.checkIfUserExists = function (aMail, aCallback) {
 };
 
 module.exports.sendNewPassword = function (aMail, aCallback) {
-  var generatedCode = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
-    return v.toString(16);
-  });
-  var dateNow = new Date();
+  var generatedCode = globals.helpers.getGeneratedCode();
+  var messageText = '<p>Hi there,<br /><br />somebody just did a password recovery for your email address on PicoBudget.com! ' +
+    'If this was you, click on the following link and set a new password: <a href=\'http://www.picobudget.com/newPassword/' +
+    generatedCode + '\'>http://www.picobudget.com/newPassword/' + generatedCode + '</a></p>' +
+    '<p>If this was not you, you can ignore this mail and continue to use our services.</p>' +
+    '<p>We hope you enjoy our product. If you have any questions, feel free to contact us at servicedesk@picobudget.com.</p>' +
+    '<p>Have a nice day,<br />Michael Kohler<br />Founder PicoBudget.com</p>';
+  var subject = 'PicoBudget.com - Password reset request';
   globals.db.collection('passwordreset', function (err, collection) {
-    collection.insert({user: aMail, code: generatedCode, date: dateNow}, function (err) {
-      var smtpTransport = globals.nodemailer.createTransport('SMTP',{
-        service: 'Gmail',
-        auth: {
-          user: 'YOUREMAILADDRESSHERE!',
-          pass: 'YOURPASSWORDHERE!'
-        }
-      });
-      var messageText = '<p>Hi there,<br /><br />somebody just did a password recovery for your email address on PicoBudget.com! ' +
-        'If this was you, click on the following link and set a new password: <a href=\'http://www.picobudget.com/newPassword/' +
-        generatedCode + '\'>http://www.picobudget.com/newPassword/' + generatedCode + '</a></p>' +
-        '<p>If this was not you, you can ignore this mail and continue to use our services.</p>' +
-        '<p>We hope you enjoy our product. If you have any questions, feel free to contact us at servicedesk@picobudget.com.</p>' +
-        '<p>Have a nice day,<br />Michael Kohler<br />Founder PicoBudget.com</p>';
-      var mailOptions = {
-        from: 'PicoBudget.com <no-reply@picobudget.com>',
-        to: aMail,
-        subject: 'PicoBudget.com - Password reset request',
-        html: messageText
-      };
-      smtpTransport.sendMail(mailOptions, function(err, response) {
-        smtpTransport.close();
-        aCallback(true);
+    collection.insert({user: aMail, code: generatedCode, date: new Date()}, function (err) {
+      globals.helpers.sendMail(aMail, subject, messageText, function (success) {
+        success ? aCallback(true) : aCallback(null);
       });
     });
   });
