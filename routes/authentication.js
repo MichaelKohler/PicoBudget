@@ -4,6 +4,7 @@ var globals = require('../globals');
 
 exports.login = function (req, res) {
   var locals = {user: req.session.user || ''};
+  locals.pagetitle = 'Login - ' + globals.titleAddition;
   if (req.session.user) {
     res.redirect('/dashboard');
   }
@@ -14,6 +15,7 @@ exports.login = function (req, res) {
 
 exports.forgotPassword = function (req, res) {
   var locals = {user: req.session.user || ''};
+  locals.pagetitle = 'Forgot password - ' + globals.titleAddition;
   res.render('forgotPassword', locals);
 };
 
@@ -35,6 +37,7 @@ exports.sendResetPasswordMail = function (req, res) {
 
 exports.newPassword = function (req, res) {
   var locals = {user: req.session.user || ''};
+  locals.pagetitle = 'New password - ' + globals.titleAddition;
   locals.code = globals.helpers.sanitize(req.params.code);
   res.render('newPassword', locals);
 };
@@ -72,6 +75,7 @@ exports.authenticated = function (req, res) {
     else {
       res.flash('error', 'Either the username or password were wrong! Please try again.');
       var locals = {user: req.session.user || ''};
+      locals.pagetitle = 'Login - ' + globals.titleAddition;
       res.render('login', locals);
     }
   });
@@ -82,6 +86,7 @@ exports.registered = function (req, res) {
   var password = globals.helpers.sanitize(req.body.passwordInputReg);
   var confirmPassword = globals.helpers.sanitize(req.body.passwordConfirmInputReg);
   var locals = {user: req.session.user || ''};
+  locals.pagetitle = 'Login - ' + globals.titleAddition;
   if (password === confirmPassword) {
     globals.users.create(email, password, function (user) {
       if (user === 'EXISTS') {
@@ -131,5 +136,6 @@ exports.logout = function (req, res) {
   delete req.session.user;
   res.flash('info', 'You are logged out now.');
   var locals = {user: ''};
+  locals.pagetitle = 'Login - ' + globals.titleAddition;
   res.render('login', locals);
 };

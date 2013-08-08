@@ -328,6 +328,26 @@
       }
 
       return state;
-    }
+    },
 
+    // FIREFOX OS
+    initInstall: function pb_initInstallation() {
+      var installbutton = document.getElementById('installbutton');
+      if (installbutton && window.navigator.mozApps) {
+        installbutton.addEventListener('click', function() {
+          installbutton.innerHTML = 'Installing..';
+          var manifestUrl = 'http://localhost:1337/webapp/manifest.webapp';
+          var request = window.navigator.mozApps.install(manifestUrl);
+          request.onsuccess = function () {
+            installbutton.parentNode.removeChild(installbutton);
+          };
+          request.onerror = function () {
+            installbutton.innerHTML = 'Install failed ' + this.error.name;
+          };
+        });
+      }
+      else {
+        installbutton.parentNode.removeChild(installbutton);
+      }
+    }
   };

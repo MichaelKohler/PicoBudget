@@ -1,74 +1,63 @@
-doctype html
-html(lang='en')
-  head
-    title Accounts - PicoBudget - Expense tracking tool
-    include includes/head.jade
-  body
-    include includes/dashboard_nav.jade
-    .container
-      section#content
-        .row
-          include includes/dashboard_sidebar.jade
+include includes/all_header.jade
+  .row
+    include includes/dashboard_sidebar.jade
 
-          .col-lg-10
-            h1 Account - #{locals.account.name}
-            table.table.table-hover
-              thead
-                tr
-                  th Name
-                  th Currency
-                  th(style='text-align:right;') Balance
-              tbody
-                  tr
-                    td #{locals.account.name}
-                    td #{locals.account.curr}
-                    td(style='text-align:right;') #{functions.formatAmount(locals.account.bal)}
-                    td(style='text-align:right;')
-                      a(href='/accounts?editAccount=true&n=#{locals.account.name}&b=#{locals.account.bal}') Edit
-                    td(style='text-align:right;')
-                      a(style='color:red;', href='/accounts?deleteAccount=true&n=#{locals.account.name}') Delete
+    .col-lg-10
+      h1 Account - #{locals.account.name}
+      table.table.table-hover
+        thead
+          tr
+            th Name
+            th Currency
+            th(style='text-align:right;') Balance
+        tbody
+            tr
+              td #{locals.account.name}
+              td #{locals.account.curr}
+              td(style='text-align:right;') #{functions.formatAmount(locals.account.bal)}
+              td(style='text-align:right;')
+                a(href='/accounts?editAccount=true&n=#{locals.account.name}&b=#{locals.account.bal}') Edit
+              td(style='text-align:right;')
+                a(style='color:red;', href='/accounts?deleteAccount=true&n=#{locals.account.name}') Delete
 
-            h3 Transactions
-            - if (locals.transactions.length > 0)
-              table.table.table-hover
-                thead
-                  tr
-                    th Date
-                    th Account
-                    th Descrition
-                    th Tags
-                    th(style='text-align:right;') Amount
-                tbody
-                  for trans in locals.transactions
-                    tr
-                      td #{trans.date.toLocaleDateString()}
-                      td
-                        a(href='/account/#{trans.acc}/1') #{trans.acc}
-                      td #{trans.name}
-                      td
-                        - if (trans.tags)
-                          for tag in trans.tags
-                            a(href='/tag/#{tag}/#{trans.art}/1') #{tag}&nbsp;
-                      - if (trans.art === "+")
-                        td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
-                      - else
-                        td(style='text-align:right;') -#{functions.formatAmount(trans.amount)}
-              ul.pager
-                - if (locals.page == 1)
-                  li.previous.disabled
-                    a(href="#") &larr; Newer
+      h3 Transactions
+      - if (locals.transactions.length > 0)
+        table.table.table-hover
+          thead
+            tr
+              th Date
+              th Account
+              th Descrition
+              th Tags
+              th(style='text-align:right;') Amount
+          tbody
+            for trans in locals.transactions
+              tr
+                td #{trans.date.toLocaleDateString()}
+                td
+                  a(href='/account/#{trans.acc}/1') #{trans.acc}
+                td #{trans.name}
+                td
+                  - if (trans.tags)
+                    for tag in trans.tags
+                      a(href='/tag/#{tag}/#{trans.art}/1') #{tag}&nbsp;
+                - if (trans.art === "+")
+                  td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
                 - else
-                  li.previous
-                    a(href="/account/#{locals.account.name}/#{locals.page - 1}") &larr; Newer
-                - if (locals.needsMorePages)
-                  li.next
-                    a(href="/account/#{locals.account.name}/#{locals.page + 1}") Older &rarr;
-                - else
-                  li.next.disabled
-                    a(href="#") Older &rarr;
-            - else
-              p There are no transactions to be displayed.
-
-      include includes/footer.jade
-
-    include includes/libs.jade
+                  td(style='text-align:right;') -#{functions.formatAmount(trans.amount)}
+        ul.pager
+          - if (locals.page == 1)
+            li.previous.disabled
+              a(href="#") &larr; Newer
+          - else
+            li.previous
+              a(href="/account/#{locals.account.name}/#{locals.page - 1}") &larr; Newer
+          - if (locals.needsMorePages)
+            li.next
+              a(href="/account/#{locals.account.name}/#{locals.page + 1}") Older &rarr;
+          - else
+            li.next.disabled
+              a(href="#") Older &rarr;
+      - else
+        p There are no transactions to be displayed.
+include includes/all_footer.jade

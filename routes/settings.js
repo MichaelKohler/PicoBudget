@@ -4,6 +4,7 @@ var globals = require('../globals');
 
 exports.settings = function (req, res) {
   var locals = {user: req.session.user || ''};
+  locals.pagetitle = 'Settings - ' + globals.titleAddition;
   res.render('settings', locals);
 };
 
@@ -14,6 +15,7 @@ exports.settingsChanged = function (req, res) {
 
   globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, function (updatedUser) {
     var locals = {user: req.session.user || ''};
+    locals.pagetitle = 'Settings - ' + globals.titleAddition;
     if (updatedUser) {
       req.session.user = updatedUser; // we need to reinit the session because of the new password
       res.flash('success', 'Your settings are saved.');
@@ -51,11 +53,13 @@ exports.userDeleted = function (req, res) {
   ], function (err) {
     if (err) {
       locals.user = req.session.user || '';
+      locals.pagetitle = 'About - ' + globals.titleAddition;
       res.flash('error', 'We could not remove all your data. Did you enter the correct password? If so, please contact us so we can remove it manually.');
       res.render('about', locals);
     }
     else {
       locals.user = '';
+      locals.pagetitle = 'Login - ' + globals.titleAddition;
       delete req.session.user;
       res.flash('success', 'Your user account and all data associated with it was removed.');
       res.render('login', locals);

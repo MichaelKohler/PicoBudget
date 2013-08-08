@@ -4,6 +4,7 @@ var globals = require('../globals');
 
 exports.accounts = function (req, res) {
   var locals = {user: req.session.user || ''};
+  locals.pagetitle = 'Accounts - ' + globals.titleAddition;
   locals.editmode = globals.helpers.sanitize(req.query.editAccount || '');
   if (locals.editmode !== '') {
     locals.editname = globals.helpers.sanitize(req.query.n || '');
@@ -27,6 +28,7 @@ exports.accountOverview = function (req, res) {
   var name = globals.helpers.sanitize(req.params.name);
   var limit = 10;
   var locals = {user: req.session.user || ''};
+  locals.pagetitle = 'Account overview - ' + globals.titleAddition;
   globals.async.parallel([
     function getAccount(callback) {
       globals.accounts.getAccount(req.session.user.user, name, function (account) {

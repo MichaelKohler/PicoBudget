@@ -1,112 +1,102 @@
-doctype html
-html(lang='en')
-  head
-    title Accounts - PicoBudget - Expense tracking tool
-    include includes/head.jade
-  body
-    include includes/dashboard_nav.jade
-    .container
-      section#content
-        .row
-          include includes/dashboard_sidebar.jade
+include includes/all_header.jade
+  .row
+    include includes/dashboard_sidebar.jade
 
-          .col-lg-10
-            h1 Accounts
-            ul(style='padding-top:20px;').nav.nav-tabs#tabnav
-              li#overviewlink
-                a(href='#') Overview
-              li#newlink
-                a(href='#') New account
-            #overview
-              h3 Account overview
-              - if (flash.success !== undefined)
-                .alert-success.alert#success
-                  strong Well done!
-                  br
-                  p #{flash.success}
-              - if (flash.error !== undefined)
-                .alert-danger.alert#fail
-                  strong Oh no..
-                  br
-                  p #{flash.error}
-              .alert-error.alert.hidden#fillInAllInfo
-                strong Error!
-                br
-                p Please fill in all the information!
-              #accounttable
-                - if (locals.accounts && locals.accounts.length > 0)
-                  table.table.table-hover
-                    thead
-                      tr
-                        th Name
-                        th Currency
-                        th(style='text-align:right;') Balance
-                    tbody
-                      for account in locals.accounts
-                        tr
-                          td
-                            a(href='/account/#{account.name}/1') #{account.name}
-                          td #{account.curr}
-                          td(style='text-align:right;') #{functions.formatAmount(account.bal)}
-                          td(style='text-align:right;')
-                            a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
-                          td(style='text-align:right;')
-                            a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
-                      tr(style='font-weight:bold;')
-                        td
-                        td Total (#{locals.user.curr}):
-                        td(style='text-align:right;') #{functions.formatAmount(locals.balanceSum)}
-                        td
-                        td
-                - else
-                  p There are no accounts to be displayed.
+    .col-lg-10
+      h1 Accounts
+      ul(style='padding-top:20px;').nav.nav-tabs#tabnav
+        li#overviewlink
+          a(href='#') Overview
+        li#newlink
+          a(href='#') New account
+      #overview
+        h3 Account overview
+        - if (flash.success !== undefined)
+          .alert-success.alert#success
+            strong Well done!
+            br
+            p #{flash.success}
+        - if (flash.error !== undefined)
+          .alert-danger.alert#fail
+            strong Oh no..
+            br
+            p #{flash.error}
+        .alert-error.alert.hidden#fillInAllInfo
+          strong Error!
+          br
+          p Please fill in all the information!
+        #accounttable
+          - if (locals.accounts && locals.accounts.length > 0)
+            table.table.table-hover
+              thead
+                tr
+                  th Name
+                  th Currency
+                  th(style='text-align:right;') Balance
+              tbody
+                for account in locals.accounts
+                  tr
+                    td
+                      a(href='/account/#{account.name}/1') #{account.name}
+                    td #{account.curr}
+                    td(style='text-align:right;') #{functions.formatAmount(account.bal)}
+                    td(style='text-align:right;')
+                      a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
+                    td(style='text-align:right;')
+                      a(style='color:red;', href='/accounts?deleteAccount=true&n=#{account.name}') Delete
+                tr(style='font-weight:bold;')
+                  td
+                  td Total (#{locals.user.curr}):
+                  td(style='text-align:right;') #{functions.formatAmount(locals.balanceSum)}
+                  td
+                  td
+          - else
+            p There are no accounts to be displayed.
 
-              - if (locals.editmode !== '')
-                h3(id='editaccounttitle') Edit account
-                form(id='editaccountform', method='POST', action='/accountEdited', onsubmit="return PBHelperTools.validateEditAccount();")
-                  fieldset
-                    .form-group#cg-editname
-                      label(for='editNameInput') Name
-                      input.form-control#editNameInput(type='text', name='editNameInput', value='#{locals.editname}')
-                    .form-group#cg-hiddenoldname
-                      input.form-control#hiddenOldName(type='hidden', name='hiddenOldName', value='#{locals.editname}')
-                    .form-group#cg-editinitialbalance
-                      label(for='editInitBalanceInput') Balance
-                      input.form-control#editInitBalanceInput(type='text', name='editInitBalanceInput', value='#{locals.editbalance}')
-                    button.btn.btn-success(type='submit') Edit account
-              - if (locals.deletemode !== '')
-                h3(id='deleteaccounttitle') Delete account
-                form(id='deleteaccountform', method='POST', action='/accountDeleted', onsubmit="return PBHelperTools.validateDeleteAccount();")
-                  fieldset
-                    .form-group#cg-deletename
-                      label(for='deleteNameInput') Name
-                      input.form-control.uneditable-input#deleteNameInput(type='text', name='deleteNameInput', value='#{locals.deletename}')
-                    button.btn.btn-warning(type='submit') Delete this account!
-            #new
-              h3(id='addaccounttitle') Add a new account
-              form(id='addaccountform', method='POST', action='/accountAdded', onsubmit="return PBHelperTools.validateAddAccount();")
-                fieldset
-                  .form-group#cg-name
-                    label(for='nameInput') Name
-                    input.form-control#nameInput(type='text', name='nameInput')
-                  .form-group#cg-currency
-                    select.selectpicker(name='currDropdown')
-                      for currency in data.currencies
-                        - if (currency.ISO === locals.user.curr)
-                          option(value='#{currency.ISO}', selected='true') #{currency.ISO} - #{currency.name}
-                        - else
-                          option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
-                  .form-group#cg-initialbalance
-                    label(for='initBalanceInput') Initial balance
-                    input.form-control#initBalanceInput(type='text', name='initBalanceInput')
-                  button.btn.btn-success(type='submit') Add account
+        - if (locals.editmode !== '')
+          h3(id='editaccounttitle') Edit account
+          form(id='editaccountform', method='POST', action='/accountEdited', onsubmit="return PBHelperTools.validateEditAccount();")
+            fieldset
+              .form-group#cg-editname
+                label(for='editNameInput') Name
+                input.form-control#editNameInput(type='text', name='editNameInput', value='#{locals.editname}')
+              .form-group#cg-hiddenoldname
+                input.form-control#hiddenOldName(type='hidden', name='hiddenOldName', value='#{locals.editname}')
+              .form-group#cg-editinitialbalance
+                label(for='editInitBalanceInput') Balance
+                input.form-control#editInitBalanceInput(type='text', name='editInitBalanceInput', value='#{locals.editbalance}')
+              button.btn.btn-success(type='submit') Edit account
+        - if (locals.deletemode !== '')
+          h3(id='deleteaccounttitle') Delete account
+          form(id='deleteaccountform', method='POST', action='/accountDeleted', onsubmit="return PBHelperTools.validateDeleteAccount();")
+            fieldset
+              .form-group#cg-deletename
+                label(for='deleteNameInput') Name
+                input.form-control.uneditable-input#deleteNameInput(type='text', name='deleteNameInput', value='#{locals.deletename}')
+              button.btn.btn-warning(type='submit') Delete this account!
+      #new
+        h3(id='addaccounttitle') Add a new account
+        form(id='addaccountform', method='POST', action='/accountAdded', onsubmit="return PBHelperTools.validateAddAccount();")
+          fieldset
+            .form-group#cg-name
+              label(for='nameInput') Name
+              input.form-control#nameInput(type='text', name='nameInput')
+            .form-group#cg-currency
+              select.selectpicker(name='currDropdown')
+                for currency in data.currencies
+                  - if (currency.ISO === locals.user.curr)
+                    option(value='#{currency.ISO}', selected='true') #{currency.ISO} - #{currency.name}
+                  - else
+                    option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
+            .form-group#cg-initialbalance
+              label(for='initBalanceInput') Initial balance
+              input.form-control#initBalanceInput(type='text', name='initBalanceInput')
+            button.btn.btn-success(type='submit') Add account
 
-      include includes/footer.jade
+include includes/all_footer.jade
 
-    include includes/libs.jade
-
-    script.
-      (function() {
-        PBHelperTools.toggleAccountNavigationTabs();
-        PBHelperTools.toggleAccountMode();
-      })();
+script.
+  (function() {
+    PBHelperTools.toggleAccountNavigationTabs();
+    PBHelperTools.toggleAccountMode();
+  })();

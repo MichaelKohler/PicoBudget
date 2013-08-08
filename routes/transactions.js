@@ -5,6 +5,7 @@ var globals = require('../globals');
 exports.transactions = function (req, res) {
   var transpage = parseInt(globals.helpers.sanitize(req.params.transpage), 10);
   var locals = { user: req.session.user || '', page: transpage };
+  locals.pagetitle = 'Transactions - ' + globals.titleAddition;
   var limit = 10;
   globals.async.parallel([
     function getAllTrans(callback) {

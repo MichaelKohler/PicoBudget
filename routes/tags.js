@@ -10,6 +10,7 @@ exports.tagOverview = function (req, res) {
   globals.transactions.getAllTransactionsByTag(req.session.user.user, tagname, function(allTransactionsList) {
     if (allTransactionsList) {
       var locals = { user: req.session.user || '' };
+      locals.pagetitle = 'Tag overview - ' + globals.titleAddition;
       locals.tag = tagname;
       locals.tagtype = tagtype;
       locals.transactions = allTransactionsList.slice(transpage*limit-limit, transpage*limit);

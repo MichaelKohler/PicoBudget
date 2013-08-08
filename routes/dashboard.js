@@ -4,6 +4,7 @@ var globals = require('../globals');
 
 exports.index = function (req, res) {
   var locals = { user: req.session.user || '', registeredInfo: req.session.user.isNew };
+  locals.pagetitle = 'Dashboard - ' + globals.titleAddition;
   globals.async.parallel([
     function getLimitedTransactions(callback) {
       globals.transactions.getLimitedTransactions(req.session.user.user, 1, 10, function (transactionList) {

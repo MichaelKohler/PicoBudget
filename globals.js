@@ -19,6 +19,7 @@
 
   /** Configuration **/
   exports.currencies = require('./currencies.json').currencies;
+  exports.titleAddition = 'PicoBudget.com - Expense tracking tool';
 
   return exports;
 }());

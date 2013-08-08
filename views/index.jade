@@ -1,33 +1,23 @@
-doctype html
-html(lang='en')
-  head
-    title PicoBudget - Expense tracking tool
-    include includes/head.jade
-  body
-    include includes/nav.jade
-    .container
-      section#content
-        .well
-          h1 Easily manage your money
-          p Ever wondered where your money goes? What do you spend the most money on? PicoBudget is a simple tool which features transactions, budgeting and reporting. Using Basic PicoBudget is absolutely free. If you enjoy it, though, you can get even more features with PicoBudget Premium!
-          p Currently PicoBudget is under construction. Feel free to come back to check it out when it launched!
+include includes/all_header.jade
+  .well
+    h1 Easily manage your money
+    p Ever wondered where your money goes? What do you spend the most money on? PicoBudget is a simple tool which features transactions, budgeting and reporting. Using Basic PicoBudget is absolutely free. If you enjoy it, though, you can get even more features with PicoBudget Premium!
+    p Currently PicoBudget is under construction. Feel free to come back to check it out when it launched!
 
-        .row
-          .col-lg-4
-            h2 Introduction
-            p What is PicoBudget? Who is it for? Why should you use it?
-            p
-              a.btn.btn-default(href='/introduction') Read more &raquo;
-          .col-lg-4
-            h2 Login / Registration
-            p The basic features are free, what's stopping you from registering?
-            p
-              a.btn.btn-default(href='/login') Go to login / registration &raquo;
-          .col-lg-4
-            h2 Premium
-            p With a premium account you get even more features. It already starts from 0.00!
-            p
-              a.btn.btn-default(href='/premium') Read more &raquo;
-      include includes/footer.jade
-
-    include includes/libs.jade
+  .row
+    .col-lg-4
+      h2 Introduction
+      p What is PicoBudget? Who is it for? Why should you use it?
+      p
+        a.btn.btn-default(href='/introduction') Read more &raquo;
+    .col-lg-4
+      h2 Login / Registration
+      p The basic features are free, what's stopping you from registering?
+      p
+        a.btn.btn-default(href='/login') Go to login / registration &raquo;
+    .col-lg-4
+      h2 Premium
+      p With a premium account you get even more features. It already starts from 0.00!
+      p
+        a.btn.btn-default(href='/premium') Read more &raquo;
+include includes/all_footer.jade

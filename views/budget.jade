@@ -1,18 +1,7 @@
-doctype html
-html(lang='en')
-  head
-    title Budget - PicoBudget - Expense tracking tool
-    include includes/head.jade
-  body
-    include includes/dashboard_nav.jade
-    .container
-      section#content
-        .row
-          include includes/dashboard_sidebar.jade
+include includes/all_header.jade
+  .row
+    include includes/dashboard_sidebar.jade
 
-          h1 Budget
-          p Here should be the budget overview.
-
-      include includes/footer.jade
-
-    include includes/libs.jade
+    h1 Budget
+    p Here should be the budget overview.
+include includes/all_footer.jade
