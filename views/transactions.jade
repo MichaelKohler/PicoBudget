@@ -89,9 +89,9 @@ include includes/all_header.jade
                   option(value='-') -
               .form-group#cg-transtags
                 label(for='transTagsInput') Tags
-                input.form-control#transTagsInput(type='text', name='transTagsInput')
+                input.form-control#transTagsInput(type='hidden', name='transTagsInput')
                 p
-                  small Multiple tags can be entered with a space inbetween them.
+                  small You can add multiple tags. Please be sure to press the ENTER key after writing a new tag name.
               .form-group#cg-transamount
                 label(for='transAmountInput') Amount
                 input.form-control#transAmountInput(type='text', name='transAmountInput')
@@ -150,4 +150,5 @@ include includes/all_footer.jade
 script.
   (function() {
     PBHelperTools.toggleTransactionNavigationTabs();
+    //$("#transTagsInput").select2({tags: #{JSON.stringify(locals.tagsForAutocompletion)}});
   })();

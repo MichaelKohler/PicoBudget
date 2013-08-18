@@ -20,6 +20,10 @@ exports.transactions = function (req, res) {
       globals.tags.getAllTags(req.session.user.user, function (tagList) {
         if (!tagList) { return callback(null); }
         locals.tags = tagList;
+        locals.tagsForAutocompletion = tagList.map(function(item) {
+          return item.name;
+        });
+        console.log(JSON.stringify(['foo', 'bar']));
         callback();
       });
     },
