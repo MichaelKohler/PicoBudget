@@ -2,6 +2,7 @@
 
 var globals = require('../globals');
 var validator = require('validator');
+var request = require('request');
 
 module.exports.formatAmount = function (aAmount) {
   var fixedAmount = parseFloat(aAmount).toFixed(2);
@@ -9,12 +10,27 @@ module.exports.formatAmount = function (aAmount) {
   return formattedAmount;
 };
 
-module.exports.sumAccountBalance = function (aAccounts) {
+module.exports.sumAccountBalance = function (aAccounts, aPreferredCurrency, aCallback) {
   var sum = 0;
-  for (var i = 0; i < aAccounts.length; i++) {
-    sum += parseFloat(aAccounts[i].bal);
-  }
-  return sum;
+  globals.async.each(aAccounts, function (account, callback) {
+    var fromCurrency = account.curr;
+    if (fromCurrency !== aPreferredCurrency) {
+      var requestURL = 'http://rate-exchange.appspot.com/currency?from=' + fromCurrency + '&to=' + aPreferredCurrency;
+      request(requestURL, function (error, response, result) {
+        if (!error && response.statusCode === 200) {
+          var conversion = parseFloat(JSON.parse(result).rate);
+          sum += parseFloat(account.bal * conversion);
+          callback();
+        }
+      });
+    }
+    else {
+      sum += parseFloat(account.bal);
+      callback();
+    }
+  }, function (err) {
+    aCallback(sum.toFixed(2));
+  });
 };
 
 module.exports.sanitize = function (aInput) {
@@ -27,8 +43,8 @@ module.exports.sendMail = function (aReceiver, aSubject, aMessage, aCallback) {
   var smtpTransport = globals.nodemailer.createTransport('SMTP',{
     service: 'Gmail',
     auth: {
-      user: 'mkohler@picobudget.com',
-      pass: 'ger4dyxjer9885gc'
+      user: '...',
+      pass: '...'
     }
   });
   var mailOptions = {

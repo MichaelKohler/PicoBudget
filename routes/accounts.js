@@ -17,8 +17,10 @@ exports.accounts = function (req, res) {
   globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
     if (accountList) {
       locals.accounts = accountList;
-      locals.balanceSum = globals.helpers.sumAccountBalance(accountList);
-      res.render('accounts', locals);
+      globals.helpers.sumAccountBalance(accountList, req.session.user.curr, function (sum) {
+        locals.balanceSum = sum;
+        res.render('accounts', locals);
+      });
     }
   });
 };
