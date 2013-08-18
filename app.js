@@ -102,6 +102,7 @@
   server.get('/settings', requiresLogin, settingsRoutes.settings);
   server.post('/settingsChanged', requiresLogin, settingsRoutes.settingsChanged);
   server.post('/userDeleted', requiresLogin, settingsRoutes.userDeleted);
+  server.get('/exportAll', requiresLogin, settingsRoutes.exportAll);
 
   server.locals({
     functions : {

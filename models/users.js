@@ -74,6 +74,14 @@ module.exports.deleteAllTemporaryCodes = function (aLogin, aCallback) {
   });
 };
 
+module.exports.getAllPasswordResets = function (aLogin, aCallback) {
+  globals.db.collection('passwordreset', function (err, collection) {
+    collection.find({user: aLogin}).toArray(function (err, items) {
+        aCallback(items);
+      });
+  });
+};
+
 module.exports.activate = function (aCode, aCallback) {
   globals.db.collection('activation', function (err, collection) {
     collection.findOne({code: aCode}, function (err, entry) {

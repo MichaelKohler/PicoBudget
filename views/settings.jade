@@ -43,6 +43,11 @@ include includes/all_header.jade
                 - else
                   option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
           button.btn.btn-success(type='submit') Change settings
+      hr
+      h3 Export
+      p You can export all data we store about your user.
+      a(href='/exportAll', target='_blank')
+        button.btn.btn-default Export all data
   .row
     .col-lg-2(style='text-align:justify; padding-top: 40px;')
       p You can delete your account on the right hand side. We would like you to reconsider it, maybe getting in touch with us to instantly improve your experience would be enough for you? Feel free to contact us!

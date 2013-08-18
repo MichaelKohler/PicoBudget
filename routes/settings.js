@@ -66,3 +66,39 @@ exports.userDeleted = function (req, res) {
     }
   });
 };
+
+exports.exportAll = function (req, res) {
+  var exportedData = {};
+  globals.async.parallel([
+    function getAllTransactions(callback) {
+      globals.transactions.getAllTransactions(req.session.user.user, function (transactionList) {
+        exportedData.transactions = transactionList;
+        callback();
+      });
+    },
+    function getAllAccounts(callback) {
+      globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
+        exportedData.accounts = accountList;
+        callback();
+      });
+    },
+    function getAllTags(callback) {
+      globals.tags.getAllTags(req.session.user.user, function (tagList) {
+        exportedData.tags = tagList;
+        callback();
+      });
+    },
+    function getUserData(callback) {
+      exportedData.user = req.session.user;
+      callback();
+    },
+    function getPasswordResets(callback) {
+      globals.users.getAllPasswordResets(req.session.user.user, function (resetList) {
+        exportedData.passwordResets = resetList;
+        callback();
+      });
+    }
+  ], function (err) {
+    res.json(exportedData);
+  });
+};
