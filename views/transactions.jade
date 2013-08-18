@@ -150,5 +150,5 @@ include includes/all_footer.jade
 script.
   (function() {
     PBHelperTools.toggleTransactionNavigationTabs();
-    //$("#transTagsInput").select2({tags: #{JSON.stringify(locals.tagsForAutocompletion)}});
+    $("#transTagsInput").select2({tags: !{JSON.stringify(locals.tagsForAutocompletion)}});
   })();
