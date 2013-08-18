@@ -11,10 +11,17 @@ include includes/all_header.jade
       p
         a.btn.btn-default(href='/introduction') Read more &raquo;
     .col-lg-4
-      h2 Login / Registration
-      p The basic features are free, what's stopping you from registering?
-      p
-        a.btn.btn-default(href='/login') Go to login / registration &raquo;
+      form(id='loginform', method='POST', action='/authenticated', onsubmit="return PBHelperTools.validateLogin();")
+        fieldset
+          .form-group#cg-email
+            label(for='emailInput') eMail
+            input.form-control#emailInput(type='email', name='emailInput')
+          .form-group#cg-password
+            label(for='passwordInput') Password
+            input.form-control#passwordInput(type='password', name='passwordInput')
+          button.btn.btn-default(type='submit') Login
+          p.pull-right
+            a(href='/login') go to the signup page >>
     .col-lg-4
       h2 Premium
       p With a premium account you get even more features. It already starts from 0.00!
