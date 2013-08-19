@@ -2,6 +2,58 @@ include includes/all_header.jade
   .row
     include includes/dashboard_sidebar.jade
 
-    h1 Budget
-    p Here should be the budget overview.
+    .col-lg-10
+      h1 Budget
+
+      ul(style='padding-top:20px;').nav.nav-tabs#tabnav
+        li#overviewlink
+          a(href='#') Overview
+        li#earninglink
+          a(href='#') Define earning
+        li#spendinglink
+          a(href='#') Define spending
+      #overview
+        h3 Earning - #{locals.currentMonthYear}
+        table.table.table-hover
+          thead
+            tr
+              th Name
+              th Current
+          tbody
+            tr
+              td Foo
+              td Bar
+            tr
+              td Foo
+              td Bar
+            tr
+              td Foo
+              td Bar
+        h3 Spending - #{locals.currentMonthYear}
+        table.table.table-hover
+          thead
+            tr
+              th Name
+              th Current
+          tbody
+            tr
+              td Foo
+              td Bar
+            tr
+              td Foo
+              td Bar
+            tr
+              td Foo
+              td Bar
+      #earning
+        h3 Here comes earning def!
+      #spending
+        h3 Here comes spending def!
+
+
 include includes/all_footer.jade
+
+script.
+  (function() {
+    PBHelperTools.toggleBudgetNavigationTabs();
+  })();

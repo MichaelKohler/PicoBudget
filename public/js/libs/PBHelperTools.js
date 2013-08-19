@@ -349,5 +349,40 @@
       else {
         installbutton.parentNode.removeChild(installbutton);
       }
+    },
+
+    // BUDGET
+    toggleBudgetNavigationTabs: function pb_toggleBudgetNavigationTabs() {
+      $('#spending').addClass('hidden');
+      $('#earning').addClass('hidden');
+      $('#overviewlink').addClass('active');
+
+      $('#overviewlink').click(function (e) {
+        e.preventDefault();
+        $('#spending').addClass('hidden');
+        $('#earning').addClass('hidden');
+        $('#overview').removeClass('hidden');
+        $('#earnniglink').removeClass('active');
+        $('#spendinglink').removeClass('active');
+        $('#overviewlink').addClass('active');
+      });
+      $('#earninglink').click(function (e) {
+        e.preventDefault();
+        $('#spending').addClass('hidden');
+        $('#overview').addClass('hidden');
+        $('#earning').removeClass('hidden');
+        $('#overviewlink').removeClass('active');
+        $('#spendinglink').removeClass('active');
+        $('#earnniglink').addClass('active');
+      });
+      $('#spendinglink').click(function (e) {
+        e.preventDefault();
+        $('#earning').addClass('hidden');
+        $('#overview').addClass('hidden');
+        $('#spending').removeClass('hidden');
+        $('#overviewlink').removeClass('active');
+        $('#earnniglink').removeClass('active');
+        $('#spendinglink').addClass('active');
+      });
     }
   };
