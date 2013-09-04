@@ -13,38 +13,46 @@ include includes/all_header.jade
         li#spendinglink
           a(href='#') Define spending
       #overview
-        h3 Earning - #{locals.currentMonthYear}
+        h3 Earning - #{locals.currentMonth} #{locals.currentYear}
         table.table.table-hover
           thead
             tr
               th Name
               th Current
+              th
           tbody
             tr
               td Foo
               td Bar
+              td Progress bar!! xx %
             tr
               td Foo
               td Bar
+              td Progress bar!! xx %
             tr
               td Foo
               td Bar
-        h3 Spending - #{locals.currentMonthYear}
+              td Progress bar!! xx %
+        h3 Spending - #{locals.currentMonth} #{locals.currentYear}
         table.table.table-hover
           thead
             tr
               th Name
               th Current
+              th
           tbody
             tr
               td Foo
               td Bar
+              td Progress bar!! xx %
             tr
               td Foo
               td Bar
+              td Progress bar!! xx %
             tr
               td Foo
               td Bar
+              td Progress bar!! xx %
       #earning
         h3 Here comes earning def!
       #spending
