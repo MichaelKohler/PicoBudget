@@ -1,6 +1,6 @@
 {
   "name": "picobudget",
-  "version": "0.0.1a",
+  "version": "0.0.1",
   "author": "PicoBudget.com",
   "description": "Ever wondered where your money goes? What do you spend the most money on? PicoBudget is a simple tool which features transactions, budgeting and reporting.",
   "dependencies" : {
