@@ -49,7 +49,8 @@ exports.transactionAdded = function (req, res) {
   var transAcc = globals.helpers.sanitize(req.body.transAccDropdown);
   var transType = globals.helpers.sanitize(req.body.transArtDropdown);
   var transName = globals.helpers.sanitize(req.body.transNameInput);
-  var transTags = globals.helpers.sanitize(req.body.transTagsInput).split(' ');
+  var tags = globals.helpers.sanitize(req.body.transTagsInput);
+  var transTags = tags.split(',');
   var transAmount = parseFloat(globals.helpers.sanitize(req.body.transAmountInput));
   var newTransaction = globals.transactions.Transaction.init(transID, transAcc, transType, transName, transTags, transAmount);
   globals.async.series([
