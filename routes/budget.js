@@ -9,7 +9,7 @@ exports.budget = function (req, res) {
   // TODO: better fix for the names..
   var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December' ];
-  locals.currentMonth = monthNames[dateNow.getMonth() - 1];
+  locals.currentMonth = monthNames[dateNow.getMonth()];
   locals.currentYear = dateNow.getFullYear();
   res.render('budget', locals);
 };
