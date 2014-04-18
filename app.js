@@ -69,7 +69,6 @@
   server.get('/', mainsiteRoutes.index);
   server.get('/faq', mainsiteRoutes.faq);
   server.get('/introduction', mainsiteRoutes.introduction);
-  server.get('/premium', mainsiteRoutes.premium);
   server.get('/about', mainsiteRoutes.about);
 
   var dashboardRoutes = require('./routes/dashboard.js');

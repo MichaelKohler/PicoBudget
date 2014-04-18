@@ -20,12 +20,6 @@ exports.introduction = function (req, res) {
   res.render('introduction', locals);
 };
 
-exports.premium = function (req, res) {
-  var locals = {user: req.session.user || ''};
-  locals.pagetitle = 'Premium - ' + globals.titleAddition;
-  res.render('premium', locals);
-};
-
 exports.about = function (req, res) {
   var locals = {user: req.session.user || ''};
   locals.pagetitle = 'About - ' + globals.titleAddition;
