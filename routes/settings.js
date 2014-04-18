@@ -49,6 +49,11 @@ exports.userDeleted = function (req, res) {
       globals.users.deleteAllTemporaryCodes(req.session.user.user, function (success) {
         success ? callback() : callback({err: 'We could not delete all temporary data.'});
       });
+    },
+    function deleteBudgetPositions(callback) {
+      globals.budget.deleteAllPositions(req.session.user.user, function (success) {
+        success ? callback() : callback({err: 'We could not delete all temporary data.'});
+      });
     }
   ], function (err) {
     if (err) {
@@ -85,6 +90,12 @@ exports.exportAll = function (req, res) {
     function getAllTags(callback) {
       globals.tags.getAllTags(req.session.user.user, function (tagList) {
         exportedData.tags = tagList;
+        callback();
+      });
+    },
+    function getAllBudgetPositions(callback) {
+      globals.budget.getAllPositions(req.session.user.user, function (positionsList) {
+        exportedData.tags = positionsList;
         callback();
       });
     },

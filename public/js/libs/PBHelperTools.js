@@ -384,5 +384,45 @@
         $('#earnniglink').removeClass('active');
         $('#spendinglink').addClass('active');
       });
+    },
+
+    validateAddEarning: function pb_validateAddEarning() {
+      var state = true;
+
+      if ($('#earningNameInput').val() ===  '') {
+          $('#cg-earningName').addClass('has-error');
+          state = false;
+      } else {
+          $('#cg-earningName').removeClass('has-error');
+      }
+
+      if ($('#earningAmountInput').val() ===  '' || isNaN($('#earningAmountInput').val())) {
+          $('#cg-earningAmount').addClass('has-error');
+          state = false;
+      } else {
+          $('#cg-earningAmount').removeClass('has-error');
+      }
+
+      return state;
+    },
+
+    validateAddSpending: function pb_validateAddSpending() {
+      var state = true;
+
+      if ($('#spendingNameInput').val() ===  '') {
+        $('#cg-spendingName').addClass('has-error');
+        state = false;
+      } else {
+        $('#cg-spendingName').removeClass('has-error');
+      }
+
+      if ($('#spendingAmountInput').val() ===  '' || isNaN($('#spendingAmountInput').val())) {
+        $('#cg-spendingAmount').addClass('has-error');
+        state = false;
+      } else {
+        $('#cg-spendingAmount').removeClass('has-error');
+      }
+
+      return state;
     }
   };
