@@ -13,9 +13,3 @@ exports.introduction = function (req, res) {
   locals.pagetitle = 'Introduction - ' + globals.titleAddition;
   res.render('introduction', locals);
 };
-
-exports.about = function (req, res) {
-  var locals = {user: req.session.user || ''};
-  locals.pagetitle = 'About - ' + globals.titleAddition;
-  res.render('about', locals);
-};
