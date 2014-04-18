@@ -67,7 +67,6 @@
 
   var mainsiteRoutes = require('./routes/mainsite.js');
   server.get('/', mainsiteRoutes.index);
-  server.get('/faq', mainsiteRoutes.faq);
   server.get('/introduction', mainsiteRoutes.introduction);
   server.get('/about', mainsiteRoutes.about);
 
