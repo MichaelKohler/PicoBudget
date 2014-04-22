@@ -1,31 +1,19 @@
 'use strict';
 
 var globals = require('../globals');
+var intl = require('intl');
 
 exports.budget = function (req, res) {
   var locals = {user: req.session.user || ''};
   locals.pagetitle = 'Budget - ' + globals.titleAddition;
-
-  var dateNow = new Date();
-  // TODO: better fix for the names..
-  var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December' ];
-  locals.currentMonth = monthNames[dateNow.getMonth()];
-  locals.currentYear = dateNow.getFullYear();
+  var options = { month: "long", year: "numeric" };
+  locals.currentMonth = intl.DateTimeFormat("de-DE", options).format(new Date());
 
   locals.earningPositions = locals.spendingPositions = [];
-  globals.budget.getAllPositions(req.session.user.user,  function(allPositionsList) {
-    globals.async.each(allPositionsList, function (position, callback) {
-      if (position.type == 1) {
-        locals.earningPositions.push(position);
-      }
-      else if (position.type == -1) {
-        locals.spendingPositions.push(position);
-      }
-      callback();
-    }, function (err) {
-      res.render('budget', locals);
-    });
+  globals.budget.getAllPositionLists(req.session.user.user,  function(allPositionsLists) {
+    locals.earningPositions = allPositionsLists.earningPositions;
+    locals.spendingPositions = allPositionsLists.spendingPositions;
+    res.render('budget', locals);
   });
 };
 

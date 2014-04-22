@@ -26,47 +26,33 @@ include includes/all_header.jade
       #overview
         .row
           .col-lg-6
-            h3 Earning - #{locals.currentMonth} #{locals.currentYear}
+            h3 Earnings - #{locals.currentMonth}
             table.table.table-hover
               thead
                 tr
                   th Name
                   th Current
-                  th
+                  th Budget
               tbody
-                tr
-                  td Foo
-                  td Bar
-                  td Progress bar!! xx %
-                tr
-                  td Foo
-                  td Bar
-                  td Progress bar!! xx %
-                tr
-                  td Foo
-                  td Bar
-                  td Progress bar!! xx %
+                - for position in locals.earningPositions
+                  tr
+                    td #{position.name}
+                    td #{position.current}
+                    td #{position.amount}
           .col-lg-6
-            h3 Spending - #{locals.currentMonth} #{locals.currentYear}
+            h3 Spendings - #{locals.currentMonth}
             table.table.table-hover
               thead
                 tr
                   th Name
                   th Current
-                  th
+                  th Budget
               tbody
-                tr
-                  td Foo
-                  td Bar
-                  td Progress bar!! xx %
-                tr
-                  td Foo
-                  td Bar
-                  td Progress bar!! xx %
-                tr
-                  td Foo
-                  td Bar
-                  td Progress bar!! xx %
+                - for position in locals.spendingPositions
+                  tr
+                    td #{position.name}
+                    td #{position.current}
+                    td #{position.amount}
       #earning
           - if (locals.earningPositions && locals.earningPositions.length > 0)
               table.table.table-hover

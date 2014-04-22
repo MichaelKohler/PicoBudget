@@ -15,12 +15,25 @@ module.exports.BudgetPosition = {
   }
 };
 
-module.exports.getAllPositions = function (aLogin, callback) {
+module.exports.getAllPositionLists = function (aLogin, aCallback) {
   globals.db.collection('budget', function (err, collection) {
     collection.find({user: aLogin}, {sort: [
       ['name', 1]
     ]}).toArray(function (err, items) {
-        callback(items);
+      var lists = {};
+      lists.earningPositions = [];
+      lists.spendingPositions = [];
+      globals.async.each(items, function (position, callback) {
+        if (position.type == 1) {
+          lists.earningPositions.push(position);
+        }
+        else if (position.type == -1) {
+          lists.spendingPositions.push(position);
+        }
+        callback();
+      }, function (err) {
+        aCallback(lists);
+      });
     });
   });
 };
