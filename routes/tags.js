@@ -28,7 +28,7 @@ exports.tagOverview = function (req, res) {
 exports.tagAdded = function (req, res) {
   var tagName = globals.helpers.sanitize(req.body.tagNameInput);
   var tagType = globals.helpers.sanitize(req.body.tagTypeDropdown);
-  globals.tags.saveTag(req.session.user.user, tagName, tagType, function (success) {
+  globals.tags.saveTag(req.session.user.user, tagName, tagType, 0.00, function (success) {
     if (success) {
       res.flash('success', 'The tag has been added.');
     }

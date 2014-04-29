@@ -12,16 +12,18 @@ module.exports.getAllTags = function (aLogin, aCallback) {
   });
 };
 
-module.exports.saveTag = function (aLogin, aTagName, aTagType, aCallback) {
+module.exports.saveTag = function (aLogin, aTagName, aTagType, aAmount, aCallback) {
   globals.db.collection('tags', function (err, collection) {
     collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
       if (!foundTag) {
-        collection.insert({user: aLogin, name: aTagName, type: aTagType}, function (err, result) {
+        collection.insert({user: aLogin, name: aTagName, type: aTagType, current: aAmount}, function (err, result) {
           err ? aCallback(null) : aCallback(true);
         });
       }
       else {
-        aCallback(true);
+        collection.update(foundTag, {$set: {current: foundTag.current + aAmount}}, function (err) {
+          err ? aCallback(null) : aCallback(true);
+        });
       }
     });
   });

@@ -37,8 +37,8 @@ include includes/all_header.jade
                 - for position in locals.earningPositions
                   tr
                     td #{position.name}
-                    td #{position.current}
-                    td #{position.amount}
+                    td #{functions.formatAmount(position.current || 0)}
+                    td #{functions.formatAmount(position.amount || 0)}
           .col-lg-6
             h3 Spendings - #{locals.currentMonth}
             table.table.table-hover
@@ -51,8 +51,8 @@ include includes/all_header.jade
                 - for position in locals.spendingPositions
                   tr
                     td #{position.name}
-                    td #{position.current}
-                    td #{position.amount}
+                    td #{functions.formatAmount(position.current || 0)}
+                    td #{functions.formatAmount(position.amount || 0)}
       #earning
           - if (locals.earningPositions && locals.earningPositions.length > 0)
               table.table.table-hover
@@ -64,20 +64,9 @@ include includes/all_header.jade
                       for position in locals.earningPositions
                           tr
                               td #{position.name}
-                              td(style='text-align:right;') #{functions.formatAmount(position.amount)}
+                              td(style='text-align:right;') #{functions.formatAmount(position.amount || 0)}
           - else
               h2 There are no positions defined yet.
-
-          h3(id='addearningtitle') Add an earning position
-          form(id='addearningform', method='POST', action='/earningAdded', onsubmit="return PBHelperTools.validateAddEarning();")
-              fieldset
-                  .form-group#cg-earningName
-                      label(for='earningNameInput') Name
-                      input.form-control#earningNameInput(type='text', name='earningNameInput')
-                  .form-group#cg-earningAmount
-                      label(for='earningAmountInput') Max earning amount
-                      input.form-control#earningAmountInput(type='text', name='earningAmountInput')
-                  button.btn.btn-success(type='submit') Add position
       #spending
           - if (locals.spendingPositions && locals.spendingPositions.length > 0)
               table.table.table-hover
@@ -89,21 +78,9 @@ include includes/all_header.jade
                       for position in locals.spendingPositions
                           tr
                               td #{position.name}
-                              td(style='text-align:right;') #{functions.formatAmount(position.amount)}
+                              td(style='text-align:right;') #{functions.formatAmount(position.amount || 0)}
           - else
               h2 There are no positions defined yet.
-
-          h3(id='addspendingtitle') Add a spending position
-          form(id='addspendingform', method='POST', action='/spendingAdded', onsubmit="return PBHelperTools.validateAddSpending();")
-              fieldset
-                  .form-group#cg-spendingName
-                      label(for='spendingNameInput') Name
-                      input.form-control#spendingNameInput(type='text', name='spendingNameInput')
-                  .form-group#cg-spendingAmount
-                      label(for='spendingAmountInput') Max spending amount
-                      input.form-control#spendingAmountInput(type='text', name='spendingAmountInput')
-                  button.btn.btn-success(type='submit') Add position
-
 
 include includes/all_footer.jade
 

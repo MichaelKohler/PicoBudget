@@ -91,8 +91,6 @@
 
   var budgetRoutes = require('./routes/budget.js');
   server.get('/budget', requiresLogin, budgetRoutes.budget);
-  server.post('/earningAdded', requiresLogin, budgetRoutes.earningAdded);
-  server.post('/spendingAdded', requiresLogin, budgetRoutes.spendingAdded);
 
   var reportsRoutes = require('./routes/reports.js');
   server.get('/reports', requiresLogin, reportsRoutes.reports);

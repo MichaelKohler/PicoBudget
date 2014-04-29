@@ -13,7 +13,6 @@
   /** Models **/
   exports.users = require('./models/users');
   exports.accounts = require('./models/accounts.js');
-  exports.budget = require('./models/budget_position.js');
   exports.helpers = require('./models/helpers.js');
   exports.transactions = require('./models/transactions.js');
   exports.tags = require('./models/tags.js');

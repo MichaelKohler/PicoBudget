@@ -66,7 +66,7 @@ exports.transactionAdded = function (req, res) {
     },
     function addTagsToDB(callback) {
       globals.async.forEach(transTags, function(tag, callback) {
-        globals.tags.saveTag(req.session.user.user, tag, transType, function (success) {
+        globals.tags.saveTag(req.session.user.user, tag, transType, transAmount, function (success) {
           success ? callback() : callback({err: 'We could not save a tag.'});
         });
       }, function (err) {
