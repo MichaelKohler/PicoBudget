@@ -11,7 +11,8 @@ exports.budget = function (req, res) {
   var options = { month: "long", year: "numeric" };
   locals.currentMonth = intl.DateTimeFormat("de-DE", options).format(new Date());
 
-  locals.earningPositions = locals.spendingPositions = [];
+  locals.earningPositions = [];
+  locals.spendingPositions = [];
   globals.tags.getAllTags(req.session.user.user,  function(allTagsList) {
     globals.async.each(allTagsList, function (position, callback) {
       if (position.type == POSITIVE_SYMBOL) {
