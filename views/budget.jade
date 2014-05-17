@@ -55,30 +55,36 @@ include includes/all_header.jade
                     td #{functions.formatAmount(position.amount || 0)}
       #earning
           - if (locals.earningPositions && locals.earningPositions.length > 0)
-              table.table.table-hover
-                  thead
-                      tr
-                          th Name
-                          th(style='text-align:right;') Amount
-                  tbody
-                      for position in locals.earningPositions
+              form(id='updatebudgetearnings', method='POST', action='/updateBudget')
+                  table.table.table-hover
+                      thead
                           tr
-                              td #{position.name}
-                              td(style='text-align:right;') #{functions.formatAmount(position.amount || 0)}
+                              th Name
+                              th(style='text-align:right;') Amount
+                      tbody
+                          for position in locals.earningPositions
+                              tr
+                                  td #{position.name}
+                                  td(style='text-align:right;')
+                                      input.form-control(value="#{functions.formatAmount(position.amount || 0)}", name="#{position.name}")
+                  button.btn.btn-success(type='submit') Update budget
           - else
               h2 There are no positions defined yet.
       #spending
           - if (locals.spendingPositions && locals.spendingPositions.length > 0)
-              table.table.table-hover
-                  thead
-                      tr
-                          th Name
-                          th(style='text-align:right;') Amount
-                  tbody
-                      for position in locals.spendingPositions
+              form(id='updatebudgetspendings', method='POST', action='/updateBudget')
+                  table.table.table-hover
+                      thead
                           tr
-                              td #{position.name}
-                              td(style='text-align:right;') #{functions.formatAmount(position.amount || 0)}
+                              th Name
+                              th(style='text-align:right;') Amount
+                      tbody
+                          for position in locals.spendingPositions
+                              tr
+                                  td #{position.name}
+                                  td(style='text-align:right;')
+                                      input.form-control(value="#{functions.formatAmount(position.amount || 0)}", name="#{position.name}")
+                  button.btn.btn-success(type='submit') Update budget
           - else
               h2 There are no positions defined yet.
 

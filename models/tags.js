@@ -16,7 +16,7 @@ module.exports.saveTag = function (aLogin, aTagName, aTagType, aAmount, aCallbac
   globals.db.collection('tags', function (err, collection) {
     collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
       if (!foundTag) {
-        collection.insert({user: aLogin, name: aTagName, type: aTagType, current: aAmount, lastUpdated: new Date()}, function (err, result) {
+        collection.insert({user: aLogin, name: aTagName, type: aTagType, current: aAmount, lastUpdated: new Date(), amount: 0.00}, function (err, result) {
           err ? aCallback(null) : aCallback(true);
         });
       }
@@ -38,6 +38,21 @@ module.exports.deleteTag = function (aLogin, aTagName, aTagType, aCallback) {
     collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
       if (foundTag) {
         collection.remove({user: aLogin, name: aTagName, type: aTagType}, function (err) {
+          err ? aCallback(null) : aCallback(true);
+        });
+      }
+      else {
+        aCallback(null);
+      }
+    });
+  });
+};
+
+module.exports.updateBudgetTag = function (aLogin, aTagName, aNewAmount, aCallback) {
+  globals.db.collection('tags', function (err, collection) {
+    collection.findOne({user: aLogin, name: aTagName}, function (err, foundTag) {
+      if (foundTag) {
+        collection.update(foundTag, {$set: {amount: aNewAmount}}, function (err) {
           err ? aCallback(null) : aCallback(true);
         });
       }

@@ -27,3 +27,23 @@ exports.budget = function (req, res) {
     });
   });
 };
+
+exports.update = function (req, res) {
+    var allTags = [];
+    for (var prop in req.body) {
+      allTags.push(prop);
+    }
+    globals.async.each(allTags, function (tag, callback) {
+      globals.tags.updateBudgetTag(req.session.user.user, tag, req.body[tag], function (success) {
+        callback();
+      });
+    }, function (err) {
+      if (!err) {
+        res.flash('success', 'The budget has been updated.');
+      }
+      else {
+        res.flash('error', 'The budget could not be updated. Please try again.');
+      }
+      res.redirect('budget');
+    });
+};
