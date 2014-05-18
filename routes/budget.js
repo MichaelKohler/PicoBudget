@@ -13,7 +13,7 @@ exports.budget = function (req, res) {
 
   locals.earningPositions = [];
   locals.spendingPositions = [];
-  globals.tags.getAllTags(req.session.user.user,  function(allTagsList) {
+  globals.tags.getAllTags(req.session.user.user, function(allTagsList) {
     globals.async.each(allTagsList, function (position, callback) {
       if (position.type == POSITIVE_SYMBOL) {
         locals.earningPositions.push(position);

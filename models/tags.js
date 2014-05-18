@@ -16,12 +16,16 @@ module.exports.saveTag = function (aLogin, aTagName, aTagType, aAmount, aCallbac
   globals.db.collection('tags', function (err, collection) {
     collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
       if (!foundTag) {
-        collection.insert({user: aLogin, name: aTagName, type: aTagType, current: aAmount}, function (err, result) {
+        collection.insert({user: aLogin, name: aTagName, type: aTagType, current: aAmount, lastUpdated: new Date()}, function (err, result) {
           err ? aCallback(null) : aCallback(true);
         });
       }
       else {
-        collection.update(foundTag, {$set: {current: foundTag.current + aAmount}}, function (err) {
+        var currentAmount = foundTag.current + aAmount;
+        if (foundTag.lastUpdated.getMonth() < new Date().getMonth()) {
+          currentAmount = aAmount;
+        }
+        collection.update(foundTag, {$set: {current: currentAmount, lastUpdated: new Date()}}, function (err) {
           err ? aCallback(null) : aCallback(true);
         });
       }
