@@ -40,7 +40,7 @@ include includes/all_header.jade
               a(href='/forgotPassword') I don't remember my password
             button.btn.btn-default(type='submit') Login
       .col-lg-6
-        h1 Register for free
+        h1 Register
         hr
         form(id='registrationform', method='POST', action='/registered', onsubmit="return PBHelperTools.validateRegistration();")
           fieldset
@@ -53,5 +53,6 @@ include includes/all_header.jade
             .form-group#cg-passwordconfirm-reg
               label(for='passwordConfirmInputReg') Confirm password
               input.form-control#passwordConfirmInputReg(type='password', name='passwordConfirmInputReg')
+            p By registering you agree to our Privacy Policy which is as simple as follow: We never give away your data without legal grounds. Not for personal ad targeting, nor spam, nor anything else!
             button.btn.btn-default(type='submit') Register
 include includes/all_header.jade
