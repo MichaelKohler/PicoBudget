@@ -22,6 +22,7 @@
     server.use('/css', express.static(server.get('publicfolder') + '/css'));
     server.use('/js', express.static(server.get('publicfolder') + '/js'));
     server.use('/webapp', express.static(server.get('publicfolder') + '/webapp'));
+    server.use('/images', express.static(server.get('publicfolder') + '/images'));
     server.set('view engine', 'jade');
     server.set('views', __dirname + '/views');
     server.set('view options', { layout: false });
