@@ -52,3 +52,12 @@ exports.tagDeleted = function (req, res) {
     res.redirect('/transactions/1');
   });
 };
+
+exports.getTagSums = function(req, res) {
+  var data = {};
+  globals.tags.getAllTags(req.session.user.user, function(allTags) {
+    if (!allTags) { return callback(null); }
+    data.tags = allTags;
+    res.send(data);
+  });
+};

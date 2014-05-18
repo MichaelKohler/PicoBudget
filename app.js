@@ -83,11 +83,14 @@
   server.get('/transactions/:transpage(\\d+)', requiresLogin, transactionsRoutes.transactions);
   server.post('/transactionAdded', requiresLogin, transactionsRoutes.transactionAdded);
   server.post('/transferAdded', requiresLogin, transactionsRoutes.transferAdded);
+  server.get('/getMonthSpendingTransactions', requiresLogin,  transactionsRoutes.getMonthSpendingTransactions);
+  server.get('/getMonthEarningTransactions', requiresLogin,  transactionsRoutes.getMonthEarningTransactions);
 
   var tagsRoutes = require('./routes/tags.js');
   server.post('/tagAdded', requiresLogin, tagsRoutes.tagAdded);
   server.post('/tag/delete/:tagname/:tagtype', requiresLogin, tagsRoutes.tagDeleted);
   server.get('/tag/:tagname/:tagtype/:transpage(\\d+)', requiresLogin, tagsRoutes.tagOverview);
+  server.get('/getTagSums', requiresLogin, tagsRoutes.getTagSums);
 
   var budgetRoutes = require('./routes/budget.js');
   server.get('/budget', requiresLogin, budgetRoutes.budget);

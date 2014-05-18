@@ -3,5 +3,12 @@ include includes/all_header.jade
     include includes/dashboard_sidebar.jade
 
     h1 Reports
-    p Here should be the reports overview.
+    .row
+        .col-lg-8
+            #spendingperdaycontainer(style="min-width: 310px; height: 400px; margin: 0 auto")
+            #earningperdaycontainer(style="min-width: 310px; height: 400px; margin: 5em auto")
+            #spendingtagcontainer(style="min-width: 310px; height: 400px; margin: 5em auto")
+            #earningtagcontainer(style="min-width: 310px; height: 400px; margin: 5em auto")
 include includes/all_footer.jade
+script(src='http://code.highcharts.com/highcharts.js')
+script(src='/js/libs/reports.js', defer="defer")

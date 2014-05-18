@@ -111,3 +111,45 @@ exports.transferAdded = function (req, res) {
     res.redirect('/transactions/1');
   });
 };
+
+exports.getMonthSpendingTransactions = function(req, res) {
+  exports.getMonthXTransactions(req, res, "-");
+};
+
+exports.getMonthEarningTransactions = function(req, res) {
+  exports.getMonthXTransactions(req, res, "+");
+};
+
+exports.getMonthXTransactions = function(req, res, aType) {
+  var data = {};
+  globals.transactions.getAllTransactions(req.session.user.user, function(allTransactionsList) {
+    if (!allTransactionsList) { return callback(null); }
+    var filtered = allTransactionsList.filter(function(element) {
+      return element.date.getMonth() == new Date().getMonth() && element.art == aType;
+    });
+    var dates = [];
+    var today = new Date();
+    var dayOfMonth = today.getDate();
+    for (var i = 1; i <= dayOfMonth; i++) {
+      var entry = {};
+      entry.date = new Date(today.getFullYear(), today.getMonth(), i);
+      entry.amount = 0.00;
+      entry.formattedDate = entry.date.getDate() + ".";
+      dates.push(entry);
+    }
+    filtered.forEach (function (item) {
+      var year = item.date.getFullYear();
+      var month = item.date.getMonth();
+      var day = item.date.getDate();
+      dates.forEach (function (entry) {
+        if (entry.date.getFullYear() == year && entry.date.getMonth() == month && entry.date.getDate() == day) {
+          entry.amount = parseFloat(entry.amount) + parseFloat(item.amount);
+          entry.amount.toFixed(2);
+        }
+      });
+    });
+    data.sums = dates;
+    data.categories = dates.map(function(item) { return item.formattedDate; });
+    res.send(data);
+  });
+};
