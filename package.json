@@ -4,7 +4,7 @@
   "author": "PicoBudget.com",
   "description": "Ever wondered where your money goes? What do you spend the most money on? PicoBudget is a simple tool which features transactions, budgeting and reporting.",
   "dependencies" : {
-    "express"             :  "3.3.*",
+    "express"             :  "3.12.1",
     "connect"             :  "2.8.0",
     "mongodb"             :  "1.2.*",
     "jade"                :  "0.35.0",
