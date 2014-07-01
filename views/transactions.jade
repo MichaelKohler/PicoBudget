@@ -86,7 +86,7 @@ include includes/all_header.jade
               .form-group#cg-art
                 select.selectpicker(name='transArtDropdown')
                   option(value='+') +
-                  option(value='-') -
+                  option(value='-', selected='selected') -
               .form-group#cg-transtags
                 label(for='transTagsInput') Tags
                 input.form-control#transTagsInput(type='hidden', name='transTagsInput')
