@@ -23,7 +23,6 @@ exports.transactions = function (req, res) {
         locals.tagsForAutocompletion = tagList.map(function(item) {
           return item.name;
         });
-        console.log(JSON.stringify(['foo', 'bar']));
         callback();
       });
     },
