@@ -6,6 +6,7 @@
     { "ISO": "GBP", "name": "Great Britain Pound" },
     { "ISO": "JPY", "name": "Japanese Yen" },
     { "ISO": "CAD", "name": "Canadian Dollar" },
-    { "ISO": "AUD", "name": "Australian Dollar" }
+    { "ISO": "AUD", "name": "Australian Dollar" },
+    { "ISO": "MXN", "name": "Mexican Pesos" }
   ]
 }
