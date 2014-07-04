@@ -164,7 +164,7 @@ module.exports.saveNewPasswordForCode = function (aCode, aPassword, aCallback) {
   });
 };
 
-module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aPrefCurr, aCallback) {
+module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aPrefCurr, aPrefAcc, aCallback) {
   globals.db.collection('users', function (err, collection) {
     collection.findOne({user: aLogin}, function (err, user) {
       if (user) { // user was found
@@ -172,7 +172,7 @@ module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aP
           var salt = globals.bcrypt.genSaltSync(10);
           if (globals.bcrypt.compareSync(aOldPassword, user.pw)) {
             var hash = globals.bcrypt.hashSync(aNewPassword, salt);
-            collection.update({user: aLogin}, {$set: {pw: hash, curr: aPrefCurr}}, function (err) {
+            collection.update({user: aLogin}, {$set: {pw: hash, curr: aPrefCurr, acc: aPrefAcc}}, function (err) {
               user.pw = hash;
               user.curr = aPrefCurr;
               err ? aCallback(null) : aCallback(user);
@@ -182,9 +182,10 @@ module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aP
             aCallback(null);
           }
         }
-        else { // only save prefcurr
-          collection.update({user: aLogin}, {$set: {curr: aPrefCurr}}, function (err) {
+        else { // only save prefcurr and account
+          collection.update({user: aLogin}, {$set: {curr: aPrefCurr, acc: aPrefAcc}}, function (err) {
             user.curr = aPrefCurr;
+            user.acc = aPrefAcc;
             err ? aCallback(null) : aCallback(user);
           });
         }

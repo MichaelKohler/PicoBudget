@@ -5,17 +5,21 @@ var globals = require('../globals');
 exports.settings = function (req, res) {
   var locals = {user: req.session.user || ''};
   locals.pagetitle = 'Settings - ' + globals.titleAddition;
-  res.render('settings', locals);
+  globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
+    if (accountList) {
+      locals.accounts = accountList;
+      res.render('settings', locals);
+    }
+  });
 };
 
 exports.settingsChanged = function (req, res) {
   var oldPW = globals.helpers.sanitize(req.body.oldPasswordInput);
   var newPW = globals.helpers.sanitize(req.body.newPasswordInput);
   var prefCurr = globals.helpers.sanitize(req.body.prefCurrDropdown);
+  var prefAcc = globals.helpers.sanitize(req.body.prefAccDropdown);
 
-  globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, function (updatedUser) {
-    var locals = {user: req.session.user || ''};
-    locals.pagetitle = 'Settings - ' + globals.titleAddition;
+  globals.users.changeSettings(req.session.user.user, oldPW, newPW, prefCurr, prefAcc, function (updatedUser) {
     if (updatedUser) {
       req.session.user = updatedUser; // we need to reinit the session because of the new password
       res.flash('success', 'Your settings are saved.');
@@ -23,7 +27,7 @@ exports.settingsChanged = function (req, res) {
     else {
       res.flash('error', 'We could not update the settings. Please try again.');
     }
-    res.render('settings', locals);
+    res.redirect('/settings');
   });
 };
 

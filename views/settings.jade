@@ -42,6 +42,14 @@ include includes/all_header.jade
                   option(selected='true', value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
                 - else
                   option(value='#{currency.ISO}') #{currency.ISO} - #{currency.name}
+          .form-group#cg-prefAcc
+            p Please choose your preferred account. This will be the default value of all the account dropdowns in this app.
+            select.selectpicker(name='prefAccDropdown')
+              for account in locals.accounts
+                - if (account.name === locals.user.acc)
+                  option(selected='true', value='#{account.name}') #{account.name}
+                - else
+                  option(value='#{account.name}') #{account.name}
           button.btn.btn-success(type='submit') Change settings
       hr
       h3 Export
