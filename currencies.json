@@ -1,12 +1,26 @@
 {
   "currencies": [
+    { "ISO": "AUD", "name": "Australian Dollar" },
+    { "ISO": "CAD", "name": "Canadian Dollar" },
     { "ISO": "CHF", "name": "Schweizer Franken" },
-    { "ISO": "USD", "name": "US Dollar" },
+    { "ISO": "CNY", "name": "Chinese Yuan" },
+    { "ISO": "DKK", "name": "Danish Krone" },
     { "ISO": "EUR", "name": "Euro" },
     { "ISO": "GBP", "name": "Great Britain Pound" },
+    { "ISO": "HKD", "name": "Hongkong Dollar" },
+    { "ISO": "INR", "name": "Indian Rupee" },
     { "ISO": "JPY", "name": "Japanese Yen" },
-    { "ISO": "CAD", "name": "Canadian Dollar" },
-    { "ISO": "AUD", "name": "Australian Dollar" },
-    { "ISO": "MXN", "name": "Mexican Pesos" }
+    { "ISO": "MXN", "name": "Mexican Pesos" },
+    { "ISO": "MYR", "name": "Malaysian Ringgit" },
+    { "ISO": "NOK", "name": "Norwegian Krone" },
+    { "ISO": "NZD", "name": "New Zealand Dollar" },
+    { "ISO": "PHP", "name": "Philippine Peso" },
+    { "ISO": "RUB", "name": "Russian Ruble" },
+    { "ISO": "SEK", "name": "Swedish Krona" },
+    { "ISO": "SGD", "name": "Singapore Dollar" },
+    { "ISO": "THB", "name": "Thai Baht" },
+    { "ISO": "TRY", "name": "Turkish Lira" },
+    { "ISO": "USD", "name": "US Dollar" },
+    { "ISO": "ZAR", "name": "South African Rand" }
   ]
 }
