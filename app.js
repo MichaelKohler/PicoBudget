@@ -30,6 +30,14 @@
     server.use(express.cookieParser('' + require('crypto').randomBytes(64) + ''));
     server.use(express.session());
     server.use(flashify);
+    server.use(server.router);
+    // since we have already passed all routes, if next() is called, we have to assume
+    // that something with routing went wrong
+    server.use(function(req, res, next) {
+      res.status(404);
+      var locals = {};
+      res.render('error', locals);
+    });
   });
 
   server.configure('development', function () {
