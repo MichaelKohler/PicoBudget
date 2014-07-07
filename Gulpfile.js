@@ -6,11 +6,14 @@ gulp.task('jslint', function () {
                    './globals.js', './app.js'])
       .pipe(jslint({
         node: true,
+        vars: true,
         unparam: true,
         nomen: true,
         white: true,
         evil: true,
-        errorsOnly: false
+        errorsOnly: false,
+        plusplus: true,
+        bitwise: true
       }));
 });
 

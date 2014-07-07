@@ -6,16 +6,14 @@ var request = require('request');
 
 module.exports.formatAmount = function (aAmount) {
   var fixedAmount = parseFloat(aAmount).toFixed(2);
-  var formattedAmount = fixedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\'');
-  return formattedAmount;
+  return fixedAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '\'');
 };
 
 module.exports.convertCurrency = function (aFrom, aTo, aAmount, aCallback) {
   var requestURL = 'http://rate-exchange.appspot.com/currency?from=' + aFrom + '&to=' + aTo;
   request(requestURL, function (error, response, result) {
     if (!error && response.statusCode === 200) {
-      var conversion = parseFloat(JSON.parse(result).rate);
-      var converted = parseFloat(aAmount * conversion);
+      var converted = parseFloat(JSON.parse(result).rate) * aAmount;
       aCallback(converted);
     }
     else {
@@ -23,6 +21,7 @@ module.exports.convertCurrency = function (aFrom, aTo, aAmount, aCallback) {
     }
   });
 };
+
 
 module.exports.sumAccountBalance = function (aAccounts, aPreferredCurrency, aCallback) {
   var sum = 0;
@@ -45,8 +44,7 @@ module.exports.sumAccountBalance = function (aAccounts, aPreferredCurrency, aCal
 
 module.exports.sanitize = function (aInput) {
   var sanitizedForJSON = aInput.replace('{', '').replace('}', '');
-  var sanitized = validator.sanitize(sanitizedForJSON).xss();
-  return sanitized;
+  return validator.sanitize(sanitizedForJSON).xss();
 };
 
 module.exports.sendMail = function (aReceiver, aSubject, aMessage, aCallback) {
