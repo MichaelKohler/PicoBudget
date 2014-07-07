@@ -6,6 +6,7 @@ gulp.task('jslint', function () {
                    './globals.js', './app.js'])
       .pipe(jslint({
         node: true,
+        unparam: true,
         nomen: true,
         white: true,
         evil: true,
