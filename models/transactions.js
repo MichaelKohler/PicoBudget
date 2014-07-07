@@ -80,7 +80,12 @@ module.exports.addTransaction = function (aLogin, aTransaction, aCallback) {
     var newTransaction = { user: aLogin, date: currentDate, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
       name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount).toFixed(2) };
     collection.insert(newTransaction, function (err, results) {
-      err ? aCallback(null) : aCallback(true);
+      if (err) {
+        aCallback(null);
+      }
+      else {
+        aCallback(true);
+      }
     });
   });
 };
@@ -88,7 +93,12 @@ module.exports.addTransaction = function (aLogin, aTransaction, aCallback) {
 module.exports.deleteAllTransactions = function (aLogin, aCallback) {
   globals.db.collection('transactions', function (err, collection) {
     collection.remove({user: aLogin}, function (err) {
-      err ? aCallback(null) : aCallback(true);
+      if (err) {
+        aCallback(null);
+      }
+      else {
+        aCallback(true);
+      }
     });
   });
 };
@@ -100,7 +110,12 @@ module.exports.addTransfer = function (aLogin, aTransaction, aCallback) {
                         accTo: aTransaction.toAccount, amount: parseFloat(aTransaction.amount).toFixed(2),
                         name: aTransaction.name};
     collection.insert(newTransfer, function (err, result) {
-      err ? aCallback(null) : aCallback(true);
+      if (err) {
+        aCallback(null);
+      }
+      else {
+        aCallback(result);
+      }
     });
   });
 };
