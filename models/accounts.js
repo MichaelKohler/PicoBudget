@@ -21,12 +21,12 @@ module.exports.Account = {
   }
 };
 
-module.exports.getAllAccounts = function (aLogin, callback) {
+module.exports.getAllAccounts = function (aLogin, aCallback) {
   globals.db.collection('accounts', function (err, collection) {
     collection.find({user: aLogin}, {sort: [
       ['name', 1]
     ]}).toArray(function (err, items) {
-        callback(items);
+        aCallback(items);
     });
   });
 };
