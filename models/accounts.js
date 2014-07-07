@@ -34,7 +34,12 @@ module.exports.getAllAccounts = function (aLogin, aCallback) {
 module.exports.getAccount = function (aLogin, aName, aCallback) {
   globals.db.collection('accounts', function (err, collection) {
     collection.findOne({user: aLogin, name: aName}, function (err, account) {
-      err ? aCallback(null) : aCallback(account);
+      if (err) {
+        aCallback(null);
+      }
+      else {
+        aCallback(account);
+      }
     });
   });
 };
@@ -46,7 +51,12 @@ module.exports.addAccount = function (aLogin, aAccount, aCallback) {
         var newAccount = { user: aLogin, name: aAccount.name, curr: aAccount.currency,
           bal: parseFloat(aAccount.balance).toFixed(2) };
         collection.insert(newAccount, function (err, result) {
-          err ? aCallback(null) : aCallback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
       else {
@@ -61,7 +71,12 @@ module.exports.editAccount = function (aLogin, aOldName, aEditedAccount, aCallba
     collection.findOne({user: aLogin, name: aOldName}, function (err, foundAccount) {
       if (foundAccount) {
         collection.update({user: aLogin, name: aOldName}, {$set: {name: aEditedAccount.name, bal: aEditedAccount.balance}}, function (err) {
-          err ? aCallback(null) : aCallback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
       else {
@@ -76,7 +91,12 @@ module.exports.deleteAccount = function (aLogin, aAccName, aCallback) {
     collection.findOne({user: aLogin, name: aAccName}, function (err, foundAccount) {
       if (foundAccount) {
         collection.remove({user: aLogin, name: aAccName}, function (err) {
-          err ? aCallback(null) : aCallback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
       else {
@@ -89,7 +109,12 @@ module.exports.deleteAccount = function (aLogin, aAccName, aCallback) {
 module.exports.deleteAllAccounts = function (aLogin, aCallback) {
   globals.db.collection('accounts', function (err, collection) {
     collection.remove({user: aLogin}, function (err) {
-      err ? aCallback(null) : aCallback(true);
+      if (err) {
+        aCallback(null);
+      }
+      else {
+        aCallback(true);
+      }
     });
   });
 };
@@ -107,7 +132,12 @@ module.exports.setBalanceForTransaction = function (aLogin, aTransaction, aCallb
         }
 
         collection.update({name: aTransaction.account}, {$set: {bal: newBalance}}, function (err) {
-          err ? aCallback(null) : aCallback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
       else {
@@ -126,7 +156,12 @@ module.exports.setBalanceForTransfer = function (aLogin, aTransaction, aCallback
           if (foundAccount) {
             var newFromBalance = parseFloat(foundAccount.bal) - parseFloat(aTransaction.amount);
             collection.update({user: aLogin, name: aTransaction.fromAccount}, {$set: {bal: newFromBalance}}, function (err) {
-              err ? callback(null) : callback();
+              if (err) {
+                callback(null);
+              }
+              else {
+                callback();
+              }
             });
           }
         });
@@ -136,13 +171,23 @@ module.exports.setBalanceForTransfer = function (aLogin, aTransaction, aCallback
           if (foundAccount) {
             var newToBalance = parseFloat(foundAccount.bal) + parseFloat(aTransaction.amount);
             collection.update({user: aLogin, name: aTransaction.toAccount}, {$set: {bal: newToBalance}}, function (err) {
-              err ? callback(null) : callback();
+              if (err) {
+                callback(null);
+              }
+              else {
+                callback();
+              }
             });
           }
         });
       }
     ], function (err) {
-      err ? aCallback(null) : aCallback(true);
+      if (err) {
+        aCallback(null);
+      }
+      else {
+        aCallback(true);
+      }
     });
   });
 };
