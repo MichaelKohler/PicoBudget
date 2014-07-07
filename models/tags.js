@@ -17,7 +17,12 @@ module.exports.saveTag = function (aLogin, aTagName, aTagType, aAmount, aCallbac
     collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
       if (!foundTag) {
         collection.insert({user: aLogin, name: aTagName, type: aTagType, current: aAmount, lastUpdated: new Date(), amount: 0.00}, function (err, result) {
-          err ? aCallback(null) : aCallback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
       else {
@@ -26,7 +31,12 @@ module.exports.saveTag = function (aLogin, aTagName, aTagType, aAmount, aCallbac
           currentAmount = aAmount;
         }
         collection.update(foundTag, {$set: {current: currentAmount, lastUpdated: new Date()}}, function (err) {
-          err ? aCallback(null) : aCallback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
     });
@@ -38,7 +48,12 @@ module.exports.deleteTag = function (aLogin, aTagName, aTagType, aCallback) {
     collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
       if (foundTag) {
         collection.remove({user: aLogin, name: aTagName, type: aTagType}, function (err) {
-          err ? aCallback(null) : aCallback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
       else {
@@ -53,7 +68,12 @@ module.exports.updateBudgetTag = function (aLogin, aTagName, aNewAmount, aCallba
     collection.findOne({user: aLogin, name: aTagName}, function (err, foundTag) {
       if (foundTag) {
         collection.update(foundTag, {$set: {amount: aNewAmount}}, function (err) {
-          err ? aCallback(null) : aCallback(true);
+          if (err) {
+            aCallback(null);
+          }
+          else {
+            aCallback(true);
+          }
         });
       }
       else {
