@@ -1,157 +1,157 @@
 include includes/all_header.jade
-  .row
-    include includes/dashboard_sidebar.jade
+    .row
+        include includes/dashboard_sidebar.jade
 
-    .col-lg-10
-      h1 Transactions
-      ul(style='padding-top:20px;').nav.nav-tabs#tabnav
-        li#overviewlink
-          a(href='#') Overview
-        li#newlink
-          a(href='#') New transaction
-        li#transferlink
-          a(href='#') Transfer
-        li#tagslink
-          a(href='#') Manage tags
-      #overview
-        h3 Transaction overview
-        - if (flash.success !== undefined)
-          .alert-success.alert#success
-            strong Well done!
-            br
-            p #{flash.success}
-        - if (flash.error !== undefined)
-          .alert-danger.alert#fail
-            strong Oh no..
-            br
-            p #{flash.error}
-        - if (locals.transactions.length > 0)
-          table.table.table-hover
-            thead
-              tr
-                th Date
-                th Account
-                th Descrition
-                th Tags
-                th(style='text-align:right;') Amount
-            tbody
-              for trans in locals.transactions
-                tr
-                  td #{trans.date.toLocaleDateString()}
-                  td
-                    a(href='/account/#{trans.acc}/1') #{trans.acc}
-                  td #{trans.name}
-                  td
-                    - if (trans.tags)
-                      for tag in trans.tags
-                        a(href='/tag/#{tag}/#{trans.art}/1') #{tag}&nbsp;
-                  - if (trans.art === "+")
-                    td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
-                  - else
-                    td(style='text-align:right;') -#{functions.formatAmount(trans.amount)}
-          ul.pager
-            - if (locals.page == 1)
-              li.previous.disabled
-                a(href="#") &larr; Newer
-            - else
-              li.previous
-                a(href="/transactions/#{locals.page - 1}") &larr; Newer
-            - if (locals.needsMorePages)
-              li.next
-                a(href="/transactions/#{locals.page + 1}") Older &rarr;
-            - else
-              li.next.disabled
-                a(href="#") Older &rarr;
-        - else
-          p There are no transactions to be displayed.
-      #new
-        h3 Add a new transaction
-        - if (locals.accounts.length > 0)
-          .alert-error.alert.hidden#fillInAllInfo
-            button.close(date-dismiss='alert') ×
-            strong Error!
-            br
-            p Please fill in all the information!
-          form(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit="return PBHelperTools.validateAddTransaction();")
-            fieldset
-              .form-group#cg-id
-                input.form-control#transIDInput(type='hidden', name='lastTransIDInput', value='#{locals.transactions.length}')
-              .form-group#cg-account
-                select.selectpicker(name='transAccDropdown')
-                  for account in locals.accounts
-                    - if (account.name === locals.user.acc)
-                      option(value='#{account.name}', selected='true') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
-                    - else
-                      option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
-              .form-group#cg-name
-                label(for='transNameInput') Description
-                input.form-control#transNameInput(type='text', name='transNameInput')
-              .form-group#cg-art
-                select.selectpicker(name='transArtDropdown')
-                  option(value='+') +
-                  option(value='-', selected='selected') -
-              .form-group#cg-transtags
-                label(for='transTagsInput') Tags
-                input.form-control#transTagsInput(type='hidden', name='transTagsInput')
-                p
-                  small You can add multiple tags. Please be sure to press the ENTER key after writing a new tag name.
-              .form-group#cg-transamount
-                label(for='transAmountInput') Amount
-                input.form-control#transAmountInput(type='text', name='transAmountInput')
-              button.btn.btn-success(type='submit') Add transaction
-        - else
-          p Please add a new account before adding a transaction.
-      #transfer
-        h3 Transfer
-        - if (locals.accounts.length > 1)
-          form(id='transferform', method='POST', action='/transferAdded', onsubmit="return PBHelperTools.validateAddTransfer();")
-            fieldset
-              .form-group#cg-id
-                input.form-control#transIDInput(type='hidden', name='lastTransIDInput', value='#{locals.transactions.length}')
-              .form-group#cg-account-from
-                p from
-                select.selectpicker(name='transAccFromDropdown')
-                  for account in locals.accounts
-                    option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
-              .form-group#cg-account-to
-                p to
-                select.selectpicker(name='transAccToDropdown')
-                  for account in locals.accounts
-                    option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
-              .form-group#cg-transferamount
-                label(for='transferAmountInput') Amount
-                input.form-control#transferAmountInput(type='text', name='transferAmountInput')
-              button.btn.btn-success(type='submit') Add transfer
-        - else
-          p Transfers are only possible with two or more accounts.
-      #tags
-        h3 Tags
-        - if (locals.tags.length > 0)
-          table.table.table-hover
-            tbody
-              for tag, index in locals.tags
-                - if (index % 4 === 0)
-                  tr
-                td
-                  a(href='/tag/#{tag.name}/#{tag.type}/1') (#{tag.type}) #{tag.name}
-        - else
-          p There are not tags to be shown.
-        hr
-        h3(id='addtagtitle') Add a new tag
-        form(id='addtagform', method='POST', action='/tagAdded', onsubmit="return PBHelperTools.validateAddTag();")
-          fieldset
-            .form-group#cg-tagName
-              label(for='tagNameInput') Name
-              input.form-control#tagNameInput(type='text', name='tagNameInput')
-            .form-group#cg-tagType
-              select.selectpicker(name='tagTypeDropdown')
-                option(value='+') +
-                option(value='-') -
-            button.btn.btn-success(type='submit') Add tag
+        .col-lg-10
+            h1 Transactions
+            ul(style='padding-top:20px;').nav.nav-tabs#tabnav
+                li#overviewlink
+                    a(href='#') Overview
+                li#newlink
+                    a(href='#') New transaction
+                li#transferlink
+                    a(href='#') Transfer
+                li#tagslink
+                    a(href='#') Manage tags
+            #overview
+                h3 Transaction overview
+                - if (flash.success !== undefined)
+                    .alert-success.alert#success
+                        strong Well done!
+                        br
+                        p #{flash.success}
+                - if (flash.error !== undefined)
+                    .alert-danger.alert#fail
+                        strong Oh no..
+                        br
+                        p #{flash.error}
+                - if (locals.transactions.length > 0)
+                    table.table.table-hover
+                        thead
+                            tr
+                                th Date
+                                th Account
+                                th Descrition
+                                th Tags
+                                th(style='text-align:right;') Amount
+                        tbody
+                            for trans in locals.transactions
+                                tr
+                                    td #{trans.date.toLocaleDateString()}
+                                    td
+                                        a(href='/account/#{trans.acc}/1') #{trans.acc}
+                                    td #{trans.name}
+                                    td
+                                        - if (trans.tags)
+                                            for tag in trans.tags
+                                                a(href='/tag/#{tag}/#{trans.art}/1') #{tag}&nbsp;
+                                    - if (trans.art === "+")
+                                        td(style='text-align:right;') #{functions.formatAmount(trans.amount)}
+                                    - else
+                                        td(style='text-align:right;') -#{functions.formatAmount(trans.amount)}
+                    ul.pager
+                        - if (locals.page == 1)
+                            li.previous.disabled
+                                a(href="#") &larr; Newer
+                        - else
+                            li.previous
+                                a(href="/transactions/#{locals.page - 1}") &larr; Newer
+                        - if (locals.needsMorePages)
+                            li.next
+                                a(href="/transactions/#{locals.page + 1}") Older &rarr;
+                        - else
+                            li.next.disabled
+                                a(href="#") Older &rarr;
+                - else
+                    p There are no transactions to be displayed.
+            #new
+                h3 Add a new transaction
+                - if (locals.accounts.length > 0)
+                    .alert-error.alert.hidden#fillInAllInfo
+                        button.close(date-dismiss='alert') ×
+                        strong Error!
+                        br
+                        p Please fill in all the information!
+                    form(id='addtransactionform', method='POST', action='/transactionAdded', onsubmit="return PBHelperTools.validateAddTransaction();")
+                        fieldset
+                            .form-group#cg-id
+                                input.form-control#transIDInput(type='hidden', name='lastTransIDInput', value='#{locals.transactions.length}')
+                            .form-group#cg-account
+                                select.selectpicker(name='transAccDropdown')
+                                    for account in locals.accounts
+                                        - if (account.name === locals.user.acc)
+                                            option(value='#{account.name}', selected='true') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
+                                        - else
+                                            option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
+                            .form-group#cg-name
+                                label(for='transNameInput') Description
+                                input.form-control#transNameInput(type='text', name='transNameInput')
+                            .form-group#cg-art
+                                select.selectpicker(name='transArtDropdown')
+                                    option(value='+') +
+                                    option(value='-', selected='selected') -
+                            .form-group#cg-transtags
+                                label(for='transTagsInput') Tags
+                                input.form-control#transTagsInput(type='hidden', name='transTagsInput')
+                                p
+                                    small You can add multiple tags. Please be sure to press the ENTER key after writing a new tag name.
+                            .form-group#cg-transamount
+                                label(for='transAmountInput') Amount
+                                input.form-control#transAmountInput(type='text', name='transAmountInput')
+                            button.btn.btn-success(type='submit') Add transaction
+                - else
+                    p Please add a new account before adding a transaction.
+            #transfer
+                h3 Transfer
+                - if (locals.accounts.length > 1)
+                    form(id='transferform', method='POST', action='/transferAdded', onsubmit="return PBHelperTools.validateAddTransfer();")
+                        fieldset
+                            .form-group#cg-id
+                                input.form-control#transIDInput(type='hidden', name='lastTransIDInput', value='#{locals.transactions.length}')
+                            .form-group#cg-account-from
+                                p from
+                                select.selectpicker(name='transAccFromDropdown')
+                                    for account in locals.accounts
+                                        option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
+                            .form-group#cg-account-to
+                                p to
+                                select.selectpicker(name='transAccToDropdown')
+                                    for account in locals.accounts
+                                        option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
+                            .form-group#cg-transferamount
+                                label(for='transferAmountInput') Amount
+                                input.form-control#transferAmountInput(type='text', name='transferAmountInput')
+                            button.btn.btn-success(type='submit') Add transfer
+                - else
+                    p Transfers are only possible with two or more accounts.
+            #tags
+                h3 Tags
+                - if (locals.tags.length > 0)
+                    table.table.table-hover
+                        tbody
+                            for tag, index in locals.tags
+                                - if (index % 4 === 0)
+                                    tr
+                                td
+                                    a(href='/tag/#{tag.name}/#{tag.type}/1') (#{tag.type}) #{tag.name}
+                - else
+                    p There are not tags to be shown.
+                hr
+                h3(id='addtagtitle') Add a new tag
+                form(id='addtagform', method='POST', action='/tagAdded', onsubmit="return PBHelperTools.validateAddTag();")
+                    fieldset
+                        .form-group#cg-tagName
+                            label(for='tagNameInput') Name
+                            input.form-control#tagNameInput(type='text', name='tagNameInput')
+                        .form-group#cg-tagType
+                            select.selectpicker(name='tagTypeDropdown')
+                                option(value='+') +
+                                option(value='-') -
+                        button.btn.btn-success(type='submit') Add tag
 include includes/all_footer.jade
 
 script.
-  (function() {
-    PBHelperTools.toggleTransactionNavigationTabs();
-    $("#transTagsInput").select2({tags: !{JSON.stringify(locals.tagsForAutocompletion)}});
+    (function() {
+      PBHelperTools.toggleTransactionNavigationTabs();
+      $("#transTagsInput").select2({tags: !{JSON.stringify(locals.tagsForAutocompletion)}});
   })();

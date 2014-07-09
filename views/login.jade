@@ -1,58 +1,58 @@
 include includes/all_header.jade
-  section#loginForm
-    .alert-error.alert.hidden#fillInAllInfo
-      strong Error!
-      br
-      p Please fill in all the information!
-    .alert-error.alert.hidden#passwordsDidntMatch
-      strong Error!
-      br
-      p The passwords didn't match.
-    - if (flash.success !== undefined)
-      .alert-success.alert#success
-        strong Well done!
-        br
-        p #{flash.success}
-    - if (flash.error !== undefined)
-      .alert-danger.alert#fail
-        strong Oh no..
-        br
-        p #{flash.error}
-    - if (flash.info !== undefined)
-      .alert-info.alert#info
-        strong Info
-        br
-        p #{flash.info}
-    .row
-      .col-lg-6
-        h1 Login
-        hr
-        p If you already have an account, you can sign in here.
-        form(id='loginform', method='POST', action='/authenticated', onsubmit="return PBHelperTools.validateLogin();")
-          fieldset
-            .form-group#cg-email
-              label(for='emailInput') eMail
-              input.form-control#emailInput(type='email', name='emailInput')
-            .form-group#cg-password
-              label(for='passwordInput') Password
-              input.form-control#passwordInput(type='password', name='passwordInput')
-            .help-block
-              a(href='/forgotPassword') I don't remember my password
-            button.btn.btn-default(type='submit') Login
-      .col-lg-6
-        h1 Register
-        hr
-        form(id='registrationform', method='POST', action='/registered', onsubmit="return PBHelperTools.validateRegistration();")
-          fieldset
-            .form-group#cg-email-reg
-              label(for='emailInputReg') eMail
-              input.form-control#emailInputReg(type='email', name='emailInputReg')
-            .form-group#cg-password-reg
-              label(for='passwordInputReg') Password
-              input.form-control#passwordInputReg(type='password', name='passwordInputReg')
-            .form-group#cg-passwordconfirm-reg
-              label(for='passwordConfirmInputReg') Confirm password
-              input.form-control#passwordConfirmInputReg(type='password', name='passwordConfirmInputReg')
-            p By registering you agree to our Privacy Policy which is as simple as follow: We never give away your data without legal grounds. Not for personal ad targeting, nor spam, nor anything else!
-            button.btn.btn-default(type='submit') Register
+    section#loginForm
+        .alert-error.alert.hidden#fillInAllInfo
+            strong Error!
+            br
+            p Please fill in all the information!
+        .alert-error.alert.hidden#passwordsDidntMatch
+            strong Error!
+            br
+            p The passwords didn't match.
+        - if (flash.success !== undefined)
+            .alert-success.alert#success
+                strong Well done!
+                br
+                p #{flash.success}
+        - if (flash.error !== undefined)
+            .alert-danger.alert#fail
+                strong Oh no..
+                br
+                p #{flash.error}
+        - if (flash.info !== undefined)
+            .alert-info.alert#info
+                strong Info
+                br
+                p #{flash.info}
+        .row
+            .col-lg-6
+                h1 Login
+                hr
+                p If you already have an account, you can sign in here.
+                form(id='loginform', method='POST', action='/authenticated', onsubmit="return PBHelperTools.validateLogin();")
+                    fieldset
+                        .form-group#cg-email
+                            label(for='emailInput') eMail
+                            input.form-control#emailInput(type='email', name='emailInput')
+                        .form-group#cg-password
+                            label(for='passwordInput') Password
+                            input.form-control#passwordInput(type='password', name='passwordInput')
+                        .help-block
+                            a(href='/forgotPassword') I don't remember my password
+                        button.btn.btn-default(type='submit') Login
+            .col-lg-6
+                h1 Register
+                hr
+                form(id='registrationform', method='POST', action='/registered', onsubmit="return PBHelperTools.validateRegistration();")
+                    fieldset
+                        .form-group#cg-email-reg
+                            label(for='emailInputReg') eMail
+                            input.form-control#emailInputReg(type='email', name='emailInputReg')
+                        .form-group#cg-password-reg
+                            label(for='passwordInputReg') Password
+                            input.form-control#passwordInputReg(type='password', name='passwordInputReg')
+                        .form-group#cg-passwordconfirm-reg
+                            label(for='passwordConfirmInputReg') Confirm password
+                            input.form-control#passwordConfirmInputReg(type='password', name='passwordConfirmInputReg')
+                        p By registering you agree to our Privacy Policy which is as simple as follow: We never give away your data without legal grounds. Not for personal ad targeting, nor spam, nor anything else!
+                        button.btn.btn-default(type='submit') Register
 include includes/all_header.jade

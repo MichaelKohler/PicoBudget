@@ -1,96 +1,96 @@
 include includes/all_header.jade
-  .row
-    include includes/dashboard_sidebar.jade
+    .row
+        include includes/dashboard_sidebar.jade
 
-    .col-lg-10
-      h1 Budget
+        .col-lg-10
+            h1 Budget
 
-      - if (flash.success !== undefined)
-        .alert-success.alert#success
-          strong Well done!
-          br
-          p #{flash.success}
-          if (flash.error !== undefined)
-            .alert-danger.alert#fail
-              strong Oh no..
-              br
-              p #{flash.error}
+            - if (flash.success !== undefined)
+                .alert-success.alert#success
+                    strong Well done!
+                    br
+                    p #{flash.success}
+                    if (flash.error !== undefined)
+                        .alert-danger.alert#fail
+                            strong Oh no..
+                            br
+                            p #{flash.error}
 
-      ul(style='padding-top:20px;').nav.nav-tabs#tabnav
-        li#overviewlink
-          a(href='#') Overview
-        li#earninglink
-          a(href='#') Define earning
-        li#spendinglink
-          a(href='#') Define spending
-      #overview
-        .row
-          .col-lg-6
-            h3 Earnings - #{locals.currentMonth}
-            table.table.table-hover
-              thead
-                tr
-                  th Name
-                  th Current
-                  th Budget
-              tbody
-                - for position in locals.earningPositions
-                  tr
-                    td #{position.name}
-                    td #{functions.formatAmount(position.current || 0)}
-                    td #{functions.formatAmount(position.amount || 0)}
-          .col-lg-6
-            h3 Spendings - #{locals.currentMonth}
-            table.table.table-hover
-              thead
-                tr
-                  th Name
-                  th Current
-                  th Budget
-              tbody
-                - for position in locals.spendingPositions
-                  tr
-                    td #{position.name}
-                    td #{functions.formatAmount(position.current || 0)}
-                    td #{functions.formatAmount(position.amount || 0)}
-      #earning
-          - if (locals.earningPositions && locals.earningPositions.length > 0)
-              form(id='updatebudgetearnings', method='POST', action='/updateBudget')
-                  table.table.table-hover
-                      thead
-                          tr
-                              th Name
-                              th(style='text-align:right;') Amount
-                      tbody
-                          for position in locals.earningPositions
-                              tr
-                                  td #{position.name}
-                                  td(style='text-align:right;')
-                                      input.form-control(value="#{functions.formatAmount(position.amount || 0)}", name="#{position.name}")
-                  button.btn.btn-success(type='submit') Update budget
-          - else
-              h2 There are no positions defined yet.
-      #spending
-          - if (locals.spendingPositions && locals.spendingPositions.length > 0)
-              form(id='updatebudgetspendings', method='POST', action='/updateBudget')
-                  table.table.table-hover
-                      thead
-                          tr
-                              th Name
-                              th(style='text-align:right;') Amount
-                      tbody
-                          for position in locals.spendingPositions
-                              tr
-                                  td #{position.name}
-                                  td(style='text-align:right;')
-                                      input.form-control(value="#{functions.formatAmount(position.amount || 0)}", name="#{position.name}")
-                  button.btn.btn-success(type='submit') Update budget
-          - else
-              h2 There are no positions defined yet.
+            ul(style='padding-top:20px;').nav.nav-tabs#tabnav
+                li#overviewlink
+                    a(href='#') Overview
+                li#earninglink
+                    a(href='#') Define earning
+                li#spendinglink
+                    a(href='#') Define spending
+            #overview
+                .row
+                    .col-lg-6
+                        h3 Earnings - #{locals.currentMonth}
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th Name
+                                    th Current
+                                    th Budget
+                            tbody
+                                - for position in locals.earningPositions
+                                    tr
+                                        td #{position.name}
+                                        td #{functions.formatAmount(position.current || 0)}
+                                        td #{functions.formatAmount(position.amount || 0)}
+                    .col-lg-6
+                        h3 Spendings - #{locals.currentMonth}
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th Name
+                                    th Current
+                                    th Budget
+                            tbody
+                                - for position in locals.spendingPositions
+                                    tr
+                                        td #{position.name}
+                                        td #{functions.formatAmount(position.current || 0)}
+                                        td #{functions.formatAmount(position.amount || 0)}
+            #earning
+                - if (locals.earningPositions && locals.earningPositions.length > 0)
+                    form(id='updatebudgetearnings', method='POST', action='/updateBudget')
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th Name
+                                    th(style='text-align:right;') Amount
+                            tbody
+                                for position in locals.earningPositions
+                                    tr
+                                        td #{position.name}
+                                        td(style='text-align:right;')
+                                            input.form-control(value="#{functions.formatAmount(position.amount || 0)}", name="#{position.name}")
+                        button.btn.btn-success(type='submit') Update budget
+                - else
+                    h2 There are no positions defined yet.
+            #spending
+                - if (locals.spendingPositions && locals.spendingPositions.length > 0)
+                    form(id='updatebudgetspendings', method='POST', action='/updateBudget')
+                        table.table.table-hover
+                            thead
+                                tr
+                                    th Name
+                                    th(style='text-align:right;') Amount
+                            tbody
+                                for position in locals.spendingPositions
+                                    tr
+                                        td #{position.name}
+                                        td(style='text-align:right;')
+                                            input.form-control(value="#{functions.formatAmount(position.amount || 0)}", name="#{position.name}")
+                        button.btn.btn-success(type='submit') Update budget
+                - else
+                    h2 There are no positions defined yet.
 
 include includes/all_footer.jade
 
 script.
-  (function() {
-    PBHelperTools.toggleBudgetNavigationTabs();
-  })();
+    (function() {
+      PBHelperTools.toggleBudgetNavigationTabs();
+    })();

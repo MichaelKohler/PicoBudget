@@ -1,36 +1,36 @@
 include includes/all_header.jade
-  .well
-    h1 Easily manage your money
-    p Ever wondered where your money goes? What do you spend the most money on? PicoBudget is a simple tool which features transactions, budgeting and reporting. Using PicoBudget is absolutely free.
+    .well
+        h1 Easily manage your money
+        p Ever wondered where your money goes? What do you spend the most money on? PicoBudget is a simple tool which features transactions, budgeting and reporting. Using PicoBudget is absolutely free.
 
-  .row
-    .col-lg-4
-      h2 Introduction
-      p What is PicoBudget? Who is it for? Why should you use it?
-      p
-        a.btn.btn-default(href='/introduction') Read more &raquo;
-    .col-lg-4
-      form(id='loginform', method='POST', action='/authenticated', onsubmit="return PBHelperTools.validateLogin();")
-        fieldset
-          .form-group#cg-email
-            label(for='emailInput') eMail
-            input.form-control#emailInput(type='email', name='emailInput')
-          .form-group#cg-password
-            label(for='passwordInput') Password
-            input.form-control#passwordInput(type='password', name='passwordInput')
-          button.btn.btn-default(type='submit') Login
-          p.pull-right
-            a(href='/login') go to the signup page >>
-    .col-lg-4
-      h2 Open Source
-      p You can grab the code at&nbsp;
-        a(href='https://github.com/MichaelKohler/PicoBudget') GitHub
-        . Feel free to start your own instance! Also, if we ever should decide to discontinue this service,
-        span(style="font-weight: bold;") you can export all your data.
-  .row
-    .col-lg-12
-        h3 Preview / Screenshots
-        img(src='/images/accounts.png')
-        img(src='/images/earning.png')
-        img(src='/images/earning_tag.png')
+    .row
+        .col-lg-4
+            h2 Introduction
+            p What is PicoBudget? Who is it for? Why should you use it?
+            p
+                a.btn.btn-default(href='/introduction') Read more &raquo;
+        .col-lg-4
+            form(id='loginform', method='POST', action='/authenticated', onsubmit="return PBHelperTools.validateLogin();")
+                fieldset
+                    .form-group#cg-email
+                        label(for='emailInput') eMail
+                        input.form-control#emailInput(type='email', name='emailInput')
+                    .form-group#cg-password
+                        label(for='passwordInput') Password
+                        input.form-control#passwordInput(type='password', name='passwordInput')
+                    button.btn.btn-default(type='submit') Login
+                    p.pull-right
+                        a(href='/login') go to the signup page >>
+        .col-lg-4
+            h2 Open Source
+            p You can grab the code at&nbsp;
+                a(href='https://github.com/MichaelKohler/PicoBudget') GitHub
+                . Feel free to start your own instance! Also, if we ever should decide to discontinue this service,
+                span(style="font-weight: bold;") you can export all your data.
+    .row
+        .col-lg-12
+            h3 Preview / Screenshots
+            img(src='/images/accounts.png')
+            img(src='/images/earning.png')
+            img(src='/images/earning_tag.png')
 include includes/all_footer.jade
