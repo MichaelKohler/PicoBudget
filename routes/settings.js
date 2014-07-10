@@ -97,12 +97,6 @@ exports.exportAll = function (req, res) {
                 callback();
             });
         },
-        function getAllBudgetPositions(callback) {
-            globals.budget.getAllPositions(req.session.user.user, function (positionsList) {
-                exportedData.tags = positionsList;
-                callback();
-            });
-        },
         function getUserData(callback) {
             exportedData.user = req.session.user;
             callback();
