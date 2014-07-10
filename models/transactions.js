@@ -84,7 +84,7 @@ module.exports.addTransaction = function (aLogin, aTransaction, aCallback) {
     globals.db.collection('transactions', function (err, collection) {
         var currentDate = new Date();
         var newTransaction = { user: aLogin, date: currentDate, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
-            name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount).toFixed(2) };
+            name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount) };
         collection.insert(newTransaction, function (err, results) {
             if (err) {
                 aCallback(null);
@@ -113,7 +113,7 @@ module.exports.addTransfer = function (aLogin, aTransaction, aCallback) {
     globals.db.collection('transactions', function (err, collection) {
         var currentDate = new Date();
         var newTransfer = { user: aLogin, date: currentDate, id: aTransaction.id, accFrom: aTransaction.fromAccount,
-            accTo: aTransaction.toAccount, amount: parseFloat(aTransaction.amount).toFixed(2),
+            accTo: aTransaction.toAccount, amount: parseFloat(aTransaction.amount),
             name: aTransaction.name};
         collection.insert(newTransfer, function (err, result) {
             if (err) {

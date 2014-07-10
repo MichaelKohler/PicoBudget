@@ -49,7 +49,7 @@ module.exports.addAccount = function (aLogin, aAccount, aCallback) {
         collection.findOne({user: aLogin, name: aAccount.name}, function (err, foundAccount) {
             if (!foundAccount) {
                 var newAccount = { user: aLogin, name: aAccount.name, curr: aAccount.currency,
-                    bal: parseFloat(aAccount.balance).toFixed(2) };
+                    bal: parseFloat(aAccount.balance) };
                 collection.insert(newAccount, function (err, result) {
                     if (err) {
                         aCallback(null);
@@ -70,7 +70,7 @@ module.exports.editAccount = function (aLogin, aOldName, aEditedAccount, aCallba
     globals.db.collection('accounts', function (err, collection) {
         collection.findOne({user: aLogin, name: aOldName}, function (err, foundAccount) {
             if (foundAccount) {
-                collection.update({user: aLogin, name: aOldName}, {$set: {name: aEditedAccount.name, bal: aEditedAccount.balance}}, function (err) {
+                collection.update({user: aLogin, name: aOldName}, {$set: {name: aEditedAccount.name, bal: parseFloat(aEditedAccount.balance)}}, function (err) {
                     if (err) {
                         aCallback(null);
                     }

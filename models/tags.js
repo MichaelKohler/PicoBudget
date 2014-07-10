@@ -16,7 +16,8 @@ module.exports.saveTag = function (aLogin, aTagName, aTagType, aAmount, aCallbac
     globals.db.collection('tags', function (err, collection) {
         collection.findOne({user: aLogin, name: aTagName, type: aTagType}, function (err, foundTag) {
             if (!foundTag) {
-                collection.insert({user: aLogin, name: aTagName, type: aTagType, current: aAmount, lastUpdated: new Date(), amount: 0.00}, function (err, result) {
+                collection.insert({user: aLogin, name: aTagName, type: aTagType, current: parseFloat(aAmount),
+                                              lastUpdated: new Date(), amount: 0.00}, function (err, result) {
                     if (err) {
                         aCallback(null);
                     }
@@ -28,7 +29,7 @@ module.exports.saveTag = function (aLogin, aTagName, aTagType, aAmount, aCallbac
             else {
                 var currentAmount = foundTag.current + aAmount;
                 if (foundTag.lastUpdated.getMonth() < new Date().getMonth()) {
-                    currentAmount = aAmount;
+                    currentAmount = parseFloat(aAmount);
                 }
                 collection.update(foundTag, {$set: {current: currentAmount, lastUpdated: new Date()}}, function (err) {
                     if (err) {
@@ -67,7 +68,7 @@ module.exports.updateBudgetTag = function (aLogin, aTagName, aNewAmount, aCallba
     globals.db.collection('tags', function (err, collection) {
         collection.findOne({user: aLogin, name: aTagName}, function (err, foundTag) {
             if (foundTag) {
-                collection.update(foundTag, {$set: {amount: aNewAmount}}, function (err) {
+                collection.update(foundTag, {$set: {amount: parseFloat(aNewAmount)}}, function (err) {
                     if (err) {
                         aCallback(null);
                     }
