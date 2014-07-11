@@ -33,6 +33,7 @@ include includes/all_header.jade
                                     th Name
                                     th Currency
                                     th(style='text-align:right;') Balance
+                                    th(style='text-align: right;') in #{locals.user.curr}
                             tbody
                                 for account in locals.accounts
                                     tr
@@ -40,6 +41,7 @@ include includes/all_header.jade
                                             a(href='/account/#{account.name}/1') #{account.name}
                                         td #{account.curr}
                                         td(style='text-align:right;') #{functions.formatAmount(account.bal)}
+                                        td(style='text-align: right;') #{functions.formatAmount(account.converted)}
                                         td(style='text-align:right;')
                                             a(href='/accounts?editAccount=true&n=#{account.name}&b=#{account.bal}') Edit
                                         td(style='text-align:right;')
@@ -47,8 +49,8 @@ include includes/all_header.jade
                                 tr(style='font-weight:bold;')
                                     td
                                     td Total (#{locals.user.curr}):
-                                    td(style='text-align:right;') #{functions.formatAmount(locals.balanceSum)}
                                     td
+                                    td(style='text-align:right;') #{functions.formatAmount(locals.balanceSum)}
                                     td
                     - else
                         p There are no accounts to be displayed.

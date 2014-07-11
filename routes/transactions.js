@@ -31,7 +31,7 @@ exports.transactions = function (req, res) {
             });
         },
         function getAllAccounts(callback) {
-            globals.accounts.getAllAccounts(req.session.user.user, function (accList) {
+            globals.accounts.getAllAccounts(req.session.user.user, req.session.user.curr, function (accList) {
                 if (!accList) {
                     return callback(null);
                 }

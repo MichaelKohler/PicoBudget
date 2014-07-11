@@ -14,7 +14,7 @@ exports.accounts = function (req, res) {
         locals.deletename = globals.helpers.sanitize(req.query.n || '');
     }
     locals.deletemode = globals.helpers.sanitize(req.query.deleteAccount || '');
-    globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
+    globals.accounts.getAllAccounts(req.session.user.user, req.session.user.curr, function (accountList) {
         if (accountList) {
             locals.accounts = accountList;
             globals.helpers.sumAccountBalance(accountList, req.session.user.curr, function (sum) {

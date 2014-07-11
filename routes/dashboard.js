@@ -13,7 +13,7 @@ exports.index = function (req, res) {
             });
         },
         function getAllAccounts(callback) {
-            globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
+            globals.accounts.getAllAccounts(req.session.user.user, req.session.user.curr, function (accountList) {
                 locals.accounts = accountList;
                 callback();
             });

@@ -5,7 +5,7 @@ var globals = require('../globals');
 exports.settings = function (req, res) {
     var locals = {user: req.session.user || ''};
     locals.pagetitle = 'Settings - ' + globals.titleAddition;
-    globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
+    globals.accounts.getAllAccounts(req.session.user.user, req.session.user.curr, function (accountList) {
         if (accountList) {
             locals.accounts = accountList;
             res.render('settings', locals);
@@ -81,7 +81,7 @@ exports.exportAll = function (req, res) {
             });
         },
         function getAllAccounts(callback) {
-            globals.accounts.getAllAccounts(req.session.user.user, function (accountList) {
+            globals.accounts.getAllAccounts(req.session.user.user, req.session.user.curr, function (accountList) {
                 exportedData.accounts = accountList;
                 callback();
             });
