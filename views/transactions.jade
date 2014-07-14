@@ -83,6 +83,9 @@ include includes/all_header.jade
                                             option(value='#{account.name}', selected='true') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
                                         - else
                                             option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
+                            .form-group#cg-date
+                                label(for='transDateInput') Date
+                                input.form-control#transDateInput(type='date', name='transDateInput', value='#{locals.currentDateString}')
                             .form-group#cg-name
                                 label(for='transNameInput') Description
                                 input.form-control#transNameInput(type='text', name='transNameInput')
@@ -118,6 +121,9 @@ include includes/all_header.jade
                                 select.selectpicker(name='transAccToDropdown')
                                     for account in locals.accounts
                                         option(value='#{account.name}') #{account.name} - #{account.curr} #{functions.formatAmount(account.bal)}
+                            .form-group#cg-date
+                                label(for='transDateInput') Date
+                                input.form-control#transDateInput(type='date', name='transDateInput', value='#{locals.currentDateString}')
                             .form-group#cg-transferamount
                                 label(for='transferAmountInput') Amount
                                 input.form-control#transferAmountInput(type='text', name='transferAmountInput')

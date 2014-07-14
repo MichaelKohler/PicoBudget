@@ -12,22 +12,24 @@ module.exports.Transaction = {
     tags: [],
     amount: 0.0,
 
-    init: function (aID, aAccount, aType, aName, aTags, aAmount) {
+    init: function (aID, aAccount, aType, aName, aTags, aAmount, aDate) {
         this.id = aID;
         this.account = aAccount;
         this.type = aType;
         this.name = aName;
         this.tags = aTags;
         this.amount = aAmount;
+        this.date = aDate;
         return this;
     },
 
-    initTransfer: function (aID, aFromAccount, aToAccount, aAmount) {
+    initTransfer: function (aID, aFromAccount, aToAccount, aAmount, aDate) {
         this.id = aID;
         this.fromAccount = aFromAccount;
         this.toAccount = aToAccount;
         this.amount = aAmount;
         this.name = aFromAccount + ' -> ' + aToAccount;
+        this.date = aDate;
         return this;
     }
 };
@@ -82,8 +84,10 @@ module.exports.getTransactionsByAccount = function (aLogin, aName, aCallback) {
 
 module.exports.addTransaction = function (aLogin, aTransaction, aCallback) {
     globals.db.collection('transactions', function (err, collection) {
-        var currentDate = new Date();
-        var newTransaction = { user: aLogin, date: currentDate, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
+        if (!aTransaction.date) {
+            aTransaction.date = new Date();
+        }
+        var newTransaction = { user: aLogin, date: aTransaction.date, id: aTransaction.id, acc: aTransaction.account, art: aTransaction.type,
             name: aTransaction.name, tags: aTransaction.tags, amount: parseFloat(aTransaction.amount) };
         collection.insert(newTransaction, function (err, results) {
             if (err) {
@@ -111,8 +115,10 @@ module.exports.deleteAllTransactions = function (aLogin, aCallback) {
 
 module.exports.addTransfer = function (aLogin, aTransaction, aCallback) {
     globals.db.collection('transactions', function (err, collection) {
-        var currentDate = new Date();
-        var newTransfer = { user: aLogin, date: currentDate, id: aTransaction.id, accFrom: aTransaction.fromAccount,
+        if (!aTransaction.date) {
+            aTransaction.date = new Date();
+        }
+        var newTransfer = { user: aLogin, date: aTransaction.date, id: aTransaction.id, accFrom: aTransaction.fromAccount,
             accTo: aTransaction.toAccount, amount: parseFloat(aTransaction.amount),
             name: aTransaction.name};
         collection.insert(newTransfer, function (err, result) {

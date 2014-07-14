@@ -5,6 +5,7 @@ var globals = require('../globals');
 exports.transactions = function (req, res) {
     var transpage = parseInt(globals.helpers.sanitize(req.params.transpage), 10);
     var locals = { user: req.session.user || '', page: transpage };
+    locals.currentDateString = new Date().toString();
     locals.pagetitle = 'Transactions - ' + globals.titleAddition;
     var limit = 10;
     globals.async.parallel([
@@ -57,7 +58,8 @@ exports.transactionAdded = function (req, res) {
     var tags = globals.helpers.sanitize(req.body.transTagsInput);
     var transTags = tags.split(',');
     var transAmount = parseFloat(globals.helpers.sanitize(req.body.transAmountInput));
-    var newTransaction = globals.transactions.Transaction.init(transID, transAcc, transType, transName, transTags, transAmount);
+    var transDate = new Date(Date.parse(globals.helpers.sanitize(req.body.transDateInput)));
+    var newTransaction = globals.transactions.Transaction.init(transID, transAcc, transType, transName, transTags, transAmount, transDate);
     globals.async.series([
         function addTransaction(callback) {
             globals.transactions.addTransaction(req.session.user.user, newTransaction, function (success) {
@@ -94,7 +96,8 @@ exports.transferAdded = function (req, res) {
     var transFromAcc = globals.helpers.sanitize(req.body.transAccFromDropdown);
     var transToAcc = globals.helpers.sanitize(req.body.transAccToDropdown);
     var transAmount = parseFloat(globals.helpers.sanitize(req.body.transferAmountInput));
-    var newTransfer = globals.transactions.Transaction.initTransfer(transID, transFromAcc, transToAcc, transAmount);
+    var transDate = new Date(Date.parse(globals.helpers.sanitize(req.body.transDateInput)));
+    var newTransfer = globals.transactions.Transaction.initTransfer(transID, transFromAcc, transToAcc, transAmount, transDate);
     globals.async.series([
         function addTransfer(callback) {
             globals.transactions.addTransfer(req.session.user.user, newTransfer, function (success) {
