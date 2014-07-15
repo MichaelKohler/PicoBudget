@@ -105,8 +105,8 @@ exports.registered = function (req, res) {
                 req.session.user = user;
                 req.session.user.isNew = true;
                 globals.users.startActivationProcess(email, function (success) {
+                    res.redirect('/dashboard');
                 });
-                res.redirect('/dashboard');
             }
             else {
                 res.flash('error', 'The user could not be created. Please try again.');

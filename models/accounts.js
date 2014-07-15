@@ -26,7 +26,7 @@ module.exports.getAllAccounts = function (aLogin, aPrefCur, aCallback) {
         collection.find({user: aLogin}).toArray(function (err, items) {
             var counter = 0;
             var accounts = [];
-            if (items.length == 0) {
+            if (items.length === 0) {
                 aCallback(items); // immediately call callback since we don't have to go through conversion
             }
 
@@ -36,7 +36,7 @@ module.exports.getAllAccounts = function (aLogin, aPrefCur, aCallback) {
                     item.converted = converted;
                     accounts.push(item);
                     counter++;
-                    if (counter == items.length) {
+                    if (counter === items.length) {
                         accounts.sort(function (acc1, acc2) {
                             return acc1.name.localeCompare(acc2.name);
                         });

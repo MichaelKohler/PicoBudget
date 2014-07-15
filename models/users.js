@@ -6,8 +6,8 @@ module.exports.authenticate = function (aLogin, aPassword, aCallback) {
     var loginname = aLogin.toLowerCase();
     globals.db.collection('users', function (err, collection) {
         collection.findOne({user: loginname}, function (err, user) {
-            if (user) {
-                globals.bcrypt.compareSync(aPassword, user.pw) ? aCallback(user) : aCallback(null);
+            if (user && globals.bcrypt.compareSync(aPassword, user.pw)) {
+                 aCallback(user);
             }
             else {
                 aCallback(null);
@@ -25,7 +25,12 @@ module.exports.create = function (aLogin, aPassword, aCallback) {
             if (!foundUser) {
                 var newUser = {user: loginname, pw: hash, role: 'user', curr: 'CHF'};
                 collection.insert(newUser, function (err, result) {
-                    err ? aCallback(null) : aCallback(newUser);
+                    if (!err) {
+                        aCallback(newUser);
+                    }
+                    else {
+                        aCallback(null);
+                    }
                 });
             }
             else {
@@ -47,7 +52,12 @@ module.exports.startActivationProcess = function (aLogin, aCallback) {
     globals.db.collection('activation', function (err, collection) {
         collection.insert({user: aLogin, code: generatedCode, date: new Date()}, function (err) {
             globals.helpers.sendMail(aLogin, subject, messageText, function (success) {
-                success ? aCallback(true) : aCallback(null);
+                if (success) {
+                    aCallback(true);
+                }
+                else {
+                    aCallback(null);
+                }
             });
         });
     });
@@ -58,19 +68,34 @@ module.exports.deleteAllTemporaryCodes = function (aLogin, aCallback) {
         function deleteAllActivationCodes(callback) {
             globals.db.collection('activation', function (err, collection) {
                 collection.remove({user: aLogin}, function (err) {
-                    err ? callback({err: 'We could not remove all activation codes!'}) : callback();
+                    if (err) {
+                        callback({err: 'We could not remove all activation codes!'});
+                    }
+                    else {
+                        callback();
+                    }
                 });
             });
         },
         function deleteAllPasswordResets(callback) {
             globals.db.collection('passwordreset', function (err, collection) {
                 collection.remove({user: aLogin}, function (err) {
-                    err ? callback({err: 'We could not remove all activation codes!'}) : callback();
+                    if (err) {
+                        callback({err: 'We could not remove all activation codes!'});
+                    }
+                    else {
+                        callback();
+                    }
                 });
             });
         }
     ], function (err) {
-        err ? aCallback(null) : aCallback(true);
+        if (err) {
+            aCallback(null);
+        }
+        else {
+            aCallback(true);
+        }
     });
 };
 
@@ -86,7 +111,12 @@ module.exports.activate = function (aCode, aCallback) {
     globals.db.collection('activation', function (err, collection) {
         collection.findOne({code: aCode}, function (err, entry) {
             collection.remove({code: aCode}, function (err) {
-                err ? aCallback(null) : aCallback(true);
+                if (err) {
+                    aCallback(null);
+                }
+                else {
+                    aCallback(true);
+                }
             });
         });
     });
@@ -95,7 +125,12 @@ module.exports.activate = function (aCode, aCallback) {
 module.exports.checkIfUserExists = function (aMail, aCallback) {
     globals.db.collection('users', function (err, collection) {
         collection.findOne({user: aMail}, function (err, user) {
-            user ? aCallback(true) : aCallback(null);
+            if (!user) {
+                aCallback(null);
+            }
+            else {
+                aCallback(user);
+            }
         });
     });
 };
@@ -112,7 +147,12 @@ module.exports.sendNewPassword = function (aMail, aCallback) {
     globals.db.collection('passwordreset', function (err, collection) {
         collection.insert({user: aMail, code: generatedCode, date: new Date()}, function (err) {
             globals.helpers.sendMail(aMail, subject, messageText, function (success) {
-                success ? aCallback(true) : aCallback(null);
+                if (!success) {
+                    aCallback(null);
+                }
+                else {
+                    aCallback(true);
+                }
             });
         });
     });
@@ -140,7 +180,12 @@ module.exports.saveNewPasswordForCode = function (aCode, aPassword, aCallback) {
                     var salt = globals.bcrypt.genSaltSync(10);
                     var hash = globals.bcrypt.hashSync(aPassword, salt);
                     collection.update({user: account}, {$set: {pw: hash}}, function (err) {
-                        err ? callback({err: 'Could not update password for account!'}) : callback();
+                        if (err) {
+                            callback({err: 'Could not update password for account!'});
+                        }
+                        else {
+                            callback();
+                        }
                     });
                 });
             });
@@ -150,7 +195,12 @@ module.exports.saveNewPasswordForCode = function (aCode, aPassword, aCallback) {
                 collection.findOne({code: aCode}, function (err, codeItem) {
                     if (!err) {
                         collection.remove({code: aCode}, function (err) {
-                            err ? callback({err: 'Could not remove code!'}) : callback();
+                            if (err) {
+                                callback({err: 'Could not remove code!'});
+                            }
+                            else {
+                                callback();
+                            }
                         });
                     }
                     else {
@@ -160,7 +210,12 @@ module.exports.saveNewPasswordForCode = function (aCode, aPassword, aCallback) {
             });
         }
     ], function (err) {
-        err ? aCallback(null) : aCallback(true);
+        if (err) {
+            aCallback(null);
+        }
+        else {
+            aCallback(true);
+        }
     });
 };
 
@@ -175,7 +230,12 @@ module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aP
                         collection.update({user: aLogin}, {$set: {pw: hash, curr: aPrefCurr, acc: aPrefAcc}}, function (err) {
                             user.pw = hash;
                             user.curr = aPrefCurr;
-                            err ? aCallback(null) : aCallback(user);
+                            if (err) {
+                                aCallback(null);
+                            }
+                            else {
+                                aCallback(user);
+                            }
                         });
                     }
                     else {
@@ -186,7 +246,12 @@ module.exports.changeSettings = function (aLogin, aOldPassword, aNewPassword, aP
                     collection.update({user: aLogin}, {$set: {curr: aPrefCurr, acc: aPrefAcc}}, function (err) {
                         user.curr = aPrefCurr;
                         user.acc = aPrefAcc;
-                        err ? aCallback(null) : aCallback(user);
+                        if (err) {
+                            aCallback(null);
+                        }
+                        else {
+                            aCallback(user);
+                        }
                     });
                 }
             }
@@ -202,7 +267,12 @@ module.exports.removeUser = function (aLogin, aPassword, aCallback) {
         collection.findOne({user: aLogin}, function (err, user) {
             if (globals.bcrypt.compareSync(aPassword, user.pw)) {
                 collection.remove({user: aLogin}, function (err) {
-                    err ? aCallback(null) : aCallback(true);
+                    if (err) {
+                        aCallback(null);
+                    }
+                    else {
+                        aCallback(true);
+                    }
                 });
             }
             else {

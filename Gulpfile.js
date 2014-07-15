@@ -13,7 +13,9 @@ gulp.task('jslint', function () {
         evil: true,
         errorsOnly: false,
         plusplus: true,
-        bitwise: true
+        bitwise: true,
+        todo: true,
+        stupid: true
       }));
 });
 

@@ -36,22 +36,42 @@ exports.userDeleted = function (req, res) {
     globals.async.series([
         function deleteUser(callback) {
             globals.users.removeUser(req.session.user.user, globals.helpers.sanitize(req.body.passwordInput), function (success) {
-                success ? callback() : callback({err: 'We could not remove the user.'});
+                if (success) {
+                    callback();
+                }
+                else {
+                    callback({err: 'We could not remove the user.'});
+                }
             });
         },
         function deleteAccounts(callback) {
             globals.accounts.deleteAllAccounts(req.session.user.user, function (success) {
-                success ? callback() : callback({err: 'We could not remove the accounts.'});
+                if (success) {
+                    callback();
+                }
+                else {
+                    callback({err: 'We could not remove the accounts.'});
+                }
             });
         },
         function deleteTransactions(callback) {
             globals.transactions.deleteAllTransactions(req.session.user.user, function (success) {
-                success ? callback() : callback({err: 'We could not remove the transactions.'});
+                if (success) {
+                    callback();
+                }
+                else {
+                    callback({err: 'We could not remove the transactions.'});
+                }
             });
         },
         function deletePasswordResetsAndActivation(callback) {
             globals.users.deleteAllTemporaryCodes(req.session.user.user, function (success) {
-                success ? callback() : callback({err: 'We could not delete all temporary data.'});
+                if (success) {
+                    callback();
+                }
+                else {
+                    callback({err: 'We could not delete all temporary data.'});
+                }
             });
         }
     ], function (err) {

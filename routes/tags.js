@@ -57,7 +57,7 @@ exports.getTagSums = function (req, res) {
     var data = {};
     globals.tags.getAllTags(req.session.user.user, function (allTags) {
         if (!allTags) {
-            return callback(null);
+            allTags = [];
         }
         data.tags = allTags;
         res.send(data);
